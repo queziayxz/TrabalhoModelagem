@@ -2,6 +2,7 @@ module org.trab.demo {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires java.sql;
 
 
     opens org.trab.demo to javafx.fxml;
