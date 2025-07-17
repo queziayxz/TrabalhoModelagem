@@ -1,15 +1,31 @@
 package org.trab.demo.model;
 
-import java.util.Calendar;
+import java.util.Date;
 
-public class User {
+public abstract class User {
     private Long id;
-    private String name;
+    private String nome;
     private String email;
-    private String phone;
-    private Calendar birth_date;
+    private String telefone;
+    private Date data_nascimento;
     private String cpf;
-    private String password;
+    private String senha;
+    private boolean is_psicologo;
+
+    public User(Long id, String nome, String email, String telefone, Date data_nascimento, String cpf, String senha, boolean is_psicologo) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.data_nascimento = data_nascimento;
+        this.cpf = cpf;
+        this.senha = senha;
+        this.is_psicologo = is_psicologo;
+    }
+
+    public User() {
+
+    }
 
     public Long getId() {
         return id;
@@ -19,12 +35,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getEmail() {
@@ -35,20 +51,20 @@ public class User {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
-    public Calendar getBirth_date() {
-        return birth_date;
+    public Date getDataNascimento() {
+        return data_nascimento;
     }
 
-    public void setBirth_date(Calendar birth_date) {
-        this.birth_date = birth_date;
+    public void setDataNascimento(Date data_nascimento) {
+        this.data_nascimento = data_nascimento;
     }
 
     public String getCpf() {
@@ -59,11 +75,19 @@ public class User {
         this.cpf = cpf;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public boolean getIsPsicologo() {
+        return is_psicologo;
+    }
+
+    public void setIsPsicologo(boolean is_psicologo) {
+        this.is_psicologo = is_psicologo;
     }
 }
