@@ -3,8 +3,13 @@ package org.trab.demo.controller;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
+import org.trab.demo.model.Psicologo;
+import org.trab.demo.model.User;
 import org.trab.demo.repository.UserRepository;
+import org.trab.demo.util.Sessao;
+import org.trab.demo.util.Telas;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginController {
@@ -29,8 +34,16 @@ public class LoginController {
             dialogoErro.showAndWait();
         } else {
             try {
-                UserRepository.verifyLogin(tf_email.getText(),tf_password.getText());
+                User user =  UserRepository.autenticate(tf_email.getText(),tf_password.getText());
+                Sessao sessao = Sessao.getInstance();
+                sessao.setUser(user);
+                if(user.getIsPsicologo()) {
+                    Telas.getTelaDashPsi();
+                }
             } catch (SQLException e) {
+                dialogoErro.setContentText("Error na consulta ao banco"+e.getMessage());
+                dialogoErro.showAndWait();
+            } catch (IOException e) {
                 dialogoErro.setContentText("Error na consulta ao banco"+e.getMessage());
                 dialogoErro.showAndWait();
             }

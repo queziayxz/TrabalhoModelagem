@@ -2,16 +2,17 @@ package org.trab.demo.repository;
 
 import org.trab.demo.model.Paciente;
 import org.trab.demo.model.Psicologo;
+import org.trab.demo.model.User;
 import org.trab.demo.util.Conexao;
+import org.trab.demo.util.Sessao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
 
 public class UserRepository {
 
-    public static void verifyLogin(String email, String senha) throws SQLException
+    public static User autenticate(String email, String senha) throws SQLException
     {
         try {
 
@@ -36,7 +37,9 @@ public class UserRepository {
                         psi.setCrp(result.getString("crp"));
                         psi.setSenha(result.getString("senha"));
                         psi.setIsPsicologo(result.getBoolean("is_psicologo"));
-                        break;
+
+                        return psi;
+
                     case "0":
                         Paciente paci = new Paciente();
                         paci.setId(result.getLong("id"));
@@ -47,15 +50,18 @@ public class UserRepository {
                         paci.setCpf(result.getString("cpf"));
                         paci.setSenha(result.getString("senha"));
                         paci.setIsPsicologo(result.getBoolean("is_psicologo"));
-                        break;
+
+                        return paci;
                 }
+
             } else {
                 System.out.println("usuario nao existe");
             }
+
+            return null;
 
         } catch (SQLException e) {
             throw new SQLException(e);
         }
     }
-
 }
