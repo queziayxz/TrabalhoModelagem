@@ -35,10 +35,17 @@ public class LoginController {
         } else {
             try {
                 User user =  UserRepository.autenticate(tf_email.getText(),tf_password.getText());
-                Sessao sessao = Sessao.getInstance();
-                sessao.setUser(user);
-                if(user.getIsPsicologo()) {
-                    Telas.getTelaDashPsi();
+                if(user != null) {
+                    Sessao sessao = Sessao.getInstance();
+                    sessao.setUser(user);
+                    if(user.getIsPsicologo()) {
+                        Telas.getTelaDashPsi();
+                    } else {
+                        Telas.getTelaDashPaci();
+                    }
+                } else {
+                    dialogoErro.setContentText("Usuário não encontrado!");
+                    dialogoErro.showAndWait();
                 }
             } catch (SQLException e) {
                 dialogoErro.setContentText("Error na consulta ao banco"+e.getMessage());

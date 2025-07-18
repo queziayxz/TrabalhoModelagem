@@ -29,4 +29,13 @@ public class Telas {
         stageC.show();
     }
 
+    public static void getTelaDashPaci() throws IOException
+    {
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/dash_Paciente.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+//        stage.setTitle("Hello!");
+        stageC.setScene(scene);
+        stageC.show();
+    }
+
 }
