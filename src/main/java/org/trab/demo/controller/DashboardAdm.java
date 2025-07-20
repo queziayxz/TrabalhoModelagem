@@ -9,14 +9,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.repository.ConsultaRepository;
+import org.trab.demo.util.Telas;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class DashboardAdm implements Initializable {
-
     @FXML
     private Label lb_dia;
     @FXML
@@ -66,4 +67,33 @@ public class DashboardAdm implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    public void telaPerfil() throws IOException
+    {
+        try {
+            Telas.getTelaEditPsi();
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void telaCadHorarios() throws IOException
+    {
+        try {
+            Telas.getTelaCadHorarios();
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void telaAgendaPsicologo() throws IOException
+    {
+        try {
+            Telas.getTelaAgendaPsicologo();
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
+
 }

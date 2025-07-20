@@ -20,7 +20,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="btn_perfil" mnemonicParsing="false" prefHeight="47.0" prefWidth="148.0" text="Perfil" GridPane.columnIndex="1">
+            <Button fx:id="btn_perfil" mnemonicParsing="false" onAction="#telaPerfil" prefHeight="47.0" prefWidth="148.0" text="Perfil" GridPane.columnIndex="1">
                <font>
                   <Font size="18.0" />
                </font>
@@ -68,12 +68,12 @@
                   <Insets top="60.0" />
                </padding>
             </VBox>
-            <Button fx:id="btn_cadastra_horario" mnemonicParsing="false" text="Cadastrar Novos Horários" GridPane.columnIndex="1">
+            <Button fx:id="btn_cadastra_horario" onAction="#telaCadHorarios" mnemonicParsing="false" text="Cadastrar Novos Horários" GridPane.columnIndex="1">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btn_agenda" mnemonicParsing="false" text="Ver Agenda Completa" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button fx:id="btn_agenda" onAction="#telaAgendaPsicologo" mnemonicParsing="false" text="Ver Agenda Completa" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="18.0" />
                </font>
