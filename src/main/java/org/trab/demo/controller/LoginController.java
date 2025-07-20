@@ -48,11 +48,13 @@ public class LoginController {
                     dialogoErro.showAndWait();
                 }
             } catch (SQLException e) {
-                dialogoErro.setContentText("Error na consulta ao banco"+e.getMessage());
-                dialogoErro.showAndWait();
+//                dialogoErro.setContentText("Error na consulta ao banco"+e.getMessage());
+//                dialogoErro.showAndWait();
+                System.out.println(e.getMessage());
             } catch (IOException e) {
-                dialogoErro.setContentText("Error na consulta ao banco"+e.getMessage());
-                dialogoErro.showAndWait();
+                System.out.println(e.getMessage());
+//                dialogoErro.setContentText("Error na consulta ao banco"+e.getMessage());
+//                dialogoErro.showAndWait();
             }
         }
     }

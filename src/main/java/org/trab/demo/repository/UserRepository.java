@@ -64,4 +64,35 @@ public class UserRepository {
             throw new SQLException(e);
         }
     }
+
+    public static Paciente getPacienteId(Long id_paciente) throws SQLException
+    {
+        try {
+
+            Paciente paciente = new Paciente();
+
+            String sql = "SELECT * FROM usuarios WHERE id=?";
+            PreparedStatement statm = Conexao.getConn().prepareStatement(sql);
+            statm.setLong(1, id_paciente);
+
+            ResultSet result = statm.executeQuery();
+
+            if(result.next()) {
+                paciente.setId(result.getLong("id"));
+                paciente.setNome(result.getString("nome"));
+                paciente.setTelefone(result.getString("telefone"));
+                paciente.setEmail(result.getString("email"));
+                paciente.setDataNascimento(result.getDate("data_nascimento"));
+                paciente.setCpf(result.getString("cpf"));
+                paciente.setSenha(result.getString("senha"));
+                paciente.setIsPsicologo(result.getBoolean("is_psicologo"));
+
+                return paciente;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
 }

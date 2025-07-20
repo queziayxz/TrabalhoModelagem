@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="573.0" prefWidth="837.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="573.0" prefWidth="837.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.DashboardAdm">
    <children>
       <GridPane alignment="CENTER" prefHeight="119.0" prefWidth="838.0">
         <columnConstraints>
@@ -21,7 +20,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" prefHeight="47.0" prefWidth="148.0" text="Perfil" GridPane.columnIndex="1">
+            <Button fx:id="btn_perfil" mnemonicParsing="false" prefHeight="47.0" prefWidth="148.0" text="Perfil" GridPane.columnIndex="1">
                <font>
                   <Font size="18.0" />
                </font>
@@ -48,43 +47,33 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="185.0" prefWidth="391.0" spacing="40.0">
                <children>
-                  <Label text="12 de junho de 2025">
+                  <Label fx:id="lb_dia" text="12 de junho de 2025">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <GridPane>
+                  <Label fx:id="lb_sem_consulta" text="Você não possui consultas hoje!" visible="false">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <GridPane fx:id="grid_consulta_dia" vgap="15.0" VBox.vgrow="NEVER">
                     <columnConstraints>
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="85.0" text="8:00">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Button>
-                        <Label text="Nome" GridPane.columnIndex="1">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
                   </GridPane>
                </children>
                <padding>
                   <Insets top="60.0" />
                </padding>
             </VBox>
-            <Button mnemonicParsing="false" text="Cadastrar Novos Horários" GridPane.columnIndex="1">
+            <Button fx:id="btn_cadastra_horario" mnemonicParsing="false" text="Cadastrar Novos Horários" GridPane.columnIndex="1">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" text="Ver Agenda Completa" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button fx:id="btn_agenda" mnemonicParsing="false" text="Ver Agenda Completa" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="18.0" />
                </font>
