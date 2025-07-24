@@ -75,7 +75,7 @@ public class AgendaController implements Initializable {
             Date dateSql = Date.valueOf(data);
             List<Consulta> consultas = ConsultaRepository.getConsultasData(dateSql);
 
-            limpaCampos();
+            resetaCampos();
 
             if(consultas.isEmpty()) {
                 this.lb_semHorario.setVisible(true);
@@ -115,6 +115,9 @@ public class AgendaController implements Initializable {
         this.tf_telefone.setText(paciente.getTelefone());
         this.tf_email.setText(paciente.getEmail());
 
+        this.btn_deletar.setDisable(false);
+        this.btn_cancelar.setDisable(false);
+
         this.btn_deletar.setUserData(paciente);
     }
 
@@ -152,7 +155,7 @@ public class AgendaController implements Initializable {
         }
     }
 
-    private void limpaCampos()
+    private void resetaCampos()
     {
         this.grid_horarios.getChildren().clear();
         this.lb_semHorario.setVisible(false);
@@ -160,5 +163,8 @@ public class AgendaController implements Initializable {
         this.tf_nome.clear();
         this.tf_telefone.clear();
         this.tf_email.clear();
+        this.btn_cancelar.setDisable(true);
+        this.btn_deletar.setDisable(true);
+
     }
 }
