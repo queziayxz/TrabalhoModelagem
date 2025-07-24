@@ -46,6 +46,10 @@ public class AgendaController implements Initializable {
 
     @FXML
     private Label lb_data;
+
+    @FXML
+    private Label lb_semHorario;
+
     @FXML
     private GridPane grid_horarios;
 
@@ -71,27 +75,33 @@ public class AgendaController implements Initializable {
             Date dateSql = Date.valueOf(data);
             List<Consulta> consultas = ConsultaRepository.getConsultasData(dateSql);
 
-            this.grid_horarios.getChildren().clear();
+            limpaCampos();
 
-            for(int i = 0; i < consultas.size(); i++) {
-                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
+            if(consultas.isEmpty()) {
+                this.lb_semHorario.setVisible(true);
+            } else {
 
-                Button button = new Button(formattedTime);
-                button.setPrefWidth(85);
-                button.setPrefHeight(26);
-                button.setUserData(consultas.get(i).getPaciente());
-                button.setOnAction(this::selecionaHorario);
-                button.setStyle("-fx-font-size:18");
+                for(int i = 0; i < consultas.size(); i++) {
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                    String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
 
-                Label label = new Label(consultas.get(i).getPaciente().getNome());
-                label.setStyle("-fx-font-size:18");
+                    Button button = new Button(formattedTime);
+                    button.setPrefWidth(85);
+                    button.setPrefHeight(26);
+                    button.setStyle("-fx-font-size:18");
 
-                this.grid_horarios.add(button, 0, i);
-                this.grid_horarios.add(label, 1, i);
+                    if(consultas.get(i).getPaciente() != null) {
+                        button.setUserData(consultas.get(i).getPaciente());
+                        button.setOnAction(this::selecionaHorario);
 
+                        Label label = new Label(consultas.get(i).getPaciente().getNome());
+                        label.setStyle("-fx-font-size:18");
+                        this.grid_horarios.add(label, 1, i);
+                    }
+
+                    this.grid_horarios.add(button, 0, i);
+                }
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -140,5 +150,15 @@ public class AgendaController implements Initializable {
         } catch (IOException e) {
             throw new IOException(e.getMessage());
         }
+    }
+
+    private void limpaCampos()
+    {
+        this.grid_horarios.getChildren().clear();
+        this.lb_semHorario.setVisible(false);
+        this.data_picker.getEditor().clear();
+        this.tf_nome.clear();
+        this.tf_telefone.clear();
+        this.tf_email.clear();
     }
 }

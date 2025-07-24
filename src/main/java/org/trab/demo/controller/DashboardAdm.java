@@ -35,7 +35,6 @@ public class DashboardAdm implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             Date currentDate = Calendar.getInstance().getTime();
-    //        TimeZone timeZ =
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
             dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
             String formattedDate = dateFormat.format(currentDate);
@@ -47,21 +46,26 @@ public class DashboardAdm implements Initializable {
                 this.lb_sem_consulta.setVisible(true);
             } else {
                 for(int i = 0; i < consultas.size(); i++) {
-                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                    String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
+                    if(consultas.get(i).getPaciente() != null) {
+                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                        String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
 
-                    Button button = new Button(formattedTime);
-                    button.setPrefWidth(85);
-                    button.setPrefHeight(26);
-                    button.setStyle("-fx-font-size:14");
-                    this.grid_consulta_dia.add(button,0,i);
+                        Button button = new Button(formattedTime);
+                        button.setPrefWidth(85);
+                        button.setPrefHeight(26);
+                        button.setStyle("-fx-font-size:14");
+                        this.grid_consulta_dia.add(button,0,i);
 
-                    Label label = new Label(consultas.get(i).getPaciente().getNome());
-                    label.setStyle("-fx-font-size:18");
-                    this.grid_consulta_dia.add(label,1,i);
-
+                        Label label = new Label(consultas.get(i).getPaciente().getNome());
+                        label.setStyle("-fx-font-size:18");
+                        this.grid_consulta_dia.add(label,1,i);
+                    }
                 }
             }
+
+            if(this.grid_consulta_dia.getChildren().isEmpty()) {
+                this.lb_sem_consulta.setVisible(true);
+            };
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

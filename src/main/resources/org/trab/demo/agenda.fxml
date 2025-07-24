@@ -67,15 +67,21 @@
       </HBox>
       <HBox prefHeight="515.0" prefWidth="886.0" spacing="30.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox prefHeight="512.0" prefWidth="126.0" HBox.hgrow="ALWAYS">
+            <VBox alignment="TOP_CENTER" prefHeight="512.0" prefWidth="126.0" HBox.hgrow="ALWAYS">
                <children>
+                  <Label fx:id="lb_semHorario" text="Sem horários nesse dia!" visible="false">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                   <GridPane fx:id="grid_horarios" vgap="15.0">
                     <columnConstraints>
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
                </children>

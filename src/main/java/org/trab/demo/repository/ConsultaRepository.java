@@ -22,6 +22,8 @@ public class ConsultaRepository {
             List<Agenda> horarios = AgendaRepository.getHorariosData(data);
 
             for(int i = 0; i < horarios.size(); i++) {
+                Consulta con = new Consulta();
+
                 String sql = "SELECT * FROM consultas WHERE id_agenda=?";
 
                 PreparedStatement statem = Conexao.getConn().prepareStatement(sql);
@@ -29,17 +31,18 @@ public class ConsultaRepository {
 
                 ResultSet result = statem.executeQuery();
 
-                while(result.next()) {
-                    Consulta con = new Consulta();
+                if(result.next()) {
                     con.setId(result.getLong("id"));
 
                     con.setPaciente(UserRepository.getPacienteId(result.getLong("id_paciente")));
 
                     con.setHorarioConsulta(horarios.get(i));
                     consultas.add(con);
+                } else {
+                    con.setHorarioConsulta(horarios.get(i));
+                    consultas.add(con);
                 }
             }
-
             return consultas;
 
         } catch (SQLException e) {
