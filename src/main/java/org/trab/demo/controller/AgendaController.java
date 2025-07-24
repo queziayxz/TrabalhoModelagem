@@ -1,12 +1,22 @@
 package org.trab.demo.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import org.trab.demo.model.Consulta;
+import org.trab.demo.model.Paciente;
+import org.trab.demo.repository.ConsultaRepository;
 import org.trab.demo.util.Telas;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AgendaController implements Initializable {
@@ -36,6 +46,8 @@ public class AgendaController implements Initializable {
 
     @FXML
     private Label lb_data;
+    @FXML
+    private GridPane grid_horarios;
 
     @FXML
     private TextField tf_email;
@@ -44,12 +56,63 @@ public class AgendaController implements Initializable {
     private TextField tf_telefone;
 
     @FXML
-    private TextField tx_nome;
+    private TextField tf_nome;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
         btn_agenda.setDisable(true);
+    }
+
+    public void mostrarHorariosDia()
+    {
+        try {
+            LocalDate data = this.data_picker.getValue();
+            Date dateSql = Date.valueOf(data);
+            List<Consulta> consultas = ConsultaRepository.getConsultasData(dateSql);
+
+            this.grid_horarios.getChildren().clear();
+
+            for(int i = 0; i < consultas.size(); i++) {
+                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
+
+                Button button = new Button(formattedTime);
+                button.setPrefWidth(85);
+                button.setPrefHeight(26);
+                button.setUserData(consultas.get(i).getPaciente());
+                button.setOnAction(this::selecionaHorario);
+                button.setStyle("-fx-font-size:18");
+
+                Label label = new Label(consultas.get(i).getPaciente().getNome());
+                label.setStyle("-fx-font-size:18");
+
+                this.grid_horarios.add(button, 0, i);
+                this.grid_horarios.add(label, 1, i);
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void selecionaHorario(ActionEvent event)
+    {
+        Button button = (Button) event.getSource();
+        Paciente paciente = (Paciente) button.getUserData();
+        this.tf_nome.setText(paciente.getNome());
+        this.tf_telefone.setText(paciente.getTelefone());
+        this.tf_email.setText(paciente.getEmail());
+
+        this.btn_deletar.setUserData(paciente);
+    }
+
+    public void deletarHorario(ActionEvent event)
+    {
+        Button button = (Button) event.getSource();
+        Paciente paciente = (Paciente) button.getUserData();
+
     }
 
     public void telaCadHorarios() throws IOException

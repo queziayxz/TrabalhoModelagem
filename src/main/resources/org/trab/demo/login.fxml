@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="537.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.LoginController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="676.0" prefWidth="807.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.LoginController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="100.0" text="Login" textAlignment="CENTER" VBox.vgrow="ALWAYS">
          <font>
@@ -49,12 +49,16 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </VBox>
-      <Hyperlink prefHeight="24.0" prefWidth="179.0" text="Ainda não fez cadastro?">
-         <padding>
-            <Insets left="20.0" />
-         </padding>
-      </Hyperlink>
-      <HBox accessibleRole="PASSWORD_FIELD" alignment="CENTER" prefHeight="177.0" prefWidth="600.0">
+      <HBox prefWidth="200.0">
+         <children>
+            <Hyperlink prefHeight="24.0" prefWidth="166.0" text="Ainda não fez cadastro?">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Hyperlink>
+         </children>
+      </HBox>
+      <HBox accessibleRole="PASSWORD_FIELD" alignment="CENTER" prefHeight="182.0" prefWidth="610.0">
          <children>
             <Button fx:id="btn_login" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="114.0" text="Logar">
                <font>

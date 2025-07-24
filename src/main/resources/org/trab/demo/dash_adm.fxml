@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="573.0" prefWidth="837.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.DashboardAdm">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="623.0" prefWidth="936.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.DashboardAdm">
    <children>
-      <GridPane alignment="CENTER" prefHeight="119.0" prefWidth="838.0">
+      <GridPane alignment="CENTER" prefHeight="249.0" prefWidth="936.0">
         <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -68,12 +68,12 @@
                   <Insets top="60.0" />
                </padding>
             </VBox>
-            <Button fx:id="btn_cadastra_horario" onAction="#telaCadHorarios" mnemonicParsing="false" text="Cadastrar Novos Horários" GridPane.columnIndex="1">
+            <Button fx:id="btn_cadastra_horario" mnemonicParsing="false" onAction="#telaCadHorarios" text="Cadastrar Novos Horários" GridPane.columnIndex="1">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btn_agenda" onAction="#telaAgendaPsicologo" mnemonicParsing="false" text="Ver Agenda Completa" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button fx:id="btn_agenda" mnemonicParsing="false" onAction="#telaAgendaPsicologo" text="Ver Agenda Completa" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="18.0" />
                </font>

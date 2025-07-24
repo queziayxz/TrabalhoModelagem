@@ -3,10 +3,16 @@ package org.trab.demo.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import org.trab.demo.model.Consulta;
+import org.trab.demo.repository.ConsultaRepository;
 import org.trab.demo.util.Telas;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+import java.sql.Date;
 import java.util.ResourceBundle;
 
 public class CadastrarHorariosController implements Initializable {

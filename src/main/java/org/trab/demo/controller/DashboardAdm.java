@@ -48,7 +48,7 @@ public class DashboardAdm implements Initializable {
             } else {
                 for(int i = 0; i < consultas.size(); i++) {
                     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                    String formattedTime = timeFormat.format(consultas.get(i).getHorario());
+                    String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
 
                     Button button = new Button(formattedTime);
                     button.setPrefWidth(85);
@@ -64,7 +64,7 @@ public class DashboardAdm implements Initializable {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
     }
 

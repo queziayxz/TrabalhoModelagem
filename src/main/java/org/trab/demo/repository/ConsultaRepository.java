@@ -1,5 +1,6 @@
 package org.trab.demo.repository;
 
+import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.util.Conexao;
 
@@ -18,22 +19,25 @@ public class ConsultaRepository {
 
             List<Consulta> consultas = new ArrayList<>();
 
-            String sql = "SELECT * FROM consultas WHERE data=?";
+            List<Agenda> horarios = AgendaRepository.getHorariosData(data);
 
-            PreparedStatement statem = Conexao.getConn().prepareStatement(sql);
-            statem.setDate(1,data);
+            for(int i = 0; i < horarios.size(); i++) {
+                String sql = "SELECT * FROM consultas WHERE id_agenda=?";
 
-            ResultSet result = statem.executeQuery();
+                PreparedStatement statem = Conexao.getConn().prepareStatement(sql);
+                statem.setLong(1,horarios.get(i).getId());
 
-            while(result.next()) {
-                Consulta con = new Consulta();
-                con.setId(result.getLong("id"));
+                ResultSet result = statem.executeQuery();
 
-                con.setPaciente(UserRepository.getPacienteId(result.getLong("id_paciente")));
+                while(result.next()) {
+                    Consulta con = new Consulta();
+                    con.setId(result.getLong("id"));
 
-                con.setData(result.getDate("data"));
-                con.setHorario(result.getTime("horario"));
-                consultas.add(con);
+                    con.setPaciente(UserRepository.getPacienteId(result.getLong("id_paciente")));
+
+                    con.setHorarioConsulta(horarios.get(i));
+                    consultas.add(con);
+                }
             }
 
             return consultas;

@@ -6,14 +6,12 @@ import java.util.Date;
 public class Consulta {
     private Long id;
     private Paciente paciente;
-    private Date data;
-    private Time horario;
+    private Agenda horarioConsulta;
 
-    public Consulta(Long id, Paciente paciente, Date data, Time horario) {
+    public Consulta(Long id, Paciente paciente, Agenda horarioConsulta) {
         this.id = id;
         this.paciente = paciente;
-        this.data = data;
-        this.horario = horario;
+        this.horarioConsulta = horarioConsulta;
     }
 
     public Consulta() {
@@ -36,19 +34,11 @@ public class Consulta {
         this.paciente = paciente;
     }
 
-    public Date getData() {
-        return data;
+    public Agenda getHorarioConsulta() {
+        return this.horarioConsulta;
     }
 
-    public void setData(Date data) {
-        this.data = data;
-    }
-
-    public Time getHorario() {
-        return horario;
-    }
-
-    public void setHorario(Time horario) {
-        this.horario = horario;
+    public void setHorarioConsulta(Agenda horarioConsulta) {
+        this.horarioConsulta = horarioConsulta;
     }
 }
