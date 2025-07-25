@@ -51,6 +51,8 @@ public class AgendaController implements Initializable {
 
     @FXML
     private Label lb_semHorario;
+    @FXML
+    private Label lb_selectData;
 
     @FXML
     private GridPane grid_horarios;
@@ -79,10 +81,11 @@ public class AgendaController implements Initializable {
 
             resetaCampos();
 
+            this.lb_selectData.setVisible(false);
+
             if(consultas.isEmpty()) {
                 this.lb_semHorario.setVisible(true);
             } else {
-
                 for(int i = 0; i < consultas.size(); i++) {
                     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
                     String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
@@ -122,9 +125,14 @@ public class AgendaController implements Initializable {
             this.tf_telefone.setText(consulta.getPaciente().getTelefone());
             this.tf_email.setText(consulta.getPaciente().getEmail());
             this.btn_cancelar.setDisable(false);
+            this.btn_deletar.setDisable(true);
             this.btn_cancelar.setUserData(consulta);
         } else {
+            this.tf_nome.clear();
+            this.tf_telefone.clear();
+            this.tf_email.clear();
             this.btn_deletar.setDisable(false);
+            this.btn_cancelar.setDisable(true);
         }
     }
 
@@ -169,7 +177,35 @@ public class AgendaController implements Initializable {
         Button button = (Button) event.getSource();
         Consulta consulta = (Consulta) button.getUserData();
 
-        System.out.println("horario consulta selecionado: "+consulta.getHorarioConsulta().getHora());
+        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType btnSim = new ButtonType("Sim");
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String dateF = dateFormat.format(consulta.getHorarioConsulta().getData());
+        String timeF = timeFormat.format(consulta.getHorarioConsulta().getHora());
+
+        dialogoExe.setTitle("Cancelando Consulta");
+        dialogoExe.setContentText("Tem certeza que deseja cancelar a consulta de "+timeF+" no dia "+dateF+"?");
+        dialogoExe.getButtonTypes().setAll(btnSim, btnCancelar);
+        dialogoExe.showAndWait().ifPresent(b -> {
+            if (b == btnSim) {
+                try {
+                    ConsultaRepository.cancelarConsulta(consulta.getId());
+
+                    Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+                    dialogoInfo.setContentText("Consulta Cancelada com Sucesso!");
+                    dialogoInfo.showAndWait();
+                    resetaCampos();
+                } catch (SQLException e) {
+                    Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
+                    dialogoInfo.setTitle("Error");
+                    dialogoInfo.setHeaderText("Não foi possível cancelar a consulta selecionada!");
+                    dialogoInfo.showAndWait();
+                }
+            }
+        });
     }
 
     public void telaCadHorarios() throws IOException

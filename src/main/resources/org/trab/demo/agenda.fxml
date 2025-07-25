@@ -69,6 +69,11 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="512.0" prefWidth="126.0" HBox.hgrow="ALWAYS">
                <children>
+                  <Label fx:id="lb_selectData" text="Selecione uma data!">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                   <Label fx:id="lb_semHorario" text="Sem horários nesse dia!" visible="false">
                      <font>
                         <Font size="18.0" />
@@ -81,6 +86,7 @@
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints />
+                        <RowConstraints />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
@@ -125,7 +131,7 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btn_cancelar" onAction="#cancelarConsulta" disable="true" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Cancelar Consulta" HBox.hgrow="ALWAYS">
+                        <Button fx:id="btn_cancelar" disable="true" mnemonicParsing="false" onAction="#cancelarConsulta" prefHeight="39.0" prefWidth="150.0" text="Cancelar Consulta" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font>
