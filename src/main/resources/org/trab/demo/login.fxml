@@ -51,7 +51,7 @@
       </VBox>
       <HBox prefWidth="200.0">
          <children>
-            <Hyperlink prefHeight="24.0" prefWidth="166.0" text="Ainda não fez cadastro?">
+            <Hyperlink prefHeight="24.0" onAction="#linkSemCadastro" prefWidth="166.0" text="Ainda não fez cadastro?">
                <padding>
                   <Insets left="20.0" />
                </padding>

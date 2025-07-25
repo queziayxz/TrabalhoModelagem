@@ -125,7 +125,7 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btn_cancelar" disable="true" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Cancelar Consulta" HBox.hgrow="ALWAYS">
+                        <Button fx:id="btn_cancelar" onAction="#cancelarConsulta" disable="true" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Cancelar Consulta" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font>

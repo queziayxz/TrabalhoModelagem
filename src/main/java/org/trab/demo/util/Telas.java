@@ -16,8 +16,18 @@ public class Telas {
     private static int height = 700;
     public static void getTelaLogin(Stage stage) throws IOException
     {
-        stageC = stage;
+        if (stage != null) {
+            stageC = stage;
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), width, height);
+
+        stageC.setScene(scene);
+        stageC.show();
+    }
+    public static void getTelaCadastro() throws IOException
+    {
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/cadastro.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
 
         stageC.setScene(scene);

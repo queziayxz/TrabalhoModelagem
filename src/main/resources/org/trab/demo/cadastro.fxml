@@ -102,7 +102,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </PasswordField>
-            <Hyperlink fx:id="link_login" text="Já Possui Cadastro?" />
+            <Hyperlink fx:id="link_login" onAction="#linkPossuiCadastro" text="Já Possui Cadastro?" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" />

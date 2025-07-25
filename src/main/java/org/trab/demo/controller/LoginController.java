@@ -57,4 +57,13 @@ public class LoginController {
             }
         }
     }
+
+    public void linkSemCadastro()
+    {
+        try {
+            Telas.getTelaCadastro();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

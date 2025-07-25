@@ -95,7 +95,7 @@ public class AgendaController implements Initializable {
                     button.setOnAction(this::selecionaHorario);
 
                     if(consultas.get(i).getPaciente() != null) {
-                        button.setUserData(consultas.get(i).getPaciente());
+                        button.setUserData(consultas.get(i));
 
                         Label label = new Label(consultas.get(i).getPaciente().getNome());
                         label.setStyle("-fx-font-size:18");
@@ -115,56 +115,61 @@ public class AgendaController implements Initializable {
     public void selecionaHorario(ActionEvent event)
     {
         Button button = (Button) event.getSource();
-        Paciente paciente = (Paciente) button.getUserData();
+        Consulta consulta = (Consulta) button.getUserData();
 
-        if(paciente != null) {
-            this.tf_nome.setText(paciente.getNome());
-            this.tf_telefone.setText(paciente.getTelefone());
-            this.tf_email.setText(paciente.getEmail());
+        if(consulta != null) {
+            this.tf_nome.setText(consulta.getPaciente().getNome());
+            this.tf_telefone.setText(consulta.getPaciente().getTelefone());
+            this.tf_email.setText(consulta.getPaciente().getEmail());
             this.btn_cancelar.setDisable(false);
+            this.btn_cancelar.setUserData(consulta);
         } else {
             this.btn_deletar.setDisable(false);
         }
-
     }
 
     public void deletarHorario(ActionEvent event)
     {
-            Button button = (Button) event.getSource();
-            Agenda horario = (Agenda) button.getUserData();
+        Button button = (Button) event.getSource();
+        Agenda horario = (Agenda) button.getUserData();
 
-            Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
-            ButtonType btnDeletar = new ButtonType("Deletar");
-            ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType btnDeletar = new ButtonType("Deletar");
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-            String dateF = dateFormat.format(horario.getData());
-            String timeF = timeFormat.format(horario.getHora());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String dateF = dateFormat.format(horario.getData());
+        String timeF = timeFormat.format(horario.getHora());
 
-            dialogoExe.setTitle("Deletando Horário");
-            dialogoExe.setContentText("Tem certeza que deseja detelar o horário de "+timeF+" no dia "+dateF+"?");
-            dialogoExe.getButtonTypes().setAll(btnDeletar, btnCancelar);
-            dialogoExe.showAndWait().ifPresent(b -> {
-                if (b == btnDeletar) {
-                    try {
-                        AgendaRepository.deleteHorario(horario.getId());
+        dialogoExe.setTitle("Deletando Horário");
+        dialogoExe.setContentText("Tem certeza que deseja detelar o horário de "+timeF+" no dia "+dateF+"?");
+        dialogoExe.getButtonTypes().setAll(btnDeletar, btnCancelar);
+        dialogoExe.showAndWait().ifPresent(b -> {
+            if (b == btnDeletar) {
+                try {
+                    AgendaRepository.deleteHorario(horario.getId());
 
-                        Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
-                        dialogoInfo.setContentText("Horário Deletado com Sucesso!");
-                        dialogoInfo.showAndWait();
-                        resetaCampos();
-                    } catch (SQLException e) {
-                        Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-                        dialogoInfo.setTitle("Error");
-                        dialogoInfo.setHeaderText("Não foi possível deletar o horário selecionado!");
-                        dialogoInfo.showAndWait();
-                    }
+                    Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+                    dialogoInfo.setContentText("Horário Deletado com Sucesso!");
+                    dialogoInfo.showAndWait();
+                    resetaCampos();
+                } catch (SQLException e) {
+                    Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
+                    dialogoInfo.setTitle("Error");
+                    dialogoInfo.setHeaderText("Não foi possível deletar o horário selecionado!");
+                    dialogoInfo.showAndWait();
                 }
-            });
+            }
+        });
+    }
 
+    public void cancelarConsulta(ActionEvent event)
+    {
+        Button button = (Button) event.getSource();
+        Consulta consulta = (Consulta) button.getUserData();
 
-
+        System.out.println("horario consulta selecionado: "+consulta.getHorarioConsulta().getHora());
     }
 
     public void telaCadHorarios() throws IOException
