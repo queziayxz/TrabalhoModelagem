@@ -29,7 +29,6 @@ public class LoginController {
         dialogoErro.setTitle("Erro Login");
 
         if(tf_email.getText().isEmpty() || tf_password.getText().isEmpty()) {
-//            dialogoErro.setHeaderText("Esse é o cabeçalho...");
             dialogoErro.setContentText("Informe todos os campos para realizar o login");
             dialogoErro.showAndWait();
         } else {

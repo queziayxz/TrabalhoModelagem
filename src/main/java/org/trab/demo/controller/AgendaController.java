@@ -5,8 +5,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.model.Paciente;
+import org.trab.demo.repository.AgendaRepository;
 import org.trab.demo.repository.ConsultaRepository;
 import org.trab.demo.util.Telas;
 
@@ -90,13 +92,16 @@ public class AgendaController implements Initializable {
                     button.setPrefHeight(26);
                     button.setStyle("-fx-font-size:18");
 
+                    button.setOnAction(this::selecionaHorario);
+
                     if(consultas.get(i).getPaciente() != null) {
                         button.setUserData(consultas.get(i).getPaciente());
-                        button.setOnAction(this::selecionaHorario);
 
                         Label label = new Label(consultas.get(i).getPaciente().getNome());
                         label.setStyle("-fx-font-size:18");
                         this.grid_horarios.add(label, 1, i);
+                    } else {
+                        this.btn_deletar.setUserData(consultas.get(i).getHorarioConsulta());
                     }
 
                     this.grid_horarios.add(button, 0, i);
@@ -111,20 +116,54 @@ public class AgendaController implements Initializable {
     {
         Button button = (Button) event.getSource();
         Paciente paciente = (Paciente) button.getUserData();
-        this.tf_nome.setText(paciente.getNome());
-        this.tf_telefone.setText(paciente.getTelefone());
-        this.tf_email.setText(paciente.getEmail());
 
-        this.btn_deletar.setDisable(false);
-        this.btn_cancelar.setDisable(false);
+        if(paciente != null) {
+            this.tf_nome.setText(paciente.getNome());
+            this.tf_telefone.setText(paciente.getTelefone());
+            this.tf_email.setText(paciente.getEmail());
+            this.btn_cancelar.setDisable(false);
+        } else {
+            this.btn_deletar.setDisable(false);
+        }
 
-        this.btn_deletar.setUserData(paciente);
     }
 
     public void deletarHorario(ActionEvent event)
     {
-        Button button = (Button) event.getSource();
-        Paciente paciente = (Paciente) button.getUserData();
+            Button button = (Button) event.getSource();
+            Agenda horario = (Agenda) button.getUserData();
+
+            Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+            ButtonType btnDeletar = new ButtonType("Deletar");
+            ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+            String dateF = dateFormat.format(horario.getData());
+            String timeF = timeFormat.format(horario.getHora());
+
+            dialogoExe.setTitle("Deletando Horário");
+            dialogoExe.setContentText("Tem certeza que deseja detelar o horário de "+timeF+" no dia "+dateF+"?");
+            dialogoExe.getButtonTypes().setAll(btnDeletar, btnCancelar);
+            dialogoExe.showAndWait().ifPresent(b -> {
+                if (b == btnDeletar) {
+                    try {
+                        AgendaRepository.deleteHorario(horario.getId());
+
+                        Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+                        dialogoInfo.setContentText("Horário Deletado com Sucesso!");
+                        dialogoInfo.showAndWait();
+                        resetaCampos();
+                    } catch (SQLException e) {
+                        Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
+                        dialogoInfo.setTitle("Error");
+                        dialogoInfo.setHeaderText("Não foi possível deletar o horário selecionado!");
+                        dialogoInfo.showAndWait();
+                    }
+                }
+            });
+
+
 
     }
 

@@ -39,4 +39,18 @@ public class AgendaRepository {
         }
     }
 
+    public static void deleteHorario(Long idHorario) throws SQLException
+    {
+        try {
+            String sql = "DELETE FROM agendas WHERE id=?";
+
+            PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
+            statement.setLong(1, idHorario);
+            statement.execute();
+
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
+
 }
