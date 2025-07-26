@@ -5,10 +5,7 @@ import org.trab.demo.model.Consulta;
 import org.trab.demo.util.Conexao;
 import org.trab.demo.util.StatusConsultaEnum;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Date;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +61,42 @@ public class ConsultaRepository {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
+    }
+
+    /*
+        Método responsavel por obter todas as consultas do paciente durante a sua sessão
+     */
+    public static List<Consulta> getConsultasByPaciente(long idPaciente) throws SQLException {
+        List<Consulta> consultas = new ArrayList<>();
+        String sql = "SELECT c.id, a.id as id_agenda, a.data, a.hora, a.id_psicologo " +
+                "FROM consultas c " +
+                "JOIN agendas a ON c.id_agenda = a.id " +
+                "WHERE c.id_paciente = ? AND c.status = 'AGENDADO'";
+
+        try (Connection conn = Conexao.getConn();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, idPaciente);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Agenda agenda = new Agenda(
+                            rs.getLong("id_agenda"),
+                            rs.getDate("data"),
+                            rs.getTime("hora"),
+                            rs.getLong("id_psicologo")
+                    );
+
+                    Consulta consulta = new Consulta();
+                    consulta.setId(rs.getLong("id"));
+                    consulta.setHorarioConsulta(agenda);
+
+                    consultas.add(consulta);
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao buscar consultas: " + e.getMessage());
+        }
+        return consultas;
     }
 
 }

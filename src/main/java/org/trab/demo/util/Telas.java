@@ -44,10 +44,9 @@ public class Telas {
     }
 
     public static void getTelaDashPaci() throws IOException
-    {
-        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/dash_Paciente.fxml"));
+   {
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/dashPaciente.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
-
         stageC.setScene(scene);
         stageC.show();
     }
@@ -71,6 +70,34 @@ public class Telas {
     public static void getTelaAgendaPsicologo() throws IOException
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/agenda.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), width, height);
+        stageC.setScene(scene);
+        stageC.show();
+    }
+
+    public static void getTelaPerfil() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/view/dashPerfilPaciente.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), width, height);
+        stageC.setScene(scene);
+        stageC.show();
+    }
+
+    public static void getTelaAgendamento() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/view/dashAgendamento.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), width, height);
+        stageC.setScene(scene);
+        stageC.show();
+    }
+
+    public static void getTelaRemarcacao() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/view/dashRemarcação.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), width, height);
+        stageC.setScene(scene);
+        stageC.show();
+    }
+
+    public static void getTelaCancelamento() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/view/dashCancelamento.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
         stageC.setScene(scene);
         stageC.show();

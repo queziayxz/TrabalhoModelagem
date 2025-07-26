@@ -4,9 +4,11 @@ module org.trab.demo {
     requires java.desktop;
     requires java.sql;
 
-
+    opens org.trab.demo.model to javafx.base;
     opens org.trab.demo to javafx.fxml;
     opens org.trab.demo.controller to javafx.fxml;
+
     exports org.trab.demo;
     exports org.trab.demo.controller;
+
 }

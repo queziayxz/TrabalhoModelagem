@@ -40,6 +40,7 @@ public class LoginController {
                     if(user.getIsPsicologo()) {
                         Telas.getTelaDashPsi();
                     } else {
+                        System.out.println("entrou na dash paciente");
                         Telas.getTelaDashPaci();
                     }
                 } else {

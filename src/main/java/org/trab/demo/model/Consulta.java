@@ -2,6 +2,7 @@ package org.trab.demo.model;
 
 import java.sql.Time;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class Consulta {
     private Long id;
@@ -40,5 +41,14 @@ public class Consulta {
 
     public void setHorarioConsulta(Agenda horarioConsulta) {
         this.horarioConsulta = horarioConsulta;
+    }
+
+    // Pega as Datas formatadas
+    public String getDataFormatada() {
+        return new SimpleDateFormat("dd/MM/yyyy").format(horarioConsulta.getData());
+    }
+
+    public String getHoraFormatada() {
+        return new SimpleDateFormat("HH:mm").format(horarioConsulta.getHora());
     }
 }
