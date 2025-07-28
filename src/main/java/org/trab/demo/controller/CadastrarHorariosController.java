@@ -6,18 +6,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
-import org.trab.demo.repository.AgendaRepository;
 import org.trab.demo.repository.ConsultaRepository;
-import org.trab.demo.util.HorariosAgendaEnum;
+import org.trab.demo.enums.HorariosAgendaEnum;
 import org.trab.demo.util.Telas;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.SQLWarning;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 import java.sql.Date;
 

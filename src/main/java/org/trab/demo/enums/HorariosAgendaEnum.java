@@ -1,4 +1,4 @@
-package org.trab.demo.util;
+package org.trab.demo.enums;
 
 public enum HorariosAgendaEnum {
     OITO("08:00:00"),
