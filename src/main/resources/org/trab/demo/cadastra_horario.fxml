@@ -13,9 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="894.0"
-      xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.CadastrarHorariosController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.CadastrarHorariosController">
    <children>
       <ToolBar prefHeight="70.0" prefWidth="818.0">
          <items>
@@ -68,7 +66,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <GridPane fx:id="grid_horarios" hgap="40.0" prefHeight="205.0" prefWidth="879.0" vgap="60.0" VBox.vgrow="ALWAYS">
+                        <GridPane fx:id="grid_horarios" hgap="40.0" prefHeight="205.0" prefWidth="879.0" vgap="40.0" VBox.vgrow="ALWAYS">
                            <columnConstraints>
                               <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

@@ -41,6 +41,25 @@ public class AgendaRepository {
         }
     }
 
+    public static void cadastraHorario(Agenda horario) throws SQLException
+    {
+        System.out.println("data: "+horario.getData());
+        System.out.println("hora: "+horario.getHora());
+        System.out.println("id_psi: "+horario.getIdPsicologo());
+        try {
+            String sql = "INSERT INTO agendas (data,hora,id_psicologo,status) VALUES (?,?,?,?)";
+            PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
+            statement.setDate(1, horario.getData());
+            statement.setTime(2, horario.getHora());
+            statement.setLong(3, horario.getIdPsicologo());
+            statement.setString(4, StatusConsultaEnum.LIVRE.toString());
+
+            statement.execute();
+        } catch (SQLException e) {
+            throw new SQLException();
+        }
+    }
+
     public static void finalizaConsulta(Long idHorario, String status) throws SQLException
     {
         try {
