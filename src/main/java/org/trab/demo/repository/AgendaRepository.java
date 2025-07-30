@@ -41,6 +41,35 @@ public class AgendaRepository {
         }
     }
 
+    public static List<Agenda> getHorariosStatus() throws SQLException
+    {
+        try {
+            List<Agenda> horarios = new ArrayList<>();
+
+            String sql = "SELECT * FROM agendas WHERE status=? OR status=? ORDER BY data ASC";
+            PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
+            statement.setString(1,StatusConsultaEnum.CONCLUIDO.toString());
+            statement.setString(2,StatusConsultaEnum.NAO_REALIZADO.toString());
+            ResultSet result = statement.executeQuery();
+
+            while(result.next()) {
+                Agenda horario = new Agenda();
+                horario.setId(result.getLong("id"));
+                horario.setIdPsicologo(result.getLong("id_psicologo"));
+                horario.setData(result.getDate("data"));
+                horario.setHora(result.getTime("hora"));
+                horario.setStatus(result.getString("status"));
+
+                horarios.add(horario);
+            }
+
+            return horarios;
+
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
     public static void cadastraHorario(Agenda horario) throws SQLException
     {
         System.out.println("data: "+horario.getData());

@@ -56,6 +56,34 @@ public class ConsultaRepository {
         }
     }
 
+    public static List<Consulta> getConsultasFinalizadas() throws SQLException
+    {
+        try {
+            List<Agenda> horarios = AgendaRepository.getHorariosStatus();
+            List<Consulta> consultas = new ArrayList<>();
+
+            for(Agenda horario : horarios) {
+                String sql = "SELECT * FROM consultas WHERE id_agenda=?";
+                PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
+                statement.setLong(1,horario.getId());
+                ResultSet result = statement.executeQuery();
+                if(result.next()) {
+                    Consulta consulta = new Consulta();
+                    consulta.setId(result.getLong("id"));
+                    consulta.setHorarioConsulta(horario);
+                    consulta.setPaciente(UserRepository.getPacienteId(result.getLong("id_paciente")));
+
+                    consultas.add(consulta);
+                }
+            }
+
+            return consultas;
+
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
     public static void cancelarConsulta(Long idContulta) throws SQLException
     {
         try {

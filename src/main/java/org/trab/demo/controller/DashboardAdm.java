@@ -29,6 +29,8 @@ public class DashboardAdm implements Initializable {
     @FXML
     private Button btn_agenda;
     @FXML
+    private Button btn_historicoConsultas;
+    @FXML
     private GridPane grid_consulta_dia;
 
     @Override
@@ -94,6 +96,15 @@ public class DashboardAdm implements Initializable {
     {
         try {
             Telas.getTelaAgendaPsicologo();
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void telaHistoricoConsultas() throws IOException
+    {
+        try {
+            Telas.getTelaHistoricoConsultas();
         } catch (IOException e) {
             throw new IOException(e.getMessage());
         }
