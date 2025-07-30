@@ -134,13 +134,13 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <GridPane fx:id="grid_horarios" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="337.0" prefWidth="318.0" vgap="20.0" AnchorPane.bottomAnchor="-34.0" AnchorPane.rightAnchor="0.0">
+                        <GridPane fx:id="grid_horarios" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="318.0" vgap="20.0" AnchorPane.bottomAnchor="-34.0" AnchorPane.rightAnchor="0.0">
                            <columnConstraints>
-                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="158.4000244140625" prefWidth="158.4000244140625" />
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="158.4000244140625" />
                               <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="54.39998779296877" prefWidth="145.5999755859375" />
                            </columnConstraints>
                            <rowConstraints>
-                              <RowConstraints maxHeight="203.1999750137329" minHeight="4.79998779296875" prefHeight="203.1999750137329" />
+                              <RowConstraints minHeight="4.79998779296875" />
                            </rowConstraints>
                         </GridPane>
                      </children>

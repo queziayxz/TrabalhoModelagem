@@ -32,6 +32,11 @@
                   <Font size="14.0" />
                </font>
             </Button>
+            <Button fx:id="btn_historicoConsultas" mnemonicParsing="false" onAction="#telaHistoricoConsultas" text="Histórico de Consultas">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
             <Button fx:id="btn_perfil" mnemonicParsing="false" onAction="#telaPerfilPsi" text="Perfil">
                <font>
                   <Font size="14.0" />

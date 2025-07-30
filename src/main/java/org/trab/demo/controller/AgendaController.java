@@ -363,6 +363,15 @@ public class AgendaController implements Initializable {
         }
     }
 
+    public void telaHistoricoConsultas() throws IOException
+    {
+        try {
+            Telas.getTelaHistoricoConsultas();
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
     private void resetaCampos()
     {
         this.grid_horarios.getChildren().clear();

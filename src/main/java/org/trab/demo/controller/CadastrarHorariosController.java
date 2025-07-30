@@ -234,4 +234,13 @@ public class CadastrarHorariosController implements Initializable {
             throw new IOException(e.getMessage());
         }
     }
+
+    public void telaHistoricoConsultas() throws IOException
+    {
+        try {
+            Telas.getTelaHistoricoConsultas();
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
 }
