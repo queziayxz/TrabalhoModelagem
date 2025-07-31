@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="661.0" prefWidth="936.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.EditPsicologoController">
+<VBox prefHeight="661.0" prefWidth="936.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.EditPsicologoController">
    <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <items>

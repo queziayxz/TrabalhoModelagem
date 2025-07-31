@@ -6,6 +6,7 @@ import org.trab.demo.model.User;
 import org.trab.demo.util.Conexao;
 import org.trab.demo.util.Sessao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -118,4 +119,4 @@ public class UserRepository {
     }
 }
 
-}
+
