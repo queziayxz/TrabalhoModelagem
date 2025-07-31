@@ -95,4 +95,23 @@ public class UserRepository {
             throw new SQLException(e.getMessage());
         }
     }
+
+    public static void updatePsicologo(Psicologo psicologo) throws SQLException
+    {
+        try {
+            String sql = "UPDATE usuarios SET nome=?,telefone=?,email=?,data_nascimento=?,cpf=?,crp=? WHERE id=?";
+            PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
+            statement.setString(1,psicologo.getNome());
+            statement.setString(2,psicologo.getTelefone());
+            statement.setString(3,psicologo.getEmail());
+            statement.setString(4,psicologo.getDataNascimento().toString());
+            statement.setString(5,psicologo.getCpf());
+            statement.setString(6,psicologo.getCrp());
+            statement.setLong(7,psicologo.getId());
+
+            statement.execute();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
 }

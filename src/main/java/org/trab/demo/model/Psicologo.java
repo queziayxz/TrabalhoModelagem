@@ -1,7 +1,7 @@
 package org.trab.demo.model;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 
 public class Psicologo extends User {
     private String crp;

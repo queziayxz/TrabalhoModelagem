@@ -1,6 +1,6 @@
 package org.trab.demo.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public abstract class User {
     private Long id;
@@ -28,7 +28,7 @@ public abstract class User {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -36,7 +36,7 @@ public abstract class User {
     }
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     public void setNome(String nome) {
@@ -44,7 +44,7 @@ public abstract class User {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -52,7 +52,7 @@ public abstract class User {
     }
 
     public String getTelefone() {
-        return telefone;
+        return this.telefone;
     }
 
     public void setTelefone(String telefone) {
@@ -60,7 +60,7 @@ public abstract class User {
     }
 
     public Date getDataNascimento() {
-        return data_nascimento;
+        return this.data_nascimento;
     }
 
     public void setDataNascimento(Date data_nascimento) {
@@ -68,7 +68,7 @@ public abstract class User {
     }
 
     public String getCpf() {
-        return cpf;
+        return this.cpf;
     }
 
     public void setCpf(String cpf) {
@@ -76,7 +76,7 @@ public abstract class User {
     }
 
     public String getSenha() {
-        return senha;
+        return this.senha;
     }
 
     public void setSenha(String senha) {
@@ -84,7 +84,7 @@ public abstract class User {
     }
 
     public boolean getIsPsicologo() {
-        return is_psicologo;
+        return this.is_psicologo;
     }
 
     public void setIsPsicologo(boolean is_psicologo) {
