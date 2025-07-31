@@ -95,4 +95,27 @@ public class UserRepository {
             throw new SQLException(e.getMessage());
         }
     }
+
+    public static void atualizarUsuario(User user) throws SQLException {
+        String sql = "UPDATE usuarios SET nome=?, email=?, telefone=?, data_nascimento=?, senha=? WHERE id=?";
+        try (PreparedStatement stmt = Conexao.getConn().prepareStatement(sql)) {
+            stmt.setString(1, user.getNome());
+            stmt.setString(2, user.getEmail());
+            stmt.setString(3, user.getTelefone());
+            if (user.getDataNascimento() != null) {
+                stmt.setDate(4, new Date(user.getDataNascimento().getTime()));
+            } else {
+                stmt.setDate(4, null);
+            }
+            stmt.setString(5, user.getSenha());
+            stmt.setLong(6, user.getId());
+
+            int updated = stmt.executeUpdate();
+            if (updated == 0) {
+                throw new SQLException("Nenhum registro atualizado para o usuário ID " + user.getId());
+            }
+        }
+    }
+}
+
 }

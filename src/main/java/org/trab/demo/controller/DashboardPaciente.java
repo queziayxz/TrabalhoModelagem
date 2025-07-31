@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import org.trab.demo.enums.StatusConsultaEnum;
+import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.model.Paciente;
 import org.trab.demo.repository.ConsultaRepository;
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -30,7 +33,7 @@ public class DashboardPaciente implements Initializable {
     @FXML private Button btnAgendar;
     @FXML private Button btnRemarcar;
     @FXML private Button btnCancelar;
-    @FXML private Button btnAcessarPerfil1; // Botão Deslogar
+    @FXML private Button btnDeslogar;
     @FXML private TableView<Consulta> tvConsultas;
     @FXML private TableColumn<Consulta, String> colDia;
     @FXML private TableColumn<Consulta, String> colHora;
@@ -39,25 +42,42 @@ public class DashboardPaciente implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Obtém paciente da sessão
-        paciente = Sessao.getInstance().getUser(Paciente.class);
+        try {
+            // Obtém paciente da sessão
+            paciente = Sessao.getInstance().getUser(Paciente.class);
 
-        // Configura nome do paciente
-        lbNome.setText(paciente.getNome());
+            // Configura nome do paciente
+            lbNome.setText(paciente.getNome());
 
-        colDia.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDataFormatada()));
+            // Configurar as colunas da tabela
+            colDia.setCellValueFactory(cellData -> {
+                Agenda agenda = cellData.getValue().getHorarioConsulta();
+                return new SimpleStringProperty(formatDate(agenda.getData()));
+            });
 
-        colHora.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getHoraFormatada()));
+            colHora.setCellValueFactory(cellData -> {
+                Agenda agenda = cellData.getValue().getHorarioConsulta();
+                return new SimpleStringProperty(formatTime(agenda.getHora()));
+            });
 
-        // Carrega consultas
-        carregarConsultas();
+            // Carrega consultas
+            carregarConsultas();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            lbProxConsulta.setText("Erro ao carregar dados do paciente");
+        }
     }
 
     private void carregarConsultas() {
         try {
             List<Consulta> consultas = ConsultaRepository.getConsultasByPaciente(paciente.getId());
+
+            // Filtrar apenas consultas agendadas
+            consultas.removeIf(consulta ->
+                    !consulta.getHorarioConsulta().getStatus().equals(StatusConsultaEnum.AGENDADO.toString())
+            );
+
             tvConsultas.getItems().setAll(consultas);
 
             if (!consultas.isEmpty()) {
@@ -65,25 +85,24 @@ public class DashboardPaciente implements Initializable {
                 Consulta proxima = null;
 
                 for (Consulta c : consultas) {
-                    if (c.getHorarioConsulta().getData().after(hoje) ||
-                            c.getHorarioConsulta().getData().equals(hoje)) {
+                    Date dataConsulta = c.getHorarioConsulta().getData();
 
-                        if (proxima == null ||
-                                c.getHorarioConsulta().getData().before(proxima.getHorarioConsulta().getData())) {
+                    // Considerar apenas consultas futuras ou do dia atual
+                    if (dataConsulta.after(hoje) || dataConsulta.equals(hoje)) {
+                        if (proxima == null || dataConsulta.before(proxima.getHorarioConsulta().getData())) {
                             proxima = c;
                         }
                     }
                 }
 
                 if (proxima != null) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                    lbProxConsulta.setText("Próximas consultas: " +
-                            dateFormat.format(proxima.getHorarioConsulta().getData()) +
+                    Agenda agendaProxima = proxima.getHorarioConsulta();
+                    lbProxConsulta.setText("Próxima consulta: " +
+                            formatDate(agendaProxima.getData()) +
                             " às " +
-                            timeFormat.format(proxima.getHorarioConsulta().getHora()));
+                            formatTime(agendaProxima.getHora()));
                 } else {
-                    lbProxConsulta.setText("Próxima consulta: ");
+                    lbProxConsulta.setText("Nenhuma consulta futura agendada");
                 }
             } else {
                 lbProxConsulta.setText("Nenhuma consulta agendada");
@@ -92,6 +111,14 @@ public class DashboardPaciente implements Initializable {
             e.printStackTrace();
             lbProxConsulta.setText("Erro ao carregar consultas");
         }
+    }
+
+    private String formatDate(Date date) {
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
+    }
+
+    private String formatTime(Time time) {
+        return new SimpleDateFormat("HH:mm").format(time);
     }
 
     @FXML
@@ -116,7 +143,7 @@ public class DashboardPaciente implements Initializable {
 
     @FXML
     private void deslogar() throws IOException {
-        Sessao.getInstance().setUser(null); // Limpa a sessão
-        Telas.getTelaLogin(null); // Volta para tela de login
+        Sessao.getInstance().setUser(null);
+        Telas.getTelaLogin(null);
     }
 }

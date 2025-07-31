@@ -118,4 +118,15 @@ public class AgendaRepository {
         }
     }
 
+    public static void atualizarStatusHorario(Long idHorario, String status) throws SQLException {
+        try {
+            String sql = "UPDATE agendas SET status = ? WHERE id = ?";
+            PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
+            statement.setString(1, status);
+            statement.setLong(2, idHorario);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
 }

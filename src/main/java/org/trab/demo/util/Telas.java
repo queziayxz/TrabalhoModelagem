@@ -25,6 +25,10 @@ public class Telas {
         stageC.setScene(scene);
         stageC.show();
     }
+        public static Stage getStage() {
+            return stageC;
+        }
+
     public static void getTelaCadastro() throws IOException
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/cadastro.fxml"));

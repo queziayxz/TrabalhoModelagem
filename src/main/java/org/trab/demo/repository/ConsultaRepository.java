@@ -95,6 +95,18 @@ public class ConsultaRepository {
         }
     }
 
+    public static void agendarConsulta(Consulta consulta) throws SQLException {
+        try {
+            String sql = "INSERT INTO consultas (id_paciente, id_agenda) VALUES (?, ?)";
+            PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
+            statement.setLong(1, consulta.getPaciente().getId());
+            statement.setLong(2, consulta.getHorarioConsulta().getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
+
     /*
         Método responsavel por obter todas as consultas do paciente durante a sua sessão
      */
