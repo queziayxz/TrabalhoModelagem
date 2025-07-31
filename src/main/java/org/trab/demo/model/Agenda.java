@@ -1,13 +1,14 @@
 package org.trab.demo.model;
 
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 
 public class Agenda {
     private Long id;
     private Date data;
     private Time hora;
     private Long id_psicologo;
+    private String status;
 
     public Agenda(Long id, Date data, Time hora, Long id_psicologo) {
         this.id = id;
@@ -49,5 +50,13 @@ public class Agenda {
 
     public void setIdPsicologo(Long id_psicologo) {
         this.id_psicologo = id_psicologo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

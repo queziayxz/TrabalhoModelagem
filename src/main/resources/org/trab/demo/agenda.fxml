@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -29,6 +30,11 @@
                </font>
             </Button>
             <Button fx:id="btn_cadHorarios" mnemonicParsing="false" onAction="#telaCadHorarios" text="Cadastrar Horários">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="btn_historicoConsultas" mnemonicParsing="false" onAction="#telaHistoricoConsultas" text="Histórico de Consultas">
                <font>
                   <Font size="14.0" />
                </font>
@@ -92,7 +98,7 @@
                   </GridPane>
                </children>
             </VBox>
-            <VBox prefHeight="272.0" prefWidth="224.0" HBox.hgrow="ALWAYS">
+            <VBox prefHeight="420.0" prefWidth="317.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label text="Nome:">
                      <font>
@@ -124,20 +130,30 @@
                         <Insets bottom="20.0" />
                      </VBox.margin>
                   </TextField>
-                  <HBox alignment="CENTER" prefHeight="158.0" prefWidth="482.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                  <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" hgap="30.0" prefHeight="200.0" prefWidth="200.0" vgap="20.0">
                      <children>
-                        <Button fx:id="btn_deletar" disable="true" mnemonicParsing="false" onAction="#deletarHorario" prefHeight="39.0" prefWidth="154.0" text="Deletar Horário" HBox.hgrow="ALWAYS">
+                        <Button fx:id="btn_consultaRealizada" disable="true" mnemonicParsing="false" onAction="#concluirConsulta" prefHeight="39.0" prefWidth="150.0" text="Concluir Consulta">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btn_cancelar" disable="true" mnemonicParsing="false" onAction="#cancelarConsulta" prefHeight="39.0" prefWidth="150.0" text="Cancelar Consulta" HBox.hgrow="ALWAYS">
+                        <Button fx:id="btn_consultaNaoRealizada" disable="true" mnemonicParsing="false" onAction="#marcarNaoRealizadaConsulta" prefHeight="39.0" prefWidth="195.0" text="Marcar Como Não Realizada">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btn_deletarHorario" disable="true" mnemonicParsing="false" onAction="#deletarHorario" prefHeight="39.0" prefWidth="154.0" text="Deletar Horário">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btn_cancelarConsulta" disable="true" mnemonicParsing="false" onAction="#cancelarConsulta" prefHeight="39.0" prefWidth="150.0" text="Cancelar Consulta">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
                      </children>
-                  </HBox>
+                  </FlowPane>
                </children>
             </VBox>
          </children>

@@ -74,6 +74,13 @@ public class Telas {
         stageC.setScene(scene);
         stageC.show();
     }
+    public static void getTelaHistoricoConsultas() throws IOException
+    {
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/historico_consultas.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), width, height);
+        stageC.setScene(scene);
+        stageC.show();
+    }
 
     public static void getTelaPerfil() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/view/dashPerfilPaciente.fxml"));
