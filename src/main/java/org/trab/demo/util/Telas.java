@@ -87,28 +87,28 @@ public class Telas {
     }
 
     public static void getTelaPerfil() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/view/dashPerfilPaciente.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/dashPerfilPaciente.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
         stageC.setScene(scene);
         stageC.show();
     }
 
     public static void getTelaAgendamento() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/view/dashAgendamento.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/dashAgendamento.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
         stageC.setScene(scene);
         stageC.show();
     }
 
     public static void getTelaRemarcacao() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/view/dashRemarcação.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/dashRemarcação.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
         stageC.setScene(scene);
         stageC.show();
     }
 
     public static void getTelaCancelamento() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/view/dashCancelamento.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/dashCancelamento.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
         stageC.setScene(scene);
         stageC.show();

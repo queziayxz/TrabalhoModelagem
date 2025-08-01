@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.model.Paciente;
@@ -95,29 +96,61 @@ public class CancelamentoController {
         alert.showAndWait();
     }
 
-    @FXML
-    private void telaPerfil() throws IOException {
-        Telas.getTelaPerfil();
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
-    @FXML
-    private void telaAgendamento() throws IOException {
-        Telas.getTelaAgendamento();
+
+    public void onDeslogar(MouseEvent mouseEvent) {
+        try {
+            Sessao.getInstance().setUser(null); //define paciente da sessão NULL;
+            Telas.getTelaLogin(null); //chama tela de login
+        } catch (IOException e) {
+            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+        }
     }
 
-    @FXML
-    private void telaRemarcacao() throws IOException {
-        Telas.getTelaRemarcacao();
+    public void onInicio(MouseEvent mouseEvent) {
+        try {
+            Telas.getTelaDashPaci();//chama tela de paciente
+        } catch (IOException e) {
+            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+        }
     }
 
-    @FXML
-    private void telaCancelamento() throws IOException {
-        Telas.getTelaCancelamento();
+    public void onPerfil(MouseEvent mouseEvent) {
+        try {
+            Telas.getTelaPerfil(); //chama tela de Editar Perfil
+        } catch (IOException e) {
+            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+        }
     }
 
-    @FXML
-    private void deslogar() throws IOException {
-        Sessao.getInstance().setUser(null);
-        Telas.getTelaLogin(null);
+    public void onAgendar(MouseEvent mouseEvent) {
+        try {
+            Telas.getTelaAgendamento(); //chama tela de Editar Perfil
+        } catch (IOException e) {
+            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+        }
+    }
+
+    public void onRemarcar(MouseEvent mouseEvent) {
+        try {
+            Telas.getTelaRemarcacao(); //chama tela de Editar Perfil
+        } catch (IOException e) {
+            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+        }
+    }
+
+    public void onCancelar(MouseEvent mouseEvent) {
+        try {
+            Telas.getTelaCancelamento(); //chama tela de Editar Perfil
+        } catch (IOException e) {
+            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+        }
     }
 }

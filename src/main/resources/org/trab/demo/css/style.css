@@ -1,0 +1,16 @@
+
+.menu-bar {
+    -fx-background-color: #2b2b2b;
+    -fx-padding: 10;
+    -fx-background-radius: 4;
+}
+
+.text-menu {
+    -fx-fill: black;
+    -fx-font-size: 14px;
+}
+
+    .text-menu:hover {
+        -fx-fill: SlateGray;
+        -fx-cursor: hand;
+    }

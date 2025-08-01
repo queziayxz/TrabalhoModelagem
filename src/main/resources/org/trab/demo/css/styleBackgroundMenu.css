@@ -1,0 +1,7 @@
+.hBoxMenuBar {
+    -fx-background-color: linear-gradient( from 0% 0% to 0% 100%, #eeeeee 0%, #dddddd 100% );
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0.2, 0, 2);
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}

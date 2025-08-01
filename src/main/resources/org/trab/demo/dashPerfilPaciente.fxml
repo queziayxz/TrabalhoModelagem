@@ -1,78 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.PerfilPacienteController">
-  <children>
+<VBox xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.PerfilPacienteController">
 
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" VBox.vgrow="ALWAYS">
-      <children>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nome:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="35.0" />
-        <TextField fx:id="tfNome" prefHeight="35.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="55.0" />
-
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="110.0" />
-        <TextField fx:id="tfEmail" prefHeight="35.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="125.0" />
-
-        <HBox spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="170.0">
-          <children>
-            <VBox prefWidth="370.0" spacing="5.0">
-              <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Telefone:" />
-                <TextField fx:id="tfTelefone" prefHeight="35.0" prefWidth="370.0" />
-              </children>
-            </VBox>
-
-            <VBox prefWidth="370.0" spacing="5.0">
-              <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data de Nascimento:" />
-                <DatePicker fx:id="dpDataNascimento" prefHeight="35.0" prefWidth="370.0" />
-              </children>
-            </VBox>
-          </children>
-        </HBox>
-        <HBox spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="250.0">
-          <children>
-            <VBox prefWidth="370.0" spacing="5.0">
-              <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CPF:" />
-                <TextField fx:id="tfCPF" editable="false" prefHeight="35.0" prefWidth="370.0" />
-              </children>
-            </VBox>
-
-            <VBox prefWidth="370.0" spacing="5.0">
-              <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Senha:" />
-                <PasswordField fx:id="tfSenha" prefHeight="35.0" prefWidth="370.0" promptText="********" />
-              </children>
-            </VBox>
-          </children>
-        </HBox>
-
-        <!-- Botões -->
-        <HBox alignment="CENTER_RIGHT" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-          <children>
-            <Button fx:id="btnVoltar" onAction="#voltarParaDashboard" prefHeight="40.0" prefWidth="100.0" text="Voltar" />
-            <Button fx:id="btnSalvar" onAction="#salvarAlteracoes" prefHeight="40.0" prefWidth="150.0" text="Salvar Alterações" />
-          </children>
-          <padding>
-            <Insets top="20.0" />
-          </padding>
-        </HBox>
-            <HBox prefHeight="22.0" prefWidth="800.0">
+    <children>
+      <HBox fx:id="hBoxMenuBar" fillHeight="false" styleClass="hBoxMenuBar" stylesheets="@css/styleBackgroundMenu.css">
+         <children>
+            <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="25.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Hyperlink text="Hyperlink" />
+                  <Text onMouseClicked="#onInicio" styleClass="text-menu" text="Início">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+                  <Text onMouseClicked="#onAgendar" styleClass="text-menu" text="Agendar">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+                  <Text onMouseClicked="#onRemarcar" styleClass="text-menu" text="Remarcar">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+                  <Text onMouseClicked="#onCancelar" styleClass="text-menu" text="Cancelar">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+                  <Text onMouseClicked="#onPerfil" styleClass="text-menu" text="Perfil">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
                </children>
+               <stylesheets>
+                  <URL value="@css/style.css" />
+                  <URL value="@css/styleBackgroundMenu.css" />
+               </stylesheets>
             </HBox>
-      </children>
-    </AnchorPane>
-  </children>
+            <HBox alignment="CENTER_RIGHT" spacing="20.0">
+               <children>
+                  <Text onMouseClicked="#onDeslogar" styleClass="text-menu" text="Deslogar">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+               </children>
+               <stylesheets>
+                  <URL value="@css/style.css" />
+                  <URL value="@css/styleBackgroundMenu.css" />
+               </stylesheets>
+            </HBox>
+         </children>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </HBox>
+
+      
+              <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="479.0" prefWidth="802.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nome:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="35.0" />
+                <TextField fx:id="tfNome" prefHeight="35.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="55.0" />
+
+                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="105.0" />
+                <TextField fx:id="tfEmail" prefHeight="35.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="125.0" />
+
+                      <HBox spacing="20.0" AnchorPane.bottomAnchor="252.79999999999995" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="170.0">
+                    <children>
+                        <VBox prefWidth="370.0" spacing="5.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Telefone:" />
+                                <TextField fx:id="tfTelefone" prefHeight="35.0" prefWidth="370.0" />
+                            </children>
+                        </VBox>
+                        <VBox prefWidth="370.0" spacing="5.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data de Nascimento:" />
+                                <DatePicker fx:id="dpDataNascimento" prefHeight="35.0" prefWidth="370.0" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                      <HBox spacing="20.0" AnchorPane.bottomAnchor="104.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="250.0">
+                    <children>
+                        <VBox prefWidth="370.0" spacing="5.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CPF:" />
+                                <TextField fx:id="tfCPF" editable="false" prefHeight="35.0" prefWidth="370.0" />
+                            </children>
+                        </VBox>
+                        <VBox prefWidth="370.0" spacing="5.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Senha:" />
+                                <PasswordField fx:id="tfSenha" prefHeight="35.0" prefWidth="370.0" promptText="********" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                      <!-- Botões -->
+                <HBox alignment="CENTER_RIGHT" layoutY="304.0" prefHeight="71.0" prefWidth="760.0" spacing="20.0" AnchorPane.bottomAnchor="103.99999999999999" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="304.0">
+                    <children>
+                        <Button fx:id="btnSalvar" onAction="#salvarAlteracoes" prefHeight="35.0" prefWidth="125.0" text="Salvar Alterações" />
+                    </children>
+                    <padding>
+                        <Insets top="20.0" />
+                    </padding>
+                </HBox>
+
+                  </children>
+        </AnchorPane>
+
+    </children>
 </VBox>
