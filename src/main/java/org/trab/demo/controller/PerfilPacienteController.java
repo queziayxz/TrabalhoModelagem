@@ -10,31 +10,27 @@ import org.trab.demo.repository.UserRepository;
 import org.trab.demo.util.Sessao;
 import org.trab.demo.util.Telas;
 
+
+import java.time.LocalDate;
+
+import java.util.Calendar;
+import java.util.Date;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-
+import java.util.Calendar;
 
 public class PerfilPacienteController {
 
-    @FXML
-    private TextField tfNome;
-    @FXML
-    private TextField tfEmail;
-    @FXML
-    private TextField tfTelefone;
-    @FXML
-    private TextField tfCPF;
-    @FXML
-    private DatePicker dpDataNascimento;
-    @FXML
-    private PasswordField tfSenha;
-    @FXML
-    private Button btnSalvar;
-    @FXML
-    private Button btnVoltar;
+    @FXML private TextField tfNome;
+    @FXML private TextField tfEmail;
+    @FXML private TextField tfTelefone;
+    @FXML private TextField tfCPF;
+    @FXML private DatePicker dpDataNascimento;
+    @FXML private PasswordField tfSenha;
+    @FXML private Button btnSalvar;
+    @FXML private Button btnVoltar;
 
     private Paciente paciente;
 
@@ -52,14 +48,16 @@ public class PerfilPacienteController {
             tfTelefone.setText(paciente.getTelefone());
             tfCPF.setText(paciente.getCpf());
 
-            // Converter java.util.Date para LocalDate
             if (paciente.getDataNascimento() != null) {
-                LocalDate dataNasc = paciente.getDataNascimento().toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(paciente.getDataNascimento());
+                LocalDate dataNasc = LocalDate.of(
+                        cal.get(Calendar.YEAR),
+                        cal.get(Calendar.MONTH) + 1,
+                        cal.get(Calendar.DAY_OF_MONTH)
+                );
                 dpDataNascimento.setValue(dataNasc);
             }
-
         }
     }
 
@@ -67,24 +65,24 @@ public class PerfilPacienteController {
     private void salvarAlteracoes() {
         if (validarCampos()) {
             try {
-                // Atualizar dados do paciente
                 paciente.setNome(tfNome.getText());
                 paciente.setEmail(tfEmail.getText());
                 paciente.setTelefone(tfTelefone.getText());
 
-                // Atualizar data de nascimento se selecionada
                 if (dpDataNascimento.getValue() != null) {
-                    paciente.setDataNascimento(
-                            Date.valueOf(dpDataNascimento.getValue())
-                    );
+                    LocalDate localDate = dpDataNascimento.getValue();
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(localDate.getYear(),
+                            localDate.getMonthValue() - 1,
+                            localDate.getDayOfMonth());
+                    paciente.setDataNascimento(cal.getTime());
                 }
 
-                // Garante a atualização da senha, apenas quando é preenchida
                 if (!tfSenha.getText().isEmpty()) {
                     paciente.setSenha(tfSenha.getText());
                 }
 
-                UserRepository.atualizarUsuario(paciente);
+                UserRepository.updatePaciente(paciente);
 
                 mostrarAlerta(Alert.AlertType.INFORMATION,
                         "Sucesso",
@@ -150,53 +148,48 @@ public class PerfilPacienteController {
         alert.showAndWait();
     }
 
-
     public void onDeslogar(MouseEvent mouseEvent) {
         try {
-            Sessao.getInstance().setUser(null); //define paciente da sessão NULL;
-            Telas.getTelaLogin(null); //chama tela de login
+            Sessao.getInstance().setUser(null);
+            Telas.getTelaLogin(null);
         } catch (IOException e) {
-           showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
         }
     }
 
     public void onInicio(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaDashPaci();//chama tela de paciente
+            Telas.getTelaDashPaci();
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela inicial");
         }
     }
 
     public void onPerfil(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaPerfil(); //chama tela de Editar Perfil
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
-        }
+        showError("Edição de perfil", "você já está na tela de edição de perfil");
     }
 
     public void onAgendar(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaAgendamento(); //chama tela de Editar Perfil
+            Telas.getTelaAgendamento();
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de agendamento");
         }
     }
 
     public void onRemarcar(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaRemarcacao(); //chama tela de Editar Perfil
+            Telas.getTelaRemarcacao();
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de remarcação");
         }
     }
 
     public void onCancelar(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaCancelamento(); //chama tela de Editar Perfil
+            Telas.getTelaCancelamento();
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de cancelamento");
         }
     }
 }

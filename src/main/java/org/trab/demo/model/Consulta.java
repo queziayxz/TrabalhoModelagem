@@ -1,22 +1,24 @@
 package org.trab.demo.model;
 
 import java.sql.Time;
-import java.util.Date;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 
 public class Consulta {
     private Long id;
+    private Long idPaciente;  // Novo campo adicionado
+    private Long idAgenda;    // Novo campo adicionado
     private Paciente paciente;
     private Agenda horarioConsulta;
 
-    public Consulta(Long id, Paciente paciente, Agenda horarioConsulta) {
+    public Consulta(Long id, Long idPaciente, Long idAgenda, Paciente paciente, Agenda horarioConsulta) {
         this.id = id;
+        this.idPaciente = idPaciente;
+        this.idAgenda = idAgenda;
         this.paciente = paciente;
         this.horarioConsulta = horarioConsulta;
     }
 
     public Consulta() {
-
     }
 
     public Long getId() {
@@ -25,6 +27,22 @@ public class Consulta {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdPaciente() {
+        return idPaciente;
+    }
+
+    public void setIdPaciente(Long idPaciente) {
+        this.idPaciente = idPaciente;
+    }
+
+    public Long getIdAgenda() {
+        return idAgenda;
+    }
+
+    public void setIdAgenda(Long idAgenda) {
+        this.idAgenda = idAgenda;
     }
 
     public Paciente getPaciente() {
@@ -41,14 +59,5 @@ public class Consulta {
 
     public void setHorarioConsulta(Agenda horarioConsulta) {
         this.horarioConsulta = horarioConsulta;
-    }
-
-    // Pega as Datas formatadas
-    public String getDataFormatada() {
-        return new SimpleDateFormat("dd/MM/yyyy").format(horarioConsulta.getData());
-    }
-
-    public String getHoraFormatada() {
-        return new SimpleDateFormat("HH:mm").format(horarioConsulta.getHora());
     }
 }

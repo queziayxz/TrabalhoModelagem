@@ -83,16 +83,16 @@ public class AgendamentoController {
         Paciente paciente = sessao.getUser(Paciente.class);
 
         try {
-            // Criar nova consulta usando o modelo existente
+            // Criar nova consulta usando os IDs
             Consulta novaConsulta = new Consulta();
-            novaConsulta.setPaciente(paciente);
-            novaConsulta.setHorarioConsulta(horarioSelecionado);
+            novaConsulta.setIdPaciente(paciente.getId());
+            novaConsulta.setIdAgenda(horarioSelecionado.getId());
 
             // Inserir consulta no banco
             ConsultaRepository.agendarConsulta(novaConsulta);
 
             // Atualizar status do horário
-            AgendaRepository.atualizarStatusHorario(horarioSelecionado.getId(), StatusConsultaEnum.AGENDADO.toString());
+            AgendaRepository.finalizaConsulta(horarioSelecionado.getId(), StatusConsultaEnum.AGENDADO.toString());
 
             showAlert("Sucesso", "Consulta agendada com sucesso!");
             tableViewHorarios.getSelectionModel().clearSelection();
@@ -125,7 +125,7 @@ public class AgendamentoController {
             Sessao.getInstance().setUser(null); //define paciente da sessão NULL;
             Telas.getTelaLogin(null); //chama tela de login
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi deslogar do sistema");
         }
     }
 
@@ -133,7 +133,7 @@ public class AgendamentoController {
         try {
             Telas.getTelaDashPaci();//chama tela de paciente
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível ir para a tela inicial");
         }
     }
 
@@ -141,23 +141,19 @@ public class AgendamentoController {
         try {
             Telas.getTelaPerfil(); //chama tela de Editar Perfil
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível ir para a tela de edição de perfil");
         }
     }
 
     public void onAgendar(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaAgendamento(); //chama tela de Editar Perfil
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
-        }
+        showAlert("Agendamento", "você já está na tela de agendamento");
     }
 
     public void onRemarcar(MouseEvent mouseEvent) {
         try {
             Telas.getTelaRemarcacao(); //chama tela de Editar Perfil
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de remarcação");
         }
     }
 
@@ -165,7 +161,7 @@ public class AgendamentoController {
         try {
             Telas.getTelaCancelamento(); //chama tela de Editar Perfil
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de cancelamento");
         }
     }
 }

@@ -1,37 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
-  All rights reserved. Use is subject to license terms.
-
-  This file is available and licensed under the following license:
-
-  Redistribution and use in source and binary forms, with or without
-  modification, are permitted provided that the following conditions
-  are met:
-
-  - Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
-  - Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in
-    the documentation and/or other materials provided with the distribution.
-  - Neither the name of Oracle Corporation nor the names of its
-    contributors may be used to endorse or promote products derived
-    from this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
--->
-
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -45,96 +13,95 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.RemarcacaoController">
+<VBox xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.trab.demo.controller.AgendamentoController">
     <children>
         <AnchorPane prefWidth="894.0" VBox.vgrow="ALWAYS">
             <children>
                 <Text layoutX="14.4" layoutY="62.8" text="Agendamento Consulta" wrappingWidth="221.20819091796875" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="50.0">
-               <font>
-                  <Font size="20.0" />
-               </font></Text>
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Text>
                 <Text layoutX="14.4" layoutY="83.6283203125" text="Para agendar sua consulta, selecione um dia na qual deseja marcar a sua consulta, pressione mostrar horarios, escolha um dia e depois pressione agendar" wrappingWidth="868.7999999999998" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="75.0">
-               <font>
-                  <Font name="System Bold" size="13.0" />
-               </font></Text>
-            <HBox fx:id="hBoxMenuBar" fillHeight="false" prefWidth="899.0" styleClass="hBoxMenuBar" stylesheets="@css/styleBackgroundMenu.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <HBox alignment="CENTER_LEFT" fillHeight="false" prefWidth="823.0" spacing="25.0" HBox.hgrow="ALWAYS">
-                     <children>
-                         <Text onMouseClicked="#onInicio" styleClass="text-menu" text="Início">
-                             <font>
-                                 <Font size="10.0" />
-                             </font>
-                         </Text>
-                         <Text onMouseClicked="#onAgendar" styleClass="text-menu" text="Agendar">
-                             <font>
-                                 <Font size="10.0" />
-                             </font>
-                         </Text>
-                         <Text onMouseClicked="#onRemarcar" styleClass="text-menu" text="Remarcar">
-                             <font>
-                                 <Font size="10.0" />
-                             </font>
-                         </Text>
-                         <Text onMouseClicked="#onCancelar" styleClass="text-menu" text="Cancelar">
-                             <font>
-                                 <Font size="10.0" />
-                             </font>
-                         </Text>
-                         <Text onMouseClicked="#onPerfil" styleClass="text-menu" text="Perfil">
-                             <font>
-                                 <Font size="10.0" />
-                             </font>
-                         </Text>
-                     </children>
-                     <stylesheets>
-                        <URL value="@css/style.css" />
-                        <URL value="@css/styleBackgroundMenu.css" />
-                     </stylesheets>
-                  </HBox>
-                  <HBox alignment="CENTER_RIGHT" spacing="20.0">
-                     <children>
-                        <Text onMouseClicked="#onDeslogar" styleClass="text-menu" text="Deslogar">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Text>
-                     </children>
-                     <stylesheets>
-                        <URL value="@css/style.css" />
-                        <URL value="@css/styleBackgroundMenu.css" />
-                     </stylesheets>
-                  </HBox>
-               </children>
-               <cursor>
-                  <Cursor fx:constant="DEFAULT" />
-               </cursor>
-            </HBox>
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                </Text>
+                <HBox fx:id="hBoxMenuBar" fillHeight="false" prefWidth="899.0" styleClass="hBoxMenuBar" stylesheets="@css/styleBackgroundMenu.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" fillHeight="false" prefWidth="823.0" spacing="25.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Text onMouseClicked="#onInicio" styleClass="text-menu" text="Início">
+                                    <font>
+                                        <Font size="10.0" />
+                                    </font>
+                                </Text>
+                                <Text onMouseClicked="#onAgendar" styleClass="text-menu" text="Agendar">
+                                    <font>
+                                        <Font size="10.0" />
+                                    </font>
+                                </Text>
+                                <Text onMouseClicked="#onRemarcar" styleClass="text-menu" text="Remarcar">
+                                    <font>
+                                        <Font size="10.0" />
+                                    </font>
+                                </Text>
+                                <Text onMouseClicked="#onCancelar" styleClass="text-menu" text="Cancelar">
+                                    <font>
+                                        <Font size="10.0" />
+                                    </font>
+                                </Text>
+                                <Text onMouseClicked="#onPerfil" styleClass="text-menu" text="Perfil">
+                                    <font>
+                                        <Font size="10.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                            <stylesheets>
+                                <URL value="@css/style.css" />
+                                <URL value="@css/styleBackgroundMenu.css" />
+                            </stylesheets>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="20.0">
+                            <children>
+                                <Text onMouseClicked="#onDeslogar" styleClass="text-menu" text="Deslogar">
+                                    <font>
+                                        <Font size="10.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                            <stylesheets>
+                                <URL value="@css/style.css" />
+                                <URL value="@css/styleBackgroundMenu.css" />
+                            </stylesheets>
+                        </HBox>
+                    </children>
+                    <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                    </cursor>
+                </HBox>
 
                 <HBox layoutX="447.2" layoutY="103.8" prefHeight="26.0" prefWidth="427.0" spacing="10" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="121.8">
                     <children>
-                        <DatePicker prefHeight="26.0" HBox.hgrow="ALWAYS">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin></DatePicker>
-                        <Button fx:id="btnRemarcar1" mnemonicParsing="false" onAction="#remarcarConsulta" prefHeight="26.0" text="Exibir Consultas" />
-      
-                      <Button fx:id="btnRemarcar" text="Agendar Consulta" />
+                        <DatePicker fx:id="datePicker" prefHeight="26.0" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnExibirConsultas" mnemonicParsing="false" onAction="#exibirHorarios" prefHeight="26.0" text="Exibir Horários" />
+                        <Button fx:id="btnAgendarConsulta" text="Agendar Consulta" onAction="#agendarConsulta" />
                     </children>
-               <padding>
-                  <Insets right="16.0" />
-               </padding>
+                    <padding>
+                        <Insets right="16.0" />
+                    </padding>
                 </HBox>
 
                 <HBox layoutX="14.4" layoutY="137.4" spacing="20" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="155.0">
                     <children>
-                        <TableView HBox.hgrow="ALWAYS">
+                        <TableView fx:id="tableViewHorarios" HBox.hgrow="ALWAYS">
                             <columnResizePolicy>
                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                             </columnResizePolicy>
                             <columns>
-                                <TableColumn prefWidth="205.6" text="Dia" />
-                                <TableColumn prefWidth="205.6" text="Hora" />
+                                <TableColumn fx:id="colDia" prefWidth="205.6" text="Dia" />
+                                <TableColumn fx:id="colHora" prefWidth="205.6" text="Hora" />
                             </columns>
                         </TableView>
                     </children>

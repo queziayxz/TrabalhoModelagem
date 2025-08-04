@@ -74,11 +74,8 @@ public class CancelamentoController {
     @FXML
     private void cancelarConsulta() {
         try {
+
             ConsultaRepository.cancelarConsulta(consultaSelecionada.getId());
-            AgendaRepository.atualizarStatusHorario(
-                    consultaSelecionada.getHorarioConsulta().getId(),
-                    StatusConsultaEnum.LIVRE.toString()
-            );
 
             showAlert("Sucesso", "Consulta cancelada com sucesso!");
             carregarConsultas();
@@ -118,7 +115,7 @@ public class CancelamentoController {
         try {
             Telas.getTelaDashPaci();//chama tela de paciente
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir ir para a tela inicial");
         }
     }
 
@@ -126,7 +123,7 @@ public class CancelamentoController {
         try {
             Telas.getTelaPerfil(); //chama tela de Editar Perfil
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de editar perfil");
         }
     }
 
@@ -134,7 +131,7 @@ public class CancelamentoController {
         try {
             Telas.getTelaAgendamento(); //chama tela de Editar Perfil
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de agendamento");
         }
     }
 
@@ -142,15 +139,11 @@ public class CancelamentoController {
         try {
             Telas.getTelaRemarcacao(); //chama tela de Editar Perfil
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de remarcação");
         }
     }
 
     public void onCancelar(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaCancelamento(); //chama tela de Editar Perfil
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
-        }
+        showAlert("Cancelamento", "você já está na tela de cancelamento");
     }
 }

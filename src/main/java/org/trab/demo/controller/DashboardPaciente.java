@@ -25,6 +25,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static org.trab.demo.util.Telas.*;
+import static org.trab.demo.util.Telas.getTelaCancelamento;
+
 public class DashboardPaciente implements Initializable {
 
     @FXML private Label lbNome;
@@ -70,13 +73,7 @@ public class DashboardPaciente implements Initializable {
     }
 
     private void carregarConsultas() {
-        try {
-            List<Consulta> consultas = ConsultaRepository.getConsultasByPaciente(paciente.getId());
-
-            // Filtrar apenas consultas agendadas
-            consultas.removeIf(consulta ->
-                    !consulta.getHorarioConsulta().getStatus().equals(StatusConsultaEnum.AGENDADO.toString())
-            );
+                try {List<Consulta> consultas = ConsultaRepository.getConsultasByPaciente(paciente.getId());
 
             tvConsultas.getItems().setAll(consultas);
 
@@ -123,27 +120,27 @@ public class DashboardPaciente implements Initializable {
 
     @FXML
     private void telaPerfil() throws IOException {
-        Telas.getTelaPerfil();
+        getTelaPerfil();
     }
 
     @FXML
     private void telaAgendamento() throws IOException {
-        Telas.getTelaAgendamento();
+        getTelaAgendamento();
     }
 
     @FXML
     private void telaRemarcacao() throws IOException {
-        Telas.getTelaRemarcacao();
+        getTelaRemarcacao();
     }
 
     @FXML
     private void telaCancelamento() throws IOException {
-        Telas.getTelaCancelamento();
+        getTelaCancelamento();
     }
 
     @FXML
     private void deslogar() throws IOException {
         Sessao.getInstance().setUser(null);
-        Telas.getTelaLogin(null);
+        getTelaLogin(null);
     }
 }

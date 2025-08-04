@@ -130,21 +130,19 @@ public class RemarcacaoController {
         Paciente paciente = sessao.getUser(Paciente.class);
 
         try {
-            // Cancelar consulta atual
+            // Cancelar consulta selecionada
             ConsultaRepository.cancelarConsulta(consultaSelecionadaAtual.getId());
-            AgendaRepository.atualizarStatusHorario(
-                    consultaSelecionadaAtual.getHorarioConsulta().getId(),
-                    StatusConsultaEnum.LIVRE.toString()
-            );
 
-            // Criar nova consulta
+            // Criar nova consulta com IDs
             Consulta novaConsulta = new Consulta();
-            novaConsulta.setPaciente(paciente);
-            novaConsulta.setHorarioConsulta(horarioSelecionadoNovo);
+            novaConsulta.setIdPaciente(paciente.getId());
+            novaConsulta.setIdAgenda(horarioSelecionadoNovo.getId());
 
             // Agendar nova consulta
             ConsultaRepository.agendarConsulta(novaConsulta);
-            AgendaRepository.atualizarStatusHorario(
+
+
+            AgendaRepository.finalizaConsulta(
                     horarioSelecionadoNovo.getId(),
                     StatusConsultaEnum.AGENDADO.toString()
             );
@@ -159,6 +157,7 @@ public class RemarcacaoController {
             showAlert("Erro", "Erro ao remarcar consulta: " + e.getMessage());
         }
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -182,7 +181,7 @@ public class RemarcacaoController {
             Sessao.getInstance().setUser(null); //define paciente da sessão NULL;
             Telas.getTelaLogin(null); //chama tela de login
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível deslogar a sua conta");
         }
     }
 
@@ -190,7 +189,7 @@ public class RemarcacaoController {
         try {
             Telas.getTelaDashPaci();//chama tela de paciente
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível ir para a tela inicial");
         }
     }
 
@@ -198,7 +197,7 @@ public class RemarcacaoController {
         try {
             Telas.getTelaPerfil(); //chama tela de Editar Perfil
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível ir para a tela de editar perfil");
         }
     }
 
@@ -206,23 +205,19 @@ public class RemarcacaoController {
         try {
             Telas.getTelaAgendamento(); //chama tela de Editar Perfil
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de agendamento");
         }
     }
 
     public void onRemarcar(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaRemarcacao(); //chama tela de Editar Perfil
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
-        }
+        showAlert("Remarcação", "você já está na tela de remarcação");
     }
 
     public void onCancelar(MouseEvent mouseEvent) {
         try {
             Telas.getTelaCancelamento(); //chama tela de Editar Perfil
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível abrir a tela de Cancelamento");
         }
     }
 }

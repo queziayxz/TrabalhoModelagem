@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.PerfilPacienteController">
+<VBox xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.PerfilPacienteController">
 
     <children>
       <HBox fx:id="hBoxMenuBar" fillHeight="false" styleClass="hBoxMenuBar" stylesheets="@css/styleBackgroundMenu.css">
@@ -70,7 +70,7 @@
          </cursor>
       </HBox>
 
-      
+
               <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="479.0" prefWidth="802.0" VBox.vgrow="ALWAYS">
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nome:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="35.0" />
@@ -90,7 +90,7 @@
                         <VBox prefWidth="370.0" spacing="5.0">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data de Nascimento:" />
-                                <DatePicker fx:id="dpDataNascimento" prefHeight="35.0" prefWidth="370.0" />
+                                <DatePicker fx:id="dpDataNascimento"  prefHeight="35.0" prefWidth="370.0" />
                             </children>
                         </VBox>
                     </children>

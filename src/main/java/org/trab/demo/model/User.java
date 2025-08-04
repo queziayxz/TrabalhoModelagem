@@ -59,9 +59,7 @@ public abstract class User {
         this.telefone = telefone;
     }
 
-    public Date getDataNascimento() {
-        return data_nascimento;
-    }
+    public Date getDataNascimento() {return this.data_nascimento;}
 
     public void setDataNascimento(Date data_nascimento) {
         this.data_nascimento = data_nascimento;

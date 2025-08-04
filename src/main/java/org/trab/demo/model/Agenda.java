@@ -7,19 +7,27 @@ public class Agenda {
     private Long id;
     private Date data;
     private Time hora;
-    private Long id_psicologo;
-    private String status;
+    private Long idPsicologo;  // Corresponde a coluna id_psicologo no SQL
+    private String status;      // Corresponde a coluna status no SQL
 
-    public Agenda(Long id, Date data, Time hora, Long id_psicologo) {
+    // Construtor completo alinhado com SQL
+    public Agenda(Long id, Date data, Time hora, Long idPsicologo, String status) {
         this.id = id;
         this.data = data;
         this.hora = hora;
-        this.id_psicologo = id_psicologo;
+        this.idPsicologo = idPsicologo;
+        this.status = status;
+    }
+
+    // Construtor parcial mantido para compatibilidade
+    public Agenda(Long id, Date data, Time hora, Long idPsicologo) {
+        this(id, data, hora, idPsicologo, null);
     }
 
     public Agenda() {
     }
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -45,11 +53,11 @@ public class Agenda {
     }
 
     public Long getIdPsicologo() {
-        return id_psicologo;
+        return idPsicologo;
     }
 
-    public void setIdPsicologo(Long id_psicologo) {
-        this.id_psicologo = id_psicologo;
+    public void setIdPsicologo(Long idPsicologo) {
+        this.idPsicologo = idPsicologo;
     }
 
     public String getStatus() {

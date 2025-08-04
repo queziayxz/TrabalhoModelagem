@@ -117,6 +117,17 @@ public class UserRepository {
             }
         }
     }
+    public static void updatePaciente(Paciente paciente) throws SQLException {
+        String sql = "UPDATE usuarios SET nome=?, telefone=?, email=?, data_nascimento=? WHERE id=?";
+        try (PreparedStatement statement = Conexao.getConn().prepareStatement(sql)) {
+            statement.setString(1, paciente.getNome());
+            statement.setString(2, paciente.getTelefone());
+            statement.setString(3, paciente.getEmail());
+            statement.setDate(4, (Date) paciente.getDataNascimento());
+            statement.setLong(5, paciente.getId());
+            statement.executeUpdate();
+        }
+    }
 }
 
 
