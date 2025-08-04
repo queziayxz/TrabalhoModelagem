@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Psicologo;
+import org.trab.demo.model.User;
 import org.trab.demo.repository.AgendaRepository;
 import org.trab.demo.repository.UserRepository;
 import org.trab.demo.util.Sessao;
@@ -123,7 +124,12 @@ public class EditPsicologoController implements Initializable {
                 this.tf_cpf.getText().isEmpty() || this.tf_email.getText().isEmpty()) {
 
             throw new IllegalArgumentException("Campos Vazios!");
+        }
 
+        try {
+            User.validarCPF(this.tf_cpf.getText());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
