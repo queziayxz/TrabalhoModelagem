@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.DashboardPaciente">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.DashboardPaciente">
     <children>
         <AnchorPane prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <children>
@@ -19,7 +19,7 @@
                 <Label fx:id="lbNome" prefHeight="18.0" prefWidth="200.0" text="Nome" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="73.0">
                     <font><Font size="18.0" /></font>
                 </Label>
-                <Label fx:id="lbProxConsulta" prefHeight="26.0" prefWidth="200.0" text="Proxima(s) consulta(s):" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="130.0">
+                <Label fx:id="lbProxConsulta" layoutY="131.2" prefHeight="26.0" prefWidth="410.0" text="Proxima(s) consulta(s):" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="131.0">
                     <font><Font size="16.0" /></font>
                 </Label>
                 <Button fx:id="btnAcessarPerfil" mnemonicParsing="false" onAction="#telaPerfil" prefHeight="30.0" prefWidth="170.0" text="Acessar Perfil" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="52.0" />

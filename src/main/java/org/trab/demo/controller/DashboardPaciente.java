@@ -94,12 +94,12 @@ public class DashboardPaciente implements Initializable {
 
                 if (proxima != null) {
                     Agenda agendaProxima = proxima.getHorarioConsulta();
-                    lbProxConsulta.setText("Próxima consulta: " +
+                    lbProxConsulta.setText("Próximas consultas: " +
                             formatDate(agendaProxima.getData()) +
                             " às " +
                             formatTime(agendaProxima.getHora()));
                 } else {
-                    lbProxConsulta.setText("Nenhuma consulta futura agendada");
+                    lbProxConsulta.setText("Sua proxima consulta: ");
                 }
             } else {
                 lbProxConsulta.setText("Nenhuma consulta agendada");
