@@ -37,8 +37,8 @@ public class EditPsicologoController implements Initializable {
     @FXML
     private TextField tf_nome;
 
-    @FXML
-    private TextField tf_senha;
+//    @FXML
+//    private PasswordField tf_senha;
 
     @FXML
     private TextField tf_telefone;
@@ -66,44 +66,65 @@ public class EditPsicologoController implements Initializable {
 
     public void salvarDados()
     {
-        Psicologo psicologo = new Psicologo();
-        psicologo.setId(Sessao.getInstance().getUser(Psicologo.class).getId());
-        psicologo.setNome(this.tf_nome.getText());
-        psicologo.setTelefone(this.tf_telefone.getText());
+        try {
 
-        Date data = Date.valueOf(this.tf_dataNascimento.getValue());
-        psicologo.setDataNascimento(data);
+            this.validaCampos();
 
-        psicologo.setCrp(this.tf_crp.getText());
-        psicologo.setCpf(this.tf_cpf.getText());
-        psicologo.setEmail(this.tf_email.getText());
-        psicologo.setSenha(Sessao.getInstance().getUser(Psicologo.class).getSenha());
+            Psicologo psicologo = new Psicologo();
+            psicologo.setId(Sessao.getInstance().getUser(Psicologo.class).getId());
+            psicologo.setNome(this.tf_nome.getText());
+            psicologo.setTelefone(this.tf_telefone.getText());
 
-        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType btnEditar = new ButtonType("Editar");
-        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            Date data = Date.valueOf(this.tf_dataNascimento.getValue());
+            psicologo.setDataNascimento(data);
 
-        dialogoExe.setTitle("Editando Perfil");
-        dialogoExe.setContentText("Tem certeza que deseja editar suas informações?");
-        dialogoExe.getButtonTypes().setAll(btnEditar, btnCancelar);
-        dialogoExe.showAndWait().ifPresent(b -> {
-            if (b == btnEditar) {
-                try {
-                    UserRepository.updatePsicologo(psicologo);
+            psicologo.setCrp(this.tf_crp.getText());
+            psicologo.setCpf(this.tf_cpf.getText());
+            psicologo.setEmail(this.tf_email.getText());
+            psicologo.setSenha(Sessao.getInstance().getUser(Psicologo.class).getSenha());
+
+            Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+            ButtonType btnEditar = new ButtonType("Editar");
+            ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            dialogoExe.setTitle("Editando Perfil");
+            dialogoExe.setContentText("Tem certeza que deseja editar suas informações?");
+            dialogoExe.getButtonTypes().setAll(btnEditar, btnCancelar);
+            dialogoExe.showAndWait().ifPresent(b -> {
+                if (b == btnEditar) {
+                    try {
+                        UserRepository.updatePsicologo(psicologo);
+                    } catch (SQLException e) {
+                        Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
+                        dialogoInfo.setTitle("Error");
+                        dialogoInfo.setHeaderText("Não foi possível editar as informações!");
+                        dialogoInfo.showAndWait();
+                    }
 
                     Sessao.getInstance().setUser(psicologo);
 
                     Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
                     dialogoInfo.setContentText("Perfil Editado com Sucesso!");
                     dialogoInfo.showAndWait();
-                } catch (SQLException e) {
-                    Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-                    dialogoInfo.setTitle("Error");
-                    dialogoInfo.setHeaderText("Não foi possível editar as informações!");
-                    dialogoInfo.showAndWait();
                 }
-            }
-        });
+            });
+        } catch (IllegalArgumentException e) {
+            Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
+            dialogoInfo.setTitle("Error");
+            dialogoInfo.setHeaderText(e.getMessage());
+            dialogoInfo.showAndWait();
+        }
+    }
+
+    private void validaCampos() throws IllegalArgumentException
+    {
+        if(this.tf_nome.getText().isEmpty() || this.tf_telefone.getText().isEmpty() ||
+                this.tf_dataNascimento.getEditor().getText().isEmpty() || this.tf_crp.getText().isEmpty() ||
+                this.tf_cpf.getText().isEmpty() || this.tf_email.getText().isEmpty()) {
+
+            throw new IllegalArgumentException("Campos Vazios!");
+
+        }
     }
 
     public void telaDashPsicologo() throws IOException

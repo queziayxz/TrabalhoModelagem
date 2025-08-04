@@ -123,18 +123,6 @@
             <Insets bottom="30.0" left="40.0" right="40.0" />
          </VBox.margin>
       </TextField>
-      <Label prefHeight="27.0" prefWidth="82.0" text="Senha:">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <VBox.margin>
-            <Insets left="40.0" right="40.0" />
-         </VBox.margin>
-      </Label>
-      <TextField fx:id="tf_senha" editable="false" prefHeight="34.0" prefWidth="570.0">
-         <VBox.margin>
-            <Insets left="40.0" right="40.0" />
-         </VBox.margin></TextField>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="944.0">
          <children>
             <Button fx:id="btn_salvar" mnemonicParsing="false" onAction="#salvarDados" text="Salvar">
