@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class AgendaController implements Initializable {
     @FXML
@@ -60,6 +61,8 @@ public class AgendaController implements Initializable {
     private Label lb_semHorario;
     @FXML
     private Label lb_selectData;
+    @FXML
+    private Label lb_dataSelecionada;
 
     @FXML
     private GridPane grid_horarios;
@@ -82,11 +85,19 @@ public class AgendaController implements Initializable {
     public void mostrarHorariosDia()
     {
         try {
+            this.validaCampos();
+
             LocalDate data = this.data_picker.getValue();
             Date dateSql = Date.valueOf(data);
             List<Consulta> consultas = ConsultaRepository.getConsultasData(dateSql);
 
             resetaCampos();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+            String formattedDate = dateFormat.format(dateSql);
+            this.lb_dataSelecionada.setText(formattedDate);
+            this.lb_dataSelecionada.setVisible(true);
 
             this.lb_selectData.setVisible(false);
 
@@ -132,6 +143,11 @@ public class AgendaController implements Initializable {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
+            dialogoInfo.setTitle("Error");
+            dialogoInfo.setHeaderText(e.getMessage());
+            dialogoInfo.showAndWait();
         }
     }
 
@@ -334,6 +350,13 @@ public class AgendaController implements Initializable {
                 }
             }
         });
+    }
+
+    private void validaCampos() throws IllegalArgumentException
+    {
+        if(this.data_picker.getEditor().getText().isEmpty()) {
+            throw new IllegalArgumentException("Selecione uma Data!");
+        }
     }
 
     public void telaCadHorarios() throws IOException

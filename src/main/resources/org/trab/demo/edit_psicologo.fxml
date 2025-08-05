@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
@@ -9,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="661.0" prefWidth="936.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.EditPsicologoController">
+<VBox prefHeight="742.0" prefWidth="1088.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.EditPsicologoController">
    <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <items>
@@ -69,6 +70,19 @@
             <Insets bottom="30.0" left="40.0" right="40.0" />
          </VBox.margin>
       </TextField>
+      <Label text="Data de Nascimento:">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets left="40.0" right="40.0" />
+         </VBox.margin>
+      </Label>
+      <DatePicker fx:id="tf_dataNascimento" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="1008.0" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets bottom="30.0" left="40.0" right="40.0" />
+         </VBox.margin>
+      </DatePicker>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
             <VBox prefHeight="100.0" prefWidth="368.0" HBox.hgrow="ALWAYS">
@@ -109,21 +123,9 @@
             <Insets bottom="30.0" left="40.0" right="40.0" />
          </VBox.margin>
       </TextField>
-      <Label prefHeight="27.0" prefWidth="82.0" text="Senha:">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <VBox.margin>
-            <Insets left="40.0" right="40.0" />
-         </VBox.margin>
-      </Label>
-      <TextField fx:id="tf_senha" prefHeight="34.0" prefWidth="570.0">
-         <VBox.margin>
-            <Insets left="40.0" right="40.0" />
-         </VBox.margin></TextField>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="944.0">
          <children>
-            <Button fx:id="btn_salvar" mnemonicParsing="false" text="Salvar">
+            <Button fx:id="btn_salvar" mnemonicParsing="false" onAction="#salvarDados" text="Salvar">
                <font>
                   <Font size="18.0" />
                </font>

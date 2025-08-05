@@ -97,26 +97,25 @@ public class UserRepository {
         }
     }
 
-    public static void atualizarUsuario(User user) throws SQLException {
-        String sql = "UPDATE usuarios SET nome=?, email=?, telefone=?, data_nascimento=?, senha=? WHERE id=?";
-        try (PreparedStatement stmt = Conexao.getConn().prepareStatement(sql)) {
-            stmt.setString(1, user.getNome());
-            stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getTelefone());
-            if (user.getDataNascimento() != null) {
-                stmt.setDate(4, new Date(user.getDataNascimento().getTime()));
-            } else {
-                stmt.setDate(4, null);
-            }
-            stmt.setString(5, user.getSenha());
-            stmt.setLong(6, user.getId());
+    public static void updatePsicologo(Psicologo psicologo) throws SQLException
+    {
+        try {
+            String sql = "UPDATE usuarios SET nome=?,telefone=?,email=?,data_nascimento=?,cpf=?,crp=? WHERE id=?";
+            PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
+            statement.setString(1,psicologo.getNome());
+            statement.setString(2,psicologo.getTelefone());
+            statement.setString(3,psicologo.getEmail());
+            statement.setString(4,psicologo.getDataNascimento().toString());
+            statement.setString(5,psicologo.getCpf());
+            statement.setString(6,psicologo.getCrp());
+            statement.setLong(7,psicologo.getId());
 
-            int updated = stmt.executeUpdate();
-            if (updated == 0) {
-                throw new SQLException("Nenhum registro atualizado para o usuário ID " + user.getId());
-            }
+            statement.execute();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
+
     public static void updatePaciente(Paciente paciente) throws SQLException {
         String sql = "UPDATE usuarios SET nome=?, telefone=?, email=?, data_nascimento=? WHERE id=?";
         try (PreparedStatement statement = Conexao.getConn().prepareStatement(sql)) {
@@ -129,5 +128,3 @@ public class UserRepository {
         }
     }
 }
-
-

@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.sql.Date;
 
@@ -58,8 +59,8 @@ public class CadastrarHorariosController implements Initializable {
     public void mostrarHorarios()
     {
         try {
-
-            resetaCampos();
+            this.validaCampos();
+            this.resetaCampos();
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
             dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
@@ -68,14 +69,14 @@ public class CadastrarHorariosController implements Initializable {
 
             Date dataSelecionada = Date.valueOf(this.data_picker.getValue());
 
-            if(!dataSelecionada.toLocalDate().isAfter(LocalDate.now())) {
-                Alert dialogoExe = new Alert(Alert.AlertType.INFORMATION);
-                dialogoExe.setTitle("Erro Seleção da Data");
-                dialogoExe.setHeaderText("Não foi possível selecionar a data informada!");
-                dialogoExe.setContentText("Por favor, informe uma data futura.");
+            if(dataSelecionada.toLocalDate().isBefore(LocalDate.now())) {
+                Alert dialogoExe = new Alert(Alert.AlertType.WARNING);
+                dialogoExe.setTitle("Erro Buscar Horários");
+                dialogoExe.setHeaderText("Não foi possível buscar os horários da data selecionada!");
+                dialogoExe.setContentText("Por favor, selecione datas futuras.");
                 dialogoExe.showAndWait();
             } else {
-                List<Consulta> consultas = selecionaHorarios(dataSelecionada);
+                List<Consulta> consultas = this.selecionaHorarios(dataSelecionada);
 
                 for (int i = 0; i < consultas.size(); i++) {
                     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -104,8 +105,15 @@ public class CadastrarHorariosController implements Initializable {
                 }
             }
 
+
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
+            dialogoInfo.setTitle("Error");
+            dialogoInfo.setHeaderText(e.getMessage());
+            dialogoInfo.showAndWait();
         }
     }
 
@@ -168,38 +176,50 @@ public class CadastrarHorariosController implements Initializable {
         Button button = (Button) event.getSource();
         Consulta consulta = (Consulta) button.getUserData();
 
-        System.out.println("data: "+consulta.getHorarioConsulta().getData());
-        System.out.println("hora: "+consulta.getHorarioConsulta().getHora());
+        java.sql.Date sqlDate = consulta.getHorarioConsulta().getData();
+        LocalTime horaSelecionada = consulta.getHorarioConsulta().getHora().toLocalTime();
 
-        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType btnCadastrar = new ButtonType("Cadastrar");
-        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        if(sqlDate.toLocalDate().isEqual(LocalDate.now()) && !horaSelecionada.isAfter(LocalTime.now())) {
+            Alert dialogoExe = new Alert(Alert.AlertType.WARNING);
+            dialogoExe.setTitle("Erro Cadastro Horário");
+            dialogoExe.setHeaderText("Não foi possível cadastrar o horário selecionado!");
+            dialogoExe.setContentText("Por favor, selecione horários futuros.");
+            dialogoExe.showAndWait();
+        } else {
+            System.out.println("data: "+consulta.getHorarioConsulta().getData());
+            System.out.println("hora: "+consulta.getHorarioConsulta().getHora());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String dateF = dateFormat.format(consulta.getHorarioConsulta().getData());
-        String timeF = timeFormat.format(consulta.getHorarioConsulta().getHora());
+            Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+            ButtonType btnCadastrar = new ButtonType("Cadastrar");
+            ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-        dialogoExe.setTitle("Cadastrar Horário");
-        dialogoExe.setContentText("Tem certeza que deseja cadastrar o horário no dia "+dateF+" as "+timeF+"?");
-        dialogoExe.getButtonTypes().setAll(btnCadastrar, btnCancelar);
-        dialogoExe.showAndWait().ifPresent(b -> {
-            if (b == btnCadastrar) {
-                try {
-                    AgendaRepository.cadastraHorario(consulta.getHorarioConsulta());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+            String dateF = dateFormat.format(consulta.getHorarioConsulta().getData());
+            String timeF = timeFormat.format(consulta.getHorarioConsulta().getHora());
 
-                    Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
-                    dialogoInfo.setContentText("Horário Cadastrado com Sucesso!");
-                    dialogoInfo.showAndWait();
-                    resetaCampos();
-                } catch (SQLException e) {
-                    Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-                    dialogoInfo.setTitle("Error");
-                    dialogoInfo.setHeaderText("Não foi possível cadastrar esse horário!");
-                    dialogoInfo.showAndWait();
+            dialogoExe.setTitle("Cadastrar Horário");
+            dialogoExe.setContentText("Tem certeza que deseja cadastrar o horário no dia "+dateF+" as "+timeF+"?");
+            dialogoExe.getButtonTypes().setAll(btnCadastrar, btnCancelar);
+            dialogoExe.showAndWait().ifPresent(b -> {
+                if (b == btnCadastrar) {
+                    try {
+                        AgendaRepository.cadastraHorario(consulta.getHorarioConsulta());
+
+                        Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+                        dialogoInfo.setContentText("Horário Cadastrado com Sucesso!");
+                        dialogoInfo.showAndWait();
+                        resetaCampos();
+                    } catch (SQLException e) {
+                        Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
+                        dialogoInfo.setTitle("Error");
+                        dialogoInfo.setHeaderText("Não foi possível cadastrar esse horário!");
+                        dialogoInfo.showAndWait();
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
     private void resetaCampos()
@@ -207,6 +227,14 @@ public class CadastrarHorariosController implements Initializable {
         this.data_picker.getEditor().clear();
         this.lb_title.setText("Selecione uma Data!");
         this.grid_horarios.getChildren().clear();
+    }
+
+    private void validaCampos() throws IllegalArgumentException
+    {
+        if(this.data_picker.getEditor().getText().isEmpty()) {
+            throw new IllegalArgumentException("Selecione uma Data!");
+
+        }
     }
     public void telaAgenda() throws IOException
     {
