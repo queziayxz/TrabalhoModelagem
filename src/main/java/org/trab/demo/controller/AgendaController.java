@@ -182,9 +182,11 @@ public class AgendaController implements Initializable {
         Button button = (Button) event.getSource();
         Consulta consulta = (Consulta) button.getUserData();
 
-        LocalTime horarioAgora = consulta.getHorarioConsulta().getHora().toLocalTime();
+        java.sql.Date sqlDate = consulta.getHorarioConsulta().getData();
+        LocalTime horaSelecionada = consulta.getHorarioConsulta().getHora().toLocalTime();
 
-        if(consulta.getHorarioConsulta().getData().after(new java.util.Date()) || horarioAgora.isAfter(LocalTime.now())) {
+        if(sqlDate.toLocalDate().isAfter(LocalDate.now()) ||
+                (sqlDate.toLocalDate().isEqual(LocalDate.now()) && horaSelecionada.isAfter(LocalTime.now()))) {
             Alert dialogoExe = new Alert(Alert.AlertType.INFORMATION);
             dialogoExe.setTitle("Erro Finalização Consulta");
             dialogoExe.setHeaderText("Não foi possível marcar a consulta como concluída!");
@@ -229,9 +231,11 @@ public class AgendaController implements Initializable {
         Button button = (Button) event.getSource();
         Consulta consulta = (Consulta) button.getUserData();
 
-        LocalTime horarioAgora = consulta.getHorarioConsulta().getHora().toLocalTime();
+        java.sql.Date sqlDate = consulta.getHorarioConsulta().getData();
+        LocalTime horaSelecionada = consulta.getHorarioConsulta().getHora().toLocalTime();
 
-        if(consulta.getHorarioConsulta().getData().after(new java.util.Date()) || horarioAgora.isAfter(LocalTime.now())) {
+        if(sqlDate.toLocalDate().isAfter(LocalDate.now()) ||
+                (sqlDate.toLocalDate().isEqual(LocalDate.now()) && horaSelecionada.isAfter(LocalTime.now()))) {
             Alert dialogoExe = new Alert(Alert.AlertType.INFORMATION);
             dialogoExe.setTitle("Erro Finalização Consulta");
             dialogoExe.setHeaderText("Não foi possível marcar a consulta como não concluída!");
