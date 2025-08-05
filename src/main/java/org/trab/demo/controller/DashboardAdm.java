@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.repository.ConsultaRepository;
 import org.trab.demo.util.Sessao;
@@ -23,16 +22,6 @@ public class DashboardAdm implements Initializable {
     private Label lb_dia;
     @FXML
     private Label lb_sem_consulta;
-    @FXML
-    private Button btn_perfil;
-    @FXML
-    private Button btn_cadastra_horario;
-    @FXML
-    private Button btn_agenda;
-    @FXML
-    private Button btn_historicoConsultas;
-    @FXML
-    private Button btn_deslogar;
     @FXML
     private GridPane grid_consulta_dia;
 

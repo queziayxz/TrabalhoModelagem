@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -29,15 +28,6 @@ import java.util.TimeZone;
 public class AgendaController implements Initializable {
     @FXML
     private Button btn_agenda;
-
-    @FXML
-    private Button btn_dash;
-
-    @FXML
-    private Button btn_cadHorarios;
-
-    @FXML
-    private Button btn_deslogar;
 
     @FXML
     private Button btn_cancelarConsulta;
@@ -51,9 +41,6 @@ public class AgendaController implements Initializable {
 
     @FXML
     private Button btn_mostraHorarios;
-
-    @FXML
-    private Button btn_perfil;
 
     @FXML
     private DatePicker data_picker;

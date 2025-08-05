@@ -19,23 +19,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class HistoricoConsultasController implements Initializable {
-    @FXML
-    private Button btn_agenda;
-
-    @FXML
-    private Button btn_cadHorarios;
-
-    @FXML
-    private Button btn_dash;
 
     @FXML
     private Button btn_historicoConsultas;
-
-    @FXML
-    private Button btn_perfil;
-
-    @FXML
-    private Button btn_deslogar;
 
     @FXML
     private GridPane grid_horarios;

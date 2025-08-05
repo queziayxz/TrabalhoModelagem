@@ -17,12 +17,7 @@ import java.util.ResourceBundle;
 
 public class EditPsicologoController implements Initializable {
     @FXML
-    private Button btn_salvar;
-    @FXML
     private Button btn_perfil;
-
-    @FXML
-    private Button btn_deslogar;
 
     @FXML
     private TextField tf_cpf;
@@ -35,9 +30,6 @@ public class EditPsicologoController implements Initializable {
 
     @FXML
     private TextField tf_nome;
-
-//    @FXML
-//    private PasswordField tf_senha;
 
     @FXML
     private TextField tf_telefone;
@@ -59,7 +51,6 @@ public class EditPsicologoController implements Initializable {
         this.tf_crp.setText(Sessao.getInstance().getUser(Psicologo.class).getCrp());
         this.tf_cpf.setText(Sessao.getInstance().getUser(Psicologo.class).getCpf());
         this.tf_email.setText(Sessao.getInstance().getUser(Psicologo.class).getEmail());
-//        this.tf_senha.setText(Sessao.getInstance().getUser(Psicologo.class).getSenha());
 
     }
 

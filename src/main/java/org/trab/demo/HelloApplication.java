@@ -1,8 +1,6 @@
 package org.trab.demo;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.trab.demo.util.Conexao;
 import org.trab.demo.util.Telas;

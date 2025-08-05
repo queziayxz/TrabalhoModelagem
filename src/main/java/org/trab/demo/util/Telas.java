@@ -1,11 +1,8 @@
 package org.trab.demo.util;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.trab.demo.controller.ActionsPsiController;
-import org.trab.demo.controller.DashboardAdm;
 
 import java.io.IOException;
 
