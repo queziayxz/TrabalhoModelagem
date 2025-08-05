@@ -19,6 +19,7 @@ public class Telas {
         if (stage != null) {
             stageC = stage;
         }
+
         FXMLLoader fxmlLoader = new FXMLLoader(Telas.class.getResource("/org/trab/demo/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), width, height);
 

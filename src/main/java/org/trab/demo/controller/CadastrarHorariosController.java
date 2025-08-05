@@ -36,6 +36,9 @@ public class CadastrarHorariosController implements Initializable {
     private Button btn_dash;
 
     @FXML
+    private Button btn_deslogar;
+
+    @FXML
     private Button btn_mostrarHorarios;
 
     @FXML
@@ -233,6 +236,16 @@ public class CadastrarHorariosController implements Initializable {
     {
         if(this.data_picker.getEditor().getText().isEmpty()) {
             throw new IllegalArgumentException("Selecione uma Data!");
+
+        }
+    }
+
+    public void delogarSistema() throws IOException
+    {
+        try {
+            Sessao.getInstance().deslogar();
+            Telas.getTelaLogin(null);
+        } catch (IOException e) {
 
         }
     }

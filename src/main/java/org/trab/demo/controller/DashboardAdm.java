@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.repository.ConsultaRepository;
+import org.trab.demo.util.Sessao;
 import org.trab.demo.util.Telas;
 
 import java.io.IOException;
@@ -30,6 +31,8 @@ public class DashboardAdm implements Initializable {
     private Button btn_agenda;
     @FXML
     private Button btn_historicoConsultas;
+    @FXML
+    private Button btn_deslogar;
     @FXML
     private GridPane grid_consulta_dia;
 
@@ -71,6 +74,16 @@ public class DashboardAdm implements Initializable {
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void delogarSistema() throws IOException
+    {
+        try {
+            Sessao.getInstance().deslogar();
+            Telas.getTelaLogin(null);
+        } catch (IOException e) {
+
         }
     }
 

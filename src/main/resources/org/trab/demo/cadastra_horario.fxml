@@ -5,7 +5,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,8 +14,8 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.CadastrarHorariosController">
    <children>
-      <ToolBar prefHeight="70.0" prefWidth="818.0">
-         <items>
+      <HBox alignment="CENTER_LEFT" fillHeight="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" spacing="10.0">
+         <children>
             <Button fx:id="btn_dash" mnemonicParsing="false" onAction="#telaDashPsicologo" text="Início">
                <font>
                   <Font size="14.0" />
@@ -42,11 +41,20 @@
                   <Font size="14.0" />
                </font>
             </Button>
-         </items>
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button fx:id="btn_deslogar" maxHeight="-Infinity" mnemonicParsing="false" onAction="#delogarSistema" text="Deslogar">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
          <padding>
-            <Insets bottom="20.0" left="20.0" top="20.0" />
+            <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
          </padding>
-      </ToolBar>
+      </HBox>
       <HBox alignment="CENTER_RIGHT" prefHeight="146.0" prefWidth="854.0" spacing="40.0" VBox.vgrow="ALWAYS">
          <children>
             <DatePicker fx:id="data_picker" prefHeight="41.0" prefWidth="226.0" />

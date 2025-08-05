@@ -10,6 +10,7 @@ import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.repository.AgendaRepository;
 import org.trab.demo.repository.ConsultaRepository;
+import org.trab.demo.util.Sessao;
 import org.trab.demo.util.Telas;
 
 import java.io.IOException;
@@ -30,13 +31,16 @@ public class AgendaController implements Initializable {
     private Button btn_agenda;
 
     @FXML
+    private Button btn_dash;
+
+    @FXML
     private Button btn_cadHorarios;
 
     @FXML
-    private Button btn_cancelarConsulta;
+    private Button btn_deslogar;
 
     @FXML
-    private Button btn_dash;
+    private Button btn_cancelarConsulta;
 
     @FXML
     private Button btn_deletarHorario;
@@ -356,6 +360,16 @@ public class AgendaController implements Initializable {
     {
         if(this.data_picker.getEditor().getText().isEmpty()) {
             throw new IllegalArgumentException("Selecione uma Data!");
+        }
+    }
+
+    public void delogarSistema() throws IOException
+    {
+        try {
+            Sessao.getInstance().deslogar();
+            Telas.getTelaLogin(null);
+        } catch (IOException e) {
+
         }
     }
 
