@@ -22,6 +22,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class RemarcacaoController {
@@ -45,7 +46,6 @@ public class RemarcacaoController {
 
     @FXML
     public void initialize() {
-
         // Configurar tabela de consultas atuais
         colDiaAtual.setCellValueFactory(cellData ->
                 new SimpleObjectProperty<>(cellData.getValue().getHorarioConsulta().getData()));
@@ -68,6 +68,15 @@ public class RemarcacaoController {
         tableViewHorariosNovos.getSelectionModel().selectedItemProperty().addListener((obs, old, newSelection) -> {
             horarioSelecionadoNovo = newSelection;
             verificarSelecoes();
+        });
+
+        // Configurar data mínima para seleção (amanhã)
+        datePickerNova.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(LocalDate.now().plusDays(1)));
+            }
         });
     }
 
@@ -101,8 +110,17 @@ public class RemarcacaoController {
     @FXML
     private void exibirHorariosNovos(ActionEvent event) {
         LocalDate selectedDate = datePickerNova.getValue();
+        LocalDate hoje = LocalDate.now();
+
         if (selectedDate == null) {
             showAlert("Erro", "Por favor, selecione uma data para a nova consulta.");
+            return;
+        }
+
+        // Verificar se a data selecionada é pelo menos amanhã
+        if (selectedDate.isBefore(hoje.plusDays(1))) {
+            showAlert("Erro", "Só é possível remarcar para datas a partir de " +
+                    hoje.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             return;
         }
 
@@ -128,6 +146,28 @@ public class RemarcacaoController {
     private void remarcarConsulta(ActionEvent event) {
         Sessao sessao = Sessao.getInstance();
         Paciente paciente = sessao.getUser(Paciente.class);
+        LocalDate hoje = LocalDate.now();
+
+        // Verificar se a consulta atual pode ser cancelada (pelo menos 1 dia de antecedência)
+        LocalDate dataConsultaAtual = consultaSelecionadaAtual.getHorarioConsulta().getData().toLocalDate();
+        if (dataConsultaAtual.isBefore(hoje.plusDays(1))) {
+            showAlert("Erro", "Não é possível remarcar consultas com menos de 1 dia de antecedência.");
+            return;
+        }
+
+        // Verificar se a nova data é pelo menos amanhã
+        LocalDate novaData = horarioSelecionadoNovo.getData().toLocalDate();
+        if (novaData.isBefore(hoje.plusDays(1))) {
+            showAlert("Erro", "A nova data deve ser a partir de " +
+                    hoje.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            return;
+        }
+
+        // Verificar se não está tentando remarcar para o mesmo horário
+        if (consultaSelecionadaAtual.getHorarioConsulta().getId().equals(horarioSelecionadoNovo.getId())) {
+            showAlert("Erro", "Selecione um horário diferente para remarcar.");
+            return;
+        }
 
         try {
             // Cancelar consulta selecionada
@@ -141,7 +181,7 @@ public class RemarcacaoController {
             // Agendar nova consulta
             ConsultaRepository.agendarConsulta(novaConsulta);
 
-
+            // Atualizar status do novo horário
             AgendaRepository.finalizaConsulta(
                     horarioSelecionadoNovo.getId(),
                     StatusConsultaEnum.AGENDADO.toString()
@@ -157,7 +197,6 @@ public class RemarcacaoController {
             showAlert("Erro", "Erro ao remarcar consulta: " + e.getMessage());
         }
     }
-
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -175,11 +214,10 @@ public class RemarcacaoController {
         alert.showAndWait();
     }
 
-
     public void onDeslogar(MouseEvent mouseEvent) {
         try {
-            Sessao.getInstance().setUser(null); //define paciente da sessão NULL;
-            Telas.getTelaLogin(null); //chama tela de login
+            Sessao.getInstance().setUser(null);
+            Telas.getTelaLogin(null);
         } catch (IOException e) {
             showError("Erro de Navegação", "Não foi possível deslogar a sua conta");
         }
@@ -187,7 +225,7 @@ public class RemarcacaoController {
 
     public void onInicio(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaDashPaci();//chama tela de paciente
+            Telas.getTelaDashPaci();
         } catch (IOException e) {
             showError("Erro de Navegação", "Não foi possível ir para a tela inicial");
         }
@@ -195,7 +233,7 @@ public class RemarcacaoController {
 
     public void onPerfil(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaPerfil(); //chama tela de Editar Perfil
+            Telas.getTelaPerfil();
         } catch (IOException e) {
             showError("Erro de Navegação", "Não foi possível ir para a tela de editar perfil");
         }
@@ -203,19 +241,19 @@ public class RemarcacaoController {
 
     public void onAgendar(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaAgendamento(); //chama tela de Editar Perfil
+            Telas.getTelaAgendamento();
         } catch (IOException e) {
             showError("Erro de Navegação", "Não foi possível abrir a tela de agendamento");
         }
     }
 
     public void onRemarcar(MouseEvent mouseEvent) {
-        showAlert("Remarcação", "você já está na tela de remarcação");
+        showAlert("Remarcação", "Você já está na tela de remarcação");
     }
 
     public void onCancelar(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaCancelamento(); //chama tela de Editar Perfil
+            Telas.getTelaCancelamento();
         } catch (IOException e) {
             showError("Erro de Navegação", "Não foi possível abrir a tela de Cancelamento");
         }

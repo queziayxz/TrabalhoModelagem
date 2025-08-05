@@ -21,6 +21,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class AgendamentoController {
@@ -48,8 +49,16 @@ public class AgendamentoController {
     @FXML
     private void exibirHorarios(ActionEvent event) {
         LocalDate selectedDate = datePicker.getValue();
+        LocalDate hoje = LocalDate.now();
+
         if (selectedDate == null) {
             showAlert("Erro", "Por favor, selecione uma data.");
+            return;
+        }
+
+        // Verificar se a data selecionada é o dia atual
+        if (selectedDate.isBefore(hoje.plusDays(1))) {
+            showAlert("Erro", "Só é possível agendar consultas a partir de amanhã (" + hoje.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ").");
             return;
         }
 
@@ -79,19 +88,26 @@ public class AgendamentoController {
             return;
         }
 
+        // Verificação adicional para garantir que a data é válida
+        LocalDate dataConsulta = horarioSelecionado.getData().toLocalDate();
+        if (dataConsulta.isBefore(LocalDate.now().plusDays(1))) {
+            showAlert("Erro", "Não é possível agendar consultas para hoje. Selecione uma data a partir de amanhã.");
+            return;
+        }
+
         Sessao sessao = Sessao.getInstance();
         Paciente paciente = sessao.getUser(Paciente.class);
 
         try {
-            // Criar nova consulta usando os IDs
+            // Criar nova consulta utilizando os IDs
             Consulta novaConsulta = new Consulta();
             novaConsulta.setIdPaciente(paciente.getId());
             novaConsulta.setIdAgenda(horarioSelecionado.getId());
 
-            // Inserir consulta no banco
+            // Inserir consulta no sql
             ConsultaRepository.agendarConsulta(novaConsulta);
 
-            // Atualizar status do horário
+            // Atualização do status de consulta
             AgendaRepository.finalizaConsulta(horarioSelecionado.getId(), StatusConsultaEnum.AGENDADO.toString());
 
             showAlert("Sucesso", "Consulta agendada com sucesso!");

@@ -9,7 +9,6 @@ import javafx.scene.input.MouseEvent;
 import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.model.Paciente;
-import org.trab.demo.repository.AgendaRepository;
 import org.trab.demo.repository.ConsultaRepository;
 import org.trab.demo.util.Sessao;
 import org.trab.demo.util.Telas;
@@ -18,6 +17,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.List;
 
 public class CancelamentoController {
@@ -43,10 +43,20 @@ public class CancelamentoController {
 
         tableViewConsultas.getSelectionModel().selectedItemProperty().addListener((obs, old, newSelection) -> {
             consultaSelecionada = newSelection;
-            btnCancelarConsulta.setDisable(newSelection == null);
+            verificarSelecao();
         });
 
         carregarConsultas();
+    }
+
+    private void verificarSelecao() {
+        if (consultaSelecionada != null) {
+            LocalDate dataConsulta = consultaSelecionada.getHorarioConsulta().getData().toLocalDate();
+            boolean podeCancelar = dataConsulta.isAfter(LocalDate.now());
+            btnCancelarConsulta.setDisable(!podeCancelar);
+        } else {
+            btnCancelarConsulta.setDisable(true);
+        }
     }
 
     private void carregarConsultas() {
@@ -73,10 +83,19 @@ public class CancelamentoController {
 
     @FXML
     private void cancelarConsulta() {
+        if (consultaSelecionada == null) {
+            showAlert("Erro", "Selecione uma consulta para cancelar.");
+            return;
+        }
+
+        LocalDate dataConsulta = consultaSelecionada.getHorarioConsulta().getData().toLocalDate();
+        if (!dataConsulta.isAfter(LocalDate.now())) {
+            showAlert("Erro", "Só é possível cancelar consultas com pelo menos 1 dia de antecedência.");
+            return;
+        }
+
         try {
-
             ConsultaRepository.cancelarConsulta(consultaSelecionada.getId());
-
             showAlert("Sucesso", "Consulta cancelada com sucesso!");
             carregarConsultas();
             btnCancelarConsulta.setDisable(true);
@@ -101,49 +120,48 @@ public class CancelamentoController {
         alert.showAndWait();
     }
 
-
     public void onDeslogar(MouseEvent mouseEvent) {
         try {
-            Sessao.getInstance().setUser(null); //define paciente da sessão NULL;
-            Telas.getTelaLogin(null); //chama tela de login
+            Sessao.getInstance().setUser(null);
+            Telas.getTelaLogin(null);
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de login");
+            showError("Erro de Navegação", "Não foi possível deslogar");
         }
     }
 
     public void onInicio(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaDashPaci();//chama tela de paciente
+            Telas.getTelaDashPaci();
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir ir para a tela inicial");
+            showError("Erro de Navegação", "Não foi possível ir para a tela inicial");
         }
     }
 
     public void onPerfil(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaPerfil(); //chama tela de Editar Perfil
+            Telas.getTelaPerfil();
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de editar perfil");
+            showError("Erro de Navegação", "Não foi possível acessar o perfil");
         }
     }
 
     public void onAgendar(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaAgendamento(); //chama tela de Editar Perfil
+            Telas.getTelaAgendamento();
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de agendamento");
+            showError("Erro de Navegação", "Não foi possível acessar o agendamento");
         }
     }
 
     public void onRemarcar(MouseEvent mouseEvent) {
         try {
-            Telas.getTelaRemarcacao(); //chama tela de Editar Perfil
+            Telas.getTelaRemarcacao();
         } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de remarcação");
+            showError("Erro de Navegação", "Não foi possível acessar a remarcação");
         }
     }
 
     public void onCancelar(MouseEvent mouseEvent) {
-        showAlert("Cancelamento", "você já está na tela de cancelamento");
+        showAlert("Cancelamento", "Você já está na tela de cancelamento");
     }
 }
