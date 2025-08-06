@@ -52,7 +52,7 @@ public class RemarcacaoController {
         colHoraAtual.setCellValueFactory(cellData ->
                 new SimpleObjectProperty<>(cellData.getValue().getHorarioConsulta().getHora()));
         tableViewConsultasAtuais.setItems(consultasAtuaisList);
-
+        carregarConsultas();
         // Configurar tabela de novos horários
         colDiaNovo.setCellValueFactory(new PropertyValueFactory<>("data"));
         colHoraNovo.setCellValueFactory(new PropertyValueFactory<>("hora"));
@@ -78,6 +78,28 @@ public class RemarcacaoController {
                 setDisable(empty || date.isBefore(LocalDate.now().plusDays(1)));
             }
         });
+    }
+
+    private void carregarConsultas() {
+        Sessao sessao = Sessao.getInstance();
+        Paciente paciente = sessao.getUser(Paciente.class);
+
+        try {
+            List<Consulta> consultas = ConsultaRepository.getConsultasByPaciente(paciente.getId());
+            consultasAtuaisList.clear();
+
+            for (Consulta consulta : consultas) {
+                if (consulta.getHorarioConsulta().getStatus().equals(StatusConsultaEnum.AGENDADO.toString())) {
+                    consultasAtuaisList.add(consulta);
+                }
+            }
+
+            if (consultasAtuaisList.isEmpty()) {
+                showAlert("Informação", "Você não tem consultas agendadas para cancelar.");
+            }
+        } catch (SQLException e) {
+            showAlert("Erro", "Erro ao buscar consultas: " + e.getMessage());
+        }
     }
 
     private void verificarSelecoes() {
