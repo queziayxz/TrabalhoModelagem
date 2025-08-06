@@ -115,7 +115,7 @@ public class RemarcacaoController {
             }
 
             if (consultasAtuaisList.isEmpty()) {
-                showAlert("Informação", "Você não tem consultas agendadas para cancelar.");
+                showAlert("Informação", "Você não tem consultas agendadas para remarcar.");
             }
         } catch (SQLException e) {
             showAlert("Erro", "Erro ao buscar consultas: " + e.getMessage());
