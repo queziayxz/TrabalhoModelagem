@@ -13,8 +13,7 @@ import java.sql.SQLException;
 
 public class UserRepository {
 
-    public static User autenticate(String email, String senha) throws SQLException
-    {
+    public static User autenticate(String email, String senha) throws SQLException {
         try {
 
             String sql = "SELECT * FROM usuarios WHERE email=? AND senha=?";
@@ -25,8 +24,8 @@ public class UserRepository {
 
             ResultSet result = statem.executeQuery();
 
-            if(result.next()) {
-                switch(result.getString("is_psicologo")) {
+            if (result.next()) {
+                switch (result.getString("is_psicologo")) {
                     case "1":
                         Psicologo psi = new Psicologo();
                         psi.setId(result.getLong("id"));
@@ -66,8 +65,7 @@ public class UserRepository {
         }
     }
 
-    public static Paciente getPacienteId(Long id_paciente) throws SQLException
-    {
+    public static Paciente getPacienteId(Long id_paciente) throws SQLException {
         try {
 
             Paciente paciente = new Paciente();
@@ -78,7 +76,7 @@ public class UserRepository {
 
             ResultSet result = statm.executeQuery();
 
-            if(result.next()) {
+            if (result.next()) {
                 paciente.setId(result.getLong("id"));
                 paciente.setNome(result.getString("nome"));
                 paciente.setTelefone(result.getString("telefone"));
@@ -97,18 +95,17 @@ public class UserRepository {
         }
     }
 
-    public static void updatePsicologo(Psicologo psicologo) throws SQLException
-    {
+    public static void updatePsicologo(Psicologo psicologo) throws SQLException {
         try {
             String sql = "UPDATE usuarios SET nome=?,telefone=?,email=?,data_nascimento=?,cpf=?,crp=? WHERE id=?";
             PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
-            statement.setString(1,psicologo.getNome());
-            statement.setString(2,psicologo.getTelefone());
-            statement.setString(3,psicologo.getEmail());
-            statement.setString(4,psicologo.getDataNascimento().toString());
-            statement.setString(5,psicologo.getCpf());
-            statement.setString(6,psicologo.getCrp());
-            statement.setLong(7,psicologo.getId());
+            statement.setString(1, psicologo.getNome());
+            statement.setString(2, psicologo.getTelefone());
+            statement.setString(3, psicologo.getEmail());
+            statement.setString(4, psicologo.getDataNascimento().toString());
+            statement.setString(5, psicologo.getCpf());
+            statement.setString(6, psicologo.getCrp());
+            statement.setLong(7, psicologo.getId());
 
             statement.execute();
         } catch (SQLException e) {
@@ -117,14 +114,28 @@ public class UserRepository {
     }
 
     public static void updatePaciente(Paciente paciente) throws SQLException {
-        String sql = "UPDATE usuarios SET nome=?, telefone=?, email=?, data_nascimento=? WHERE id=?";
+        String sql = "UPDATE usuarios SET nome=?, telefone=?, email=?, data_nascimento=?, cpf=? WHERE id=?";
         try (PreparedStatement statement = Conexao.getConn().prepareStatement(sql)) {
             statement.setString(1, paciente.getNome());
             statement.setString(2, paciente.getTelefone());
             statement.setString(3, paciente.getEmail());
-            statement.setDate(4, (Date) paciente.getDataNascimento());
-            statement.setLong(5, paciente.getId());
+            statement.setDate(4, paciente.getDataNascimento());
+            statement.setString(5, paciente.getCpf());
+            statement.setLong(6, paciente.getId());
             statement.executeUpdate();
         }
+    }
+
+    public static boolean cpfExiste(String cpf) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE cpf = ?";
+        try (PreparedStatement statement = Conexao.getConn().prepareStatement(sql)) {
+            statement.setString(1, cpf);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
     }
 }
