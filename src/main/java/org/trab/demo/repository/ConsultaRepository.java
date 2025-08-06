@@ -13,6 +13,48 @@ import java.util.List;
 
 public class ConsultaRepository {
 
+    public static List<Consulta> getConsultasHorariosData(Date data) throws SQLException
+    {
+        try {
+
+            List<Consulta> consultas = new ArrayList<>();
+
+            List<Agenda> horarios = AgendaRepository.getHorariosData(data);
+
+            for(int i = 0; i < horarios.size(); i++) {
+                Consulta con = new Consulta();
+
+                if (horarios.get(i).getStatus().equals(StatusConsultaEnum.AGENDADO.toString()) ||
+                        horarios.get(i).getStatus().equals(StatusConsultaEnum.CONCLUIDO.toString()) ||
+                        horarios.get(i).getStatus().equals(StatusConsultaEnum.NAO_REALIZADO.toString())) {
+
+                    String sql = "SELECT * FROM consultas WHERE id_agenda=?";
+
+                    PreparedStatement statem = Conexao.getConn().prepareStatement(sql);
+                    statem.setLong(1, horarios.get(i).getId());
+
+                    ResultSet result = statem.executeQuery();
+
+                    if (result.next()) {
+                        con.setId(result.getLong("id"));
+
+                        con.setPaciente(UserRepository.getPacienteId(result.getLong("id_paciente")));
+
+                        con.setHorarioConsulta(horarios.get(i));
+                        consultas.add(con);
+                    }
+                } else {
+                    con.setHorarioConsulta(horarios.get(i));
+                    consultas.add(con);
+                }
+            }
+
+            return consultas;
+
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
     public static List<Consulta> getConsultasData(Date data) throws SQLException {
         try {
             List<Consulta> consultas = new ArrayList<>();
@@ -27,6 +69,9 @@ public class ConsultaRepository {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
+
+                System.out.println("id agenda: "+result.getLong("a.id"));
+
                 Consulta consulta = new Consulta();
                 consulta.setId(result.getLong("c.id"));
                 consulta.setIdPaciente(result.getLong("c.id_paciente"));
@@ -61,7 +106,7 @@ public class ConsultaRepository {
     public static List<Consulta> getConsultasFinalizadas() throws SQLException {
         try {
             List<Consulta> consultas = new ArrayList<>();
-            String sql = "SELECT c.id, c.id_paciente, c.id_agenda, a.*, u.nome " +
+            String sql = "SELECT c.*, a.*, u.* " +
                     "FROM consultas c " +
                     "JOIN agendas a ON c.id_agenda = a.id " +
                     "JOIN usuarios u ON c.id_paciente = u.id " +
@@ -86,10 +131,14 @@ public class ConsultaRepository {
                 agenda.setIdPsicologo(result.getLong("a.id_psicologo"));
                 agenda.setStatus(result.getString("a.status"));
 
-                // Criar objeto Paciente (simplificado)
+                // Criar objeto Paciente
                 Paciente paciente = new Paciente();
-                paciente.setId(result.getLong("c.id_paciente"));
+                paciente.setId(result.getLong("u.id"));
                 paciente.setNome(result.getString("u.nome"));
+                paciente.setTelefone(result.getString("u.telefone"));
+                paciente.setEmail(result.getString("u.email"));
+                paciente.setDataNascimento(result.getDate("u.data_nascimento"));
+                paciente.setCpf(result.getString("u.cpf"));
 
                 consulta.setHorarioConsulta(agenda);
                 consulta.setPaciente(paciente);

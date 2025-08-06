@@ -81,6 +81,9 @@ public class CadastrarHorariosController implements Initializable {
                     if(consultas.get(i).getPaciente() != null) {
                         button.setDisable(true);
                         label.setText(consultas.get(i).getPaciente().getNome());
+                    } else if (consultas.get(i).getHorarioConsulta().getStatus() != null) {
+                        label.setText("Horário já Cadastrado");
+                        button.setDisable(true);
                     } else {
                         label.setText("Horário Livre");
                         if(consultas.get(i).getHorarioConsulta().getStatus() != null) {
@@ -110,7 +113,7 @@ public class CadastrarHorariosController implements Initializable {
     private List<Consulta> selecionaHorarios(Date dataSelecionada) throws SQLException
     {
         try {
-            List<Consulta> consultasAgendadas = ConsultaRepository.getConsultasData(dataSelecionada);
+            List<Consulta> consultasAgendadas = ConsultaRepository.getConsultasHorariosData(dataSelecionada);
 
             List<Consulta> consultasFinais = new ArrayList<>();
 

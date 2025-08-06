@@ -81,7 +81,7 @@ public class AgendaController implements Initializable {
 
             LocalDate data = this.data_picker.getValue();
             Date dateSql = Date.valueOf(data);
-            List<Consulta> consultas = ConsultaRepository.getConsultasData(dateSql);
+            List<Consulta> consultas = ConsultaRepository.getConsultasHorariosData(dateSql);
 
             resetaCampos();
 
