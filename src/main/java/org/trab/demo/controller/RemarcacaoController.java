@@ -1,6 +1,7 @@
 package org.trab.demo.controller;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -33,11 +35,11 @@ public class RemarcacaoController {
     @FXML private Button btnExibirHorariosNovos;
     @FXML private Button btnRemarcarConsulta;
     @FXML private TableView<Consulta> tableViewConsultasAtuais;
-    @FXML private TableColumn<Consulta, Date> colDiaAtual;
-    @FXML private TableColumn<Consulta, Time> colHoraAtual;
+    @FXML private TableColumn<Consulta, String> colDiaAtual;
+    @FXML private TableColumn<Consulta, String> colHoraAtual;
     @FXML private TableView<Agenda> tableViewHorariosNovos;
-    @FXML private TableColumn<Agenda, Date> colDiaNovo;
-    @FXML private TableColumn<Agenda, Time> colHoraNovo;
+    @FXML private TableColumn<Agenda, String> colDiaNovo;
+    @FXML private TableColumn<Agenda, String> colHoraNovo;
 
     private ObservableList<Consulta> consultasAtuaisList = FXCollections.observableArrayList();
     private ObservableList<Agenda> horariosNovosList = FXCollections.observableArrayList();
@@ -46,20 +48,34 @@ public class RemarcacaoController {
 
     @FXML
     public void initialize() {
-        // Configurar tabela de consultas atuais
-        colDiaAtual.setCellValueFactory(cellData ->
-                new SimpleObjectProperty<>(cellData.getValue().getHorarioConsulta().getData()));
-        colHoraAtual.setCellValueFactory(cellData ->
-                new SimpleObjectProperty<>(cellData.getValue().getHorarioConsulta().getHora()));
+        // Configurar tabela de consultas atuais (Consulta)
+        colDiaAtual.setCellValueFactory(cellData -> {
+            Agenda agenda = cellData.getValue().getHorarioConsulta();
+            return new SimpleStringProperty(formatDate(agenda.getData()));
+        });
+
+        colHoraAtual.setCellValueFactory(cellData -> {
+            Agenda agenda = cellData.getValue().getHorarioConsulta();
+            return new SimpleStringProperty(formatTime(agenda.getHora()));
+        });
+
+        // Configurar tabela de novos horários (Agenda)
+        colDiaNovo.setCellValueFactory(cellData -> {
+            Agenda agenda = cellData.getValue();
+            return new SimpleStringProperty(formatDate(agenda.getData()));
+        });
+
+        colHoraNovo.setCellValueFactory(cellData -> {
+            Agenda agenda = cellData.getValue();
+            return new SimpleStringProperty(formatTime(agenda.getHora()));
+        });
+
         tableViewConsultasAtuais.setItems(consultasAtuaisList);
-        carregarConsultas();
-        // Configurar tabela de novos horários
-        colDiaNovo.setCellValueFactory(new PropertyValueFactory<>("data"));
-        colHoraNovo.setCellValueFactory(new PropertyValueFactory<>("hora"));
         tableViewHorariosNovos.setItems(horariosNovosList);
 
         btnRemarcarConsulta.setDisable(true);
 
+        // Listeners de seleção
         tableViewConsultasAtuais.getSelectionModel().selectedItemProperty().addListener((obs, old, newSelection) -> {
             consultaSelecionadaAtual = newSelection;
             verificarSelecoes();
@@ -70,14 +86,18 @@ public class RemarcacaoController {
             verificarSelecoes();
         });
 
-        // Configurar data mínima para seleção (amanhã)
-        datePickerNova.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(empty || date.isBefore(LocalDate.now().plusDays(1)));
-            }
-        });
+        // Carregar consultas do paciente ao inicializar
+        carregarConsultas();
+    }
+
+    private String formatDate(Date date) {
+        if (date == null) return "";
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
+    }
+
+    private String formatTime(Time time) {
+        if (time == null) return "";
+        return new SimpleDateFormat("HH:mm").format(time);
     }
 
     private void carregarConsultas() {

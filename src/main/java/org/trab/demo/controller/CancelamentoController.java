@@ -1,12 +1,14 @@
 package org.trab.demo.controller;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.trab.demo.enums.StatusConsultaEnum;
+import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.model.Paciente;
 import org.trab.demo.repository.ConsultaRepository;
@@ -17,14 +19,15 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 
 public class CancelamentoController {
 
     @FXML private TableView<Consulta> tableViewConsultas;
-    @FXML private TableColumn<Consulta, Date> colDia;
-    @FXML private TableColumn<Consulta, Time> colHora;
+    @FXML private TableColumn<Consulta, String> colDia;
+    @FXML private TableColumn<Consulta, String> colHora;
     @FXML private Button btnCancelarConsulta;
 
     private ObservableList<Consulta> consultasList = FXCollections.observableArrayList();
@@ -33,10 +36,15 @@ public class CancelamentoController {
     @FXML
     public void initialize() {
         // Configurar as colunas usando as propriedades aninhadas
-        colDia.setCellValueFactory(cellData ->
-                new SimpleObjectProperty<>(cellData.getValue().getHorarioConsulta().getData()));
-        colHora.setCellValueFactory(cellData ->
-                new SimpleObjectProperty<>(cellData.getValue().getHorarioConsulta().getHora()));
+        colDia.setCellValueFactory(cellData -> {
+            Agenda agenda = cellData.getValue().getHorarioConsulta();
+            return new SimpleStringProperty(formatDate(agenda.getData()));
+        });
+
+        colHora.setCellValueFactory(cellData -> {
+            Agenda agenda = cellData.getValue().getHorarioConsulta();
+            return new SimpleStringProperty(formatTime(agenda.getHora()));
+        });
 
         tableViewConsultas.setItems(consultasList);
         btnCancelarConsulta.setDisable(true);
@@ -47,6 +55,16 @@ public class CancelamentoController {
         });
 
         carregarConsultas();
+    }
+
+    private String formatDate(Date date) {
+        if (date == null) return "";
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
+    }
+
+    private String formatTime(Time time) {
+        if (time == null) return "";
+        return new SimpleDateFormat("HH:mm").format(time);
     }
 
     private void verificarSelecao() {

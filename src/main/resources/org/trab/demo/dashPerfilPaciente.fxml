@@ -101,7 +101,7 @@
                         <VBox prefWidth="370.0" spacing="5.0">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CPF:" />
-                                <TextField fx:id="tfCPF" editable="false" prefHeight="35.0" prefWidth="370.0" />
+                                <TextField fx:id="tfCPF" editable="true" prefHeight="35.0" prefWidth="370.0" />
                             </children>
                         </VBox>
                         <VBox prefWidth="370.0" spacing="5.0">
