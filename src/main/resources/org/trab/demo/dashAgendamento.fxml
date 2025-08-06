@@ -13,8 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.trab.demo.controller.AgendamentoController">
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.AgendamentoController">
     <children>
         <AnchorPane prefWidth="894.0" VBox.vgrow="ALWAYS">
             <children>
@@ -23,7 +22,7 @@
                         <Font size="20.0" />
                     </font>
                 </Text>
-                <Text layoutX="14.4" layoutY="83.6283203125" text="Para agendar sua consulta, selecione um dia na qual deseja marcar a sua consulta, pressione mostrar horarios, escolha um dia e depois pressione agendar" wrappingWidth="868.7999999999998" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="75.0">
+                <Text layoutX="14.4" layoutY="83.6283203125" text="Para agendar sua consulta, selecione um dia e pressione “Exibir Horários”. Depois, escolha um dos dias que irá aparecer na tabela abaixo. Por último, clique em “Agendar Consulta”.  " wrappingWidth="868.7999999999998" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="75.0">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
@@ -84,9 +83,9 @@
 
                 <HBox layoutX="447.2" layoutY="103.8" prefHeight="26.0" prefWidth="427.0" spacing="10" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="121.8">
                     <children>
-                        <DatePicker fx:id="datePicker" prefHeight="26.0" HBox.hgrow="ALWAYS"/>
+                        <DatePicker fx:id="datePicker" prefHeight="26.0" HBox.hgrow="ALWAYS" />
                         <Button fx:id="btnExibirConsultas" mnemonicParsing="false" onAction="#exibirHorarios" prefHeight="26.0" text="Exibir Horários" />
-                        <Button fx:id="btnAgendarConsulta" text="Agendar Consulta" onAction="#agendarConsulta" />
+                        <Button fx:id="btnAgendarConsulta" onAction="#agendarConsulta" text="Agendar Consulta" />
                     </children>
                     <padding>
                         <Insets right="16.0" />

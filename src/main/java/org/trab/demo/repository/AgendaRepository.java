@@ -13,7 +13,7 @@ public class AgendaRepository {
     public static List<Agenda> getHorariosData(Date data) throws SQLException {
         try {
             List<Agenda> horarios = new ArrayList<>();
-            String sql = "SELECT * FROM agendas WHERE data=?";
+            String sql = "SELECT * FROM agendas WHERE data=? ORDER BY data,hora";
             PreparedStatement statement = Conexao.getConn().prepareStatement(sql);
             statement.setDate(1, data);
             ResultSet result = statement.executeQuery();

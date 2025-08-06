@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.PerfilPacienteController">
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.PerfilPacienteController">
 
     <children>
       <HBox fx:id="hBoxMenuBar" fillHeight="false" styleClass="hBoxMenuBar" stylesheets="@css/styleBackgroundMenu.css">
@@ -79,47 +79,53 @@
                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="105.0" />
                 <TextField fx:id="tfEmail" prefHeight="35.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="125.0" />
 
-                      <HBox spacing="20.0" AnchorPane.bottomAnchor="252.79999999999995" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="170.0">
+                      <HBox spacing="20.0" AnchorPane.bottomAnchor="252.79999999999995" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="170.0">
                     <children>
-                        <VBox prefWidth="370.0" spacing="5.0">
+                        <VBox prefWidth="370.0" spacing="5.0" HBox.hgrow="ALWAYS">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Telefone:" />
-                                <TextField fx:id="tfTelefone" prefHeight="35.0" prefWidth="370.0" />
+                                <TextField fx:id="tfTelefone" prefHeight="35.0" prefWidth="370.0" VBox.vgrow="ALWAYS" />
                             </children>
                         </VBox>
-                        <VBox prefWidth="370.0" spacing="5.0">
+                        <VBox prefWidth="370.0" spacing="5.0" HBox.hgrow="ALWAYS">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data de Nascimento:" />
-                                <DatePicker fx:id="dpDataNascimento"  prefHeight="35.0" prefWidth="370.0" />
+                                <DatePicker fx:id="dpDataNascimento" maxWidth="1.7976931348623157E308" prefHeight="35.0" VBox.vgrow="ALWAYS" />
                             </children>
                         </VBox>
                     </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
                 </HBox>
 
-                      <HBox spacing="20.0" AnchorPane.bottomAnchor="104.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="250.0">
+                      <HBox spacing="20.0" AnchorPane.bottomAnchor="104.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="250.0">
                     <children>
-                        <VBox prefWidth="370.0" spacing="5.0">
+                        <VBox prefWidth="370.0" spacing="5.0" HBox.hgrow="ALWAYS">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CPF:" />
-                                <TextField fx:id="tfCPF" editable="true" prefHeight="35.0" prefWidth="370.0" />
+                                <TextField fx:id="tfCPF" editable="true" maxWidth="1.7976931348623157E308" prefHeight="35.0" />
                             </children>
                         </VBox>
-                        <VBox prefWidth="370.0" spacing="5.0">
+                        <VBox prefWidth="370.0" spacing="5.0" HBox.hgrow="ALWAYS">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Senha:" />
-                                <PasswordField fx:id="tfSenha" prefHeight="35.0" prefWidth="370.0" promptText="********" />
+                                <PasswordField fx:id="tfSenha" maxWidth="1.7976931348623157E308" prefHeight="35.0" promptText="********" />
                             </children>
                         </VBox>
                     </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
                 </HBox>
 
                       <!-- Botões -->
-                <HBox alignment="CENTER_RIGHT" layoutY="304.0" prefHeight="71.0" prefWidth="760.0" spacing="20.0" AnchorPane.bottomAnchor="103.99999999999999" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="304.0">
+                <HBox alignment="CENTER" layoutY="304.0" prefHeight="71.0" prefWidth="760.0" spacing="20.0" AnchorPane.bottomAnchor="103.99999999999999" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="304.0">
                     <children>
                         <Button fx:id="btnSalvar" onAction="#salvarAlteracoes" prefHeight="35.0" prefWidth="125.0" text="Salvar Alterações" />
                     </children>
                     <padding>
-                        <Insets top="20.0" />
+                        <Insets top="40.0" />
                     </padding>
                 </HBox>
 

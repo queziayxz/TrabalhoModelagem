@@ -175,6 +175,8 @@ public class AgendaController implements Initializable {
             this.tf_email.clear();
             this.btn_deletarHorario.setDisable(false);
             this.btn_cancelarConsulta.setDisable(true);
+            this.btn_consultaRealizada.setDisable(true);
+            this.btn_consultaNaoRealizada.setDisable(true);
         }
     }
 

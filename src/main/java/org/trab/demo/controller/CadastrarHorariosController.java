@@ -86,11 +86,7 @@ public class CadastrarHorariosController implements Initializable {
                         button.setDisable(true);
                     } else {
                         label.setText("Horário Livre");
-                        if(consultas.get(i).getHorarioConsulta().getStatus() != null) {
-                            button.setDisable(true);
-                        } else {
-                            button.setUserData(consultas.get(i));
-                        }
+                        button.setUserData(consultas.get(i));
                     }
 
                     this.grid_horarios.add(button,0,i);
@@ -117,7 +113,6 @@ public class CadastrarHorariosController implements Initializable {
 
             List<Consulta> consultasFinais = new ArrayList<>();
 
-            int index = 0;
             for(HorariosAgendaEnum horarioEnum : HorariosAgendaEnum.values()) {
                 if(!consultasAgendadas.isEmpty()) {
                     for(int i = 0; i < consultasAgendadas.size(); i++) {
@@ -137,7 +132,6 @@ public class CadastrarHorariosController implements Initializable {
                             novaCon.setHorarioConsulta(novoHorario);
 
                             consultasFinais.add(novaCon);
-                            index++;
                             break;
                         }
                     }
@@ -153,7 +147,6 @@ public class CadastrarHorariosController implements Initializable {
                     novaCon.setHorarioConsulta(novoHorario);
 
                     consultasFinais.add(novaCon);
-                    index++;
                 }
             }
 

@@ -13,9 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/17.0.6"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.trab.demo.controller.RemarcacaoController">
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.RemarcacaoController">
     <children>
         <HBox fx:id="hBoxMenuBar" fillHeight="false" prefWidth="899.0" styleClass="hBoxMenuBar" stylesheets="@css/styleBackgroundMenu.css">
             <children>
@@ -77,28 +75,31 @@
                         <Font size="20.0" />
                     </font>
                 </Text>
-                <Text layoutX="13.8" layoutY="83.6283203125" text="Para remarcar sua consulta, selecione a data na qual você deseja remarcar e selecione o dia na qual você deseja a sua consulta e pressione Remarcar Consultas" wrappingWidth="864.7999938964842" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="35.0">
+                <Text layoutX="13.8" layoutY="83.6283203125" text="Para remarcar sua consulta, selecione a consulta na qual deseja remarcar. Depois busque por uma nova data e clique em “Exibir Horários”. Por último, selecione uma nova data para sua consulta e clique em “Remarcar Consulta”." wrappingWidth="864.7999938964842" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="40.0">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
                 </Text>
-                <Text layoutX="14.0" layoutY="123.0" text="Suas Consultas Marcadas" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="70.0">
+                <Text layoutX="14.0" layoutY="123.0" text="Suas Consultas Marcadas" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="90.0">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Text>
 
-                <HBox alignment="TOP_RIGHT" layoutX="447.2" layoutY="103.8" prefHeight="26.0" prefWidth="427.0" spacing="10" AnchorPane.leftAnchor="447.2" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
+                <HBox alignment="TOP_RIGHT" layoutX="447.2" layoutY="103.8" prefHeight="26.0" prefWidth="427.0" spacing="10" AnchorPane.leftAnchor="447.2" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
                     <children>
-                        <DatePicker fx:id="datePickerNova" prefHeight="26.0" HBox.hgrow="ALWAYS"/>
-                        <Button fx:id="btnExibirHorariosNovos" mnemonicParsing="false" onAction="#exibirHorariosNovos" prefHeight="26.0" text="Exibir Horários" />
+                        <DatePicker fx:id="datePickerNova" maxHeight="1.7976931348623157E308" prefHeight="26.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnExibirHorariosNovos" mnemonicParsing="false" onAction="#exibirHorariosNovos" prefHeight="26.0" text="Exibir Horários">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
                     </children>
                     <padding>
                         <Insets right="16.0" />
                     </padding>
                 </HBox>
 
-                <HBox layoutX="14.4" layoutY="137.4" spacing="20" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="100.0">
+                <HBox layoutX="14.4" layoutY="137.4" spacing="20" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="120.0">
                     <children>
                         <TableView fx:id="tableViewConsultasAtuais" HBox.hgrow="ALWAYS">
                             <columnResizePolicy>
@@ -121,7 +122,10 @@
                     </children>
                 </HBox>
 
-                <Button fx:id="btnRemarcarConsulta" layoutX="757.6" layoutY="547.8" text="Remarcar Consultas" onAction="#remarcarConsulta" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="15.0" />
+                <Button fx:id="btnRemarcarConsulta" layoutX="757.6" layoutY="547.8" onAction="#remarcarConsulta" text="Remarcar Consultas" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="15.0">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
             </children>
         </AnchorPane>
     </children>
