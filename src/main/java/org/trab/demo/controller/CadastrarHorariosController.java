@@ -4,7 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.model.Psicologo;
@@ -27,7 +29,7 @@ import java.sql.Date;
 public class CadastrarHorariosController implements Initializable {
 
     @FXML
-    private Button btn_cadHorarios;
+    private Text btn_cadHorarios;
 
     @FXML
     private DatePicker data_picker;
@@ -222,7 +224,7 @@ public class CadastrarHorariosController implements Initializable {
         }
     }
 
-    public void delogarSistema() throws IOException
+    public void delogarSistema(MouseEvent mouseEvent) throws IOException
     {
         try {
             Sessao.getInstance().deslogar();
@@ -231,7 +233,7 @@ public class CadastrarHorariosController implements Initializable {
 
         }
     }
-    public void telaAgenda() throws IOException
+    public void telaAgenda(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaAgendaPsicologo();
@@ -240,7 +242,7 @@ public class CadastrarHorariosController implements Initializable {
         }
     }
 
-    public void telaPerfilPsi() throws IOException
+    public void telaPerfilPsi(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaEditPsi();
@@ -249,7 +251,7 @@ public class CadastrarHorariosController implements Initializable {
         }
     }
 
-    public void telaDashPsicologo() throws IOException
+    public void telaDashPsicologo(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaDashPsi();
@@ -258,7 +260,7 @@ public class CadastrarHorariosController implements Initializable {
         }
     }
 
-    public void telaHistoricoConsultas() throws IOException
+    public void telaHistoricoConsultas(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaHistoricoConsultas();

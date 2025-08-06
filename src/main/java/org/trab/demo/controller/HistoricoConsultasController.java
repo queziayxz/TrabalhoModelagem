@@ -3,7 +3,9 @@ package org.trab.demo.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.repository.ConsultaRepository;
@@ -21,7 +23,7 @@ import java.util.ResourceBundle;
 public class HistoricoConsultasController implements Initializable {
 
     @FXML
-    private Button btn_historicoConsultas;
+    private Text btn_historicoConsultas;
 
     @FXML
     private GridPane grid_horarios;
@@ -103,7 +105,7 @@ public class HistoricoConsultasController implements Initializable {
         this.tf_horario.setText(formatedTime);
     }
 
-    public void delogarSistema() throws IOException
+    public void delogarSistema(MouseEvent mouseEvent) throws IOException
     {
         try {
             Sessao.getInstance().deslogar();
@@ -114,7 +116,7 @@ public class HistoricoConsultasController implements Initializable {
     }
 
     @FXML
-    void telaAgenda() throws IOException
+    void telaAgenda(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaAgendaPsicologo();
@@ -124,7 +126,7 @@ public class HistoricoConsultasController implements Initializable {
     }
 
     @FXML
-    void telaCadHorarios() throws IOException
+    void telaCadHorarios(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaCadHorarios();
@@ -134,7 +136,7 @@ public class HistoricoConsultasController implements Initializable {
     }
 
     @FXML
-    void telaDashPsicologo() throws IOException
+    void telaDashPsicologo(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaDashPsi();
@@ -144,7 +146,7 @@ public class HistoricoConsultasController implements Initializable {
     }
 
     @FXML
-    void telaPerfilPsi() throws IOException
+    void telaPerfilPsi(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaEditPsi();

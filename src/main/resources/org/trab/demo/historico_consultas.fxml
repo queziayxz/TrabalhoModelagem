@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
@@ -14,49 +15,62 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="862.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.HistoricoConsultasController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="862.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.HistoricoConsultasController">
    <children>
-      <HBox alignment="CENTER_LEFT" fillHeight="false" maxWidth="1.7976931348623157E308" prefWidth="200.0" spacing="10.0">
+      <HBox fx:id="hBoxMenuBar" fillHeight="false" prefWidth="899.0" styleClass="hBoxMenuBar" stylesheets="@css/styleBackgroundMenu.css">
          <children>
-            <Button fx:id="btn_dash" mnemonicParsing="false" onAction="#telaDashPsicologo" text="Início">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="btn_agenda" mnemonicParsing="false" onAction="#telaAgenda" text="Agenda">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="btn_cadHorarios" mnemonicParsing="false" onAction="#telaCadHorarios" text="Cadastrar Horários">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="btn_historicoConsultas" mnemonicParsing="false" text="Histórico de Consultas">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="btn_perfil" mnemonicParsing="false" onAction="#telaPerfilPsi" text="Perfil">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <HBox alignment="CENTER_RIGHT" prefWidth="200.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" fillHeight="false" prefWidth="823.0" spacing="25.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Button fx:id="btn_deslogar" maxHeight="-Infinity" mnemonicParsing="false" onAction="#delogarSistema" text="Deslogar">
+                  <Text onMouseClicked="#telaDashPsicologo" styleClass="text-menu" text="Início">
                      <font>
-                        <Font size="14.0" />
+                        <Font size="10.0" />
                      </font>
-                  </Button>
+                  </Text>
+                  <Text onMouseClicked="#telaAgenda" styleClass="text-menu" text="Agenda">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+                  <Text onMouseClicked="#telaCadHorarios" styleClass="text-menu" text="Cadastrar Horários">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="btn_historicoConsultas" styleClass="text-menu" text="Histórico de Consultas">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+                  <Text onMouseClicked="#telaPerfilPsi" styleClass="text-menu" text="Perfil">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
                </children>
+               <stylesheets>
+                  <URL value="@css/style.css" />
+                  <URL value="@css/styleBackgroundMenu.css" />
+               </stylesheets>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" spacing="20.0">
+               <children>
+                  <Text onMouseClicked="#delogarSistema" styleClass="text-menu" text="Deslogar">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+               </children>
+               <stylesheets>
+                  <URL value="@css/style.css" />
+                  <URL value="@css/styleBackgroundMenu.css" />
+               </stylesheets>
             </HBox>
          </children>
-         <padding>
-            <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
-         </padding>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
       </HBox>
       <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Histórico de Consultas ">
          <font>

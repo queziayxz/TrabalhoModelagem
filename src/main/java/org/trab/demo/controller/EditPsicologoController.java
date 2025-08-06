@@ -3,11 +3,13 @@ package org.trab.demo.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import org.trab.demo.model.Psicologo;
 import org.trab.demo.model.User;
 import org.trab.demo.repository.UserRepository;
 import org.trab.demo.util.Sessao;
 import org.trab.demo.util.Telas;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,7 +19,7 @@ import java.util.ResourceBundle;
 
 public class EditPsicologoController implements Initializable {
     @FXML
-    private Button btn_perfil;
+    private Text btn_perfil;
 
     @FXML
     private TextField tf_cpf;
@@ -122,7 +124,7 @@ public class EditPsicologoController implements Initializable {
         }
     }
 
-    public void delogarSistema() throws IOException
+    public void delogarSistema(MouseEvent mouseEvent) throws IOException
     {
         try {
             Sessao.getInstance().deslogar();
@@ -132,7 +134,7 @@ public class EditPsicologoController implements Initializable {
         }
     }
 
-    public void telaDashPsicologo() throws IOException
+    public void telaDashPsicologo(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaDashPsi();
@@ -140,7 +142,7 @@ public class EditPsicologoController implements Initializable {
             throw new IOException(e.getMessage());
         }
     }
-    public void telaAgenda() throws IOException
+    public void telaAgenda(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaAgendaPsicologo();
@@ -149,7 +151,7 @@ public class EditPsicologoController implements Initializable {
         }
     }
 
-    public void telaCadHorarios() throws IOException
+    public void telaCadHorarios(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaCadHorarios();
@@ -158,7 +160,7 @@ public class EditPsicologoController implements Initializable {
         }
     }
 
-    public void telaHistoricoConsultas() throws IOException
+    public void telaHistoricoConsultas(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaHistoricoConsultas();

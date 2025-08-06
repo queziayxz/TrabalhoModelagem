@@ -4,7 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
@@ -17,7 +19,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,7 +28,7 @@ import java.util.TimeZone;
 
 public class AgendaController implements Initializable {
     @FXML
-    private Button btn_agenda;
+    private Text btn_agenda;
 
     @FXML
     private Button btn_cancelarConsulta;
@@ -354,7 +355,7 @@ public class AgendaController implements Initializable {
         }
     }
 
-    public void delogarSistema() throws IOException
+    public void delogarSistema(MouseEvent mouseEvent) throws IOException
     {
         try {
             Sessao.getInstance().deslogar();
@@ -364,7 +365,7 @@ public class AgendaController implements Initializable {
         }
     }
 
-    public void telaCadHorarios() throws IOException
+    public void telaCadHorarios(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaCadHorarios();
@@ -373,7 +374,7 @@ public class AgendaController implements Initializable {
         }
     }
 
-    public void telaPerfilPsi() throws IOException
+    public void telaPerfilPsi(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaEditPsi();
@@ -382,7 +383,7 @@ public class AgendaController implements Initializable {
         }
     }
 
-    public void telaDashPsicologo() throws IOException
+    public void telaDashPsicologo(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaDashPsi();
@@ -391,7 +392,7 @@ public class AgendaController implements Initializable {
         }
     }
 
-    public void telaHistoricoConsultas() throws IOException
+    public void telaHistoricoConsultas(MouseEvent mouseEvent) throws IOException
     {
         try {
             Telas.getTelaHistoricoConsultas();
