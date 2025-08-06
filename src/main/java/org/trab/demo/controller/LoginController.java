@@ -3,7 +3,6 @@ package org.trab.demo.controller;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
-import org.trab.demo.model.Psicologo;
 import org.trab.demo.model.User;
 import org.trab.demo.repository.UserRepository;
 import org.trab.demo.util.Sessao;
@@ -19,9 +18,6 @@ public class LoginController {
 
     @FXML
     private PasswordField tf_password;
-
-    @FXML
-    private Button btn_login;
 
     @FXML
     protected void login() {
@@ -48,13 +44,9 @@ public class LoginController {
                     dialogoErro.showAndWait();
                 }
             } catch (SQLException e) {
-//                dialogoErro.setContentText("Error na consulta ao banco"+e.getMessage());
-//                dialogoErro.showAndWait();
                 System.out.println(e.getMessage());
             } catch (IOException e) {
                 System.out.println(e.getMessage());
-//                dialogoErro.setContentText("Error na consulta ao banco"+e.getMessage());
-//                dialogoErro.showAndWait();
             }
         }
     }

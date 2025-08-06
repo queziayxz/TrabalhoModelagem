@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.model.Psicologo;
@@ -26,20 +25,9 @@ import java.util.*;
 import java.sql.Date;
 
 public class CadastrarHorariosController implements Initializable {
-    @FXML
-    private Button btn_agenda;
 
     @FXML
     private Button btn_cadHorarios;
-
-    @FXML
-    private Button btn_dash;
-
-    @FXML
-    private Button btn_mostrarHorarios;
-
-    @FXML
-    private Button btn_perfil;
 
     @FXML
     private DatePicker data_picker;
@@ -186,8 +174,6 @@ public class CadastrarHorariosController implements Initializable {
             dialogoExe.setContentText("Por favor, selecione horários futuros.");
             dialogoExe.showAndWait();
         } else {
-            System.out.println("data: "+consulta.getHorarioConsulta().getData());
-            System.out.println("hora: "+consulta.getHorarioConsulta().getHora());
 
             Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
             ButtonType btnCadastrar = new ButtonType("Cadastrar");
@@ -219,7 +205,6 @@ public class CadastrarHorariosController implements Initializable {
                 }
             });
         }
-
     }
 
     private void resetaCampos()
@@ -233,6 +218,16 @@ public class CadastrarHorariosController implements Initializable {
     {
         if(this.data_picker.getEditor().getText().isEmpty()) {
             throw new IllegalArgumentException("Selecione uma Data!");
+
+        }
+    }
+
+    public void delogarSistema() throws IOException
+    {
+        try {
+            Sessao.getInstance().deslogar();
+            Telas.getTelaLogin(null);
+        } catch (IOException e) {
 
         }
     }

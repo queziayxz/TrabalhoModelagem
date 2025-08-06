@@ -20,6 +20,11 @@ public class Sessao {
         this.usuario = usuario;
     }
 
+    public void deslogar()
+    {
+        this.usuario = null;
+    }
+
     public static Sessao getInstance(){
         if(instance == null){
             instance = new Sessao();

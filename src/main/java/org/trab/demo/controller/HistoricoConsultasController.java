@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.repository.ConsultaRepository;
+import org.trab.demo.util.Sessao;
 import org.trab.demo.util.Telas;
 
 import javafx.event.ActionEvent;
@@ -18,20 +19,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class HistoricoConsultasController implements Initializable {
-    @FXML
-    private Button btn_agenda;
-
-    @FXML
-    private Button btn_cadHorarios;
-
-    @FXML
-    private Button btn_dash;
 
     @FXML
     private Button btn_historicoConsultas;
-
-    @FXML
-    private Button btn_perfil;
 
     @FXML
     private GridPane grid_horarios;
@@ -111,6 +101,16 @@ public class HistoricoConsultasController implements Initializable {
         this.tf_telefone.setText(consulta.getPaciente().getTelefone());
         this.tf_dia.setText(formatedDate);
         this.tf_horario.setText(formatedTime);
+    }
+
+    public void delogarSistema() throws IOException
+    {
+        try {
+            Sessao.getInstance().deslogar();
+            Telas.getTelaLogin(null);
+        } catch (IOException e) {
+
+        }
     }
 
     @FXML

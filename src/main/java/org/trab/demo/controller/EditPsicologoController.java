@@ -1,13 +1,10 @@
 package org.trab.demo.controller;
 
-import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Psicologo;
 import org.trab.demo.model.User;
-import org.trab.demo.repository.AgendaRepository;
 import org.trab.demo.repository.UserRepository;
 import org.trab.demo.util.Sessao;
 import org.trab.demo.util.Telas;
@@ -15,14 +12,10 @@ import org.trab.demo.util.Telas;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.sql.Date;
 import java.util.ResourceBundle;
 
 public class EditPsicologoController implements Initializable {
-    @FXML
-    private Button btn_salvar;
     @FXML
     private Button btn_perfil;
 
@@ -37,9 +30,6 @@ public class EditPsicologoController implements Initializable {
 
     @FXML
     private TextField tf_nome;
-
-//    @FXML
-//    private PasswordField tf_senha;
 
     @FXML
     private TextField tf_telefone;
@@ -61,7 +51,6 @@ public class EditPsicologoController implements Initializable {
         this.tf_crp.setText(Sessao.getInstance().getUser(Psicologo.class).getCrp());
         this.tf_cpf.setText(Sessao.getInstance().getUser(Psicologo.class).getCpf());
         this.tf_email.setText(Sessao.getInstance().getUser(Psicologo.class).getEmail());
-//        this.tf_senha.setText(Sessao.getInstance().getUser(Psicologo.class).getSenha());
 
     }
 
@@ -130,6 +119,16 @@ public class EditPsicologoController implements Initializable {
             User.validarCPF(this.tf_cpf.getText());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void delogarSistema() throws IOException
+    {
+        try {
+            Sessao.getInstance().deslogar();
+            Telas.getTelaLogin(null);
+        } catch (IOException e) {
+
         }
     }
 

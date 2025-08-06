@@ -10,6 +10,7 @@ import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
 import org.trab.demo.repository.AgendaRepository;
 import org.trab.demo.repository.ConsultaRepository;
+import org.trab.demo.util.Sessao;
 import org.trab.demo.util.Telas;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -30,13 +30,7 @@ public class AgendaController implements Initializable {
     private Button btn_agenda;
 
     @FXML
-    private Button btn_cadHorarios;
-
-    @FXML
     private Button btn_cancelarConsulta;
-
-    @FXML
-    private Button btn_dash;
 
     @FXML
     private Button btn_deletarHorario;
@@ -47,9 +41,6 @@ public class AgendaController implements Initializable {
 
     @FXML
     private Button btn_mostraHorarios;
-
-    @FXML
-    private Button btn_perfil;
 
     @FXML
     private DatePicker data_picker;
@@ -191,9 +182,11 @@ public class AgendaController implements Initializable {
         Button button = (Button) event.getSource();
         Consulta consulta = (Consulta) button.getUserData();
 
-        LocalTime horarioAgora = consulta.getHorarioConsulta().getHora().toLocalTime();
+        java.sql.Date sqlDate = consulta.getHorarioConsulta().getData();
+        LocalTime horaSelecionada = consulta.getHorarioConsulta().getHora().toLocalTime();
 
-        if(consulta.getHorarioConsulta().getData().after(new java.util.Date()) || horarioAgora.isAfter(LocalTime.now())) {
+        if(sqlDate.toLocalDate().isAfter(LocalDate.now()) ||
+                (sqlDate.toLocalDate().isEqual(LocalDate.now()) && horaSelecionada.isAfter(LocalTime.now()))) {
             Alert dialogoExe = new Alert(Alert.AlertType.INFORMATION);
             dialogoExe.setTitle("Erro Finalização Consulta");
             dialogoExe.setHeaderText("Não foi possível marcar a consulta como concluída!");
@@ -238,9 +231,11 @@ public class AgendaController implements Initializable {
         Button button = (Button) event.getSource();
         Consulta consulta = (Consulta) button.getUserData();
 
-        LocalTime horarioAgora = consulta.getHorarioConsulta().getHora().toLocalTime();
+        java.sql.Date sqlDate = consulta.getHorarioConsulta().getData();
+        LocalTime horaSelecionada = consulta.getHorarioConsulta().getHora().toLocalTime();
 
-        if(consulta.getHorarioConsulta().getData().after(new java.util.Date()) || horarioAgora.isAfter(LocalTime.now())) {
+        if(sqlDate.toLocalDate().isAfter(LocalDate.now()) ||
+                (sqlDate.toLocalDate().isEqual(LocalDate.now()) && horaSelecionada.isAfter(LocalTime.now()))) {
             Alert dialogoExe = new Alert(Alert.AlertType.INFORMATION);
             dialogoExe.setTitle("Erro Finalização Consulta");
             dialogoExe.setHeaderText("Não foi possível marcar a consulta como não concluída!");
@@ -356,6 +351,16 @@ public class AgendaController implements Initializable {
     {
         if(this.data_picker.getEditor().getText().isEmpty()) {
             throw new IllegalArgumentException("Selecione uma Data!");
+        }
+    }
+
+    public void delogarSistema() throws IOException
+    {
+        try {
+            Sessao.getInstance().deslogar();
+            Telas.getTelaLogin(null);
+        } catch (IOException e) {
+
         }
     }
 
