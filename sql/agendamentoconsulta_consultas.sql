@@ -31,7 +31,7 @@ CREATE TABLE `consultas` (
   KEY `id_agenda_idx` (`id_agenda`),
   CONSTRAINT `id_agenda` FOREIGN KEY (`id_agenda`) REFERENCES `agendas` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `id_paciente` FOREIGN KEY (`id_paciente`) REFERENCES `usuarios` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,6 @@ CREATE TABLE `consultas` (
 
 LOCK TABLES `consultas` WRITE;
 /*!40000 ALTER TABLE `consultas` DISABLE KEYS */;
-INSERT INTO `consultas` VALUES (1,2,2),(2,3,3),(3,4,4);
 /*!40000 ALTER TABLE `consultas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-28 18:59:33
+-- Dump completed on 2025-08-06 17:03:12

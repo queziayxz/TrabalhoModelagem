@@ -28,3 +28,4 @@
 - Abra os arquivos do projeto na IDE
 - Na classe `util/Conexao.java` edite as variáveis `PASSWORD` e `USER` para as suas informações do mysql workbench.
 - Feito tudo isso, rode o projeto.
+- As tabelas do banco já irá vir com o psicólogo cadastrado, então é só olhar no workbench as credenciais de acesso. Mas caso não venha, é só cadastrar um pelo próprio workbench.
