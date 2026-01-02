@@ -12,9 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="578.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/17.0.6"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.trab.demo.controller.CancelamentoController">
+<VBox prefHeight="578.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.CancelamentoController">
     <children>
         <HBox fx:id="hBoxMenuBar" fillHeight="false" prefWidth="899.0" styleClass="hBoxMenuBar" stylesheets="@css/styleBackgroundMenu.css">
             <children>
@@ -53,7 +51,7 @@
                 </HBox>
                 <HBox alignment="CENTER_RIGHT" spacing="20.0">
                     <children>
-                        <Text onMouseClicked="#onDeslogar" styleClass="text-menu" text="Deslogar">
+                        <Text onMouseClicked="#onDeslogar" styleClass="text-menu" text="Sair">
                             <font>
                                 <Font size="10.0" />
                             </font>
@@ -69,27 +67,22 @@
                 <Cursor fx:constant="DEFAULT" />
             </cursor>
         </HBox>
-        <AnchorPane prefWidth="883.0" VBox.vgrow="ALWAYS">
+        <AnchorPane prefHeight="504.0" prefWidth="868.0" VBox.vgrow="ALWAYS">
             <children>
-                <Text layoutX="14.4" layoutY="31.782031250000003" text="Cancelamento Consulta" wrappingWidth="221.20819091796875" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.200000000000003">
+                <Text layoutX="14.4" layoutY="31.782031250000003" text="Cancelamento de Consulta" wrappingWidth="250.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.200000000000003">
                     <font>
                         <Font size="20.0" />
-                    </font>
-                </Text>
-                <Text layoutX="13.6" layoutY="57.0283203125" text="Para agendar sua consulta, selecione a consulta que deseja cancelar e pressione cancelar consulta" wrappingWidth="864.7999938964842" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="43.0">
-                    <font>
-                        <Font name="System Bold" size="13.0" />
                     </font>
                 </Text>
 
                 <HBox layoutX="447.2" layoutY="103.8" prefHeight="26.0" prefWidth="427.0" spacing="10" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="70.8">
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Suas Consultas marcadas">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Suas Consultas Marcadas">
                             <font>
                                 <Font size="18.0" />
                             </font>
                         </Text>
-                        <Button fx:id="btnCancelarConsulta" text="Cancelar" onAction="#cancelarConsulta" />
+                        <Button fx:id="btnCancelarConsulta" onAction="#cancelarConsulta" text="Cancelar Consulta" />
                     </children>
                     <padding>
                         <Insets right="16.0" />
@@ -103,12 +96,14 @@
                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                             </columnResizePolicy>
                             <columns>
-                                <TableColumn fx:id="colDia" prefWidth="205.6" text="Dia" />
-                                <TableColumn fx:id="colHora" prefWidth="205.6" text="Hora" />
+                                <TableColumn fx:id="colDia" prefWidth="205.6" text="Data" />
+                                <TableColumn fx:id="colHora" prefWidth="205.6" text="Horário" />
                             </columns>
                         </TableView>
                     </children>
                 </HBox>
+                <Button fx:id="btnCancelarConsulta1" alignment="BASELINE_RIGHT" layoutX="759.0" layoutY="7.0" onAction="#onAjuda" opacity="0.0" prefHeight="26.0" prefWidth="101.0" />
+                <Text fx:id="textAjuda" layoutX="764.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Precisa de ajuda?" wrappingWidth="94.13671875" style="-fx-cursor: hand; -fx-text-fill: #0066CC; -fx-underline: true;" />
             </children>
         </AnchorPane>
     </children>

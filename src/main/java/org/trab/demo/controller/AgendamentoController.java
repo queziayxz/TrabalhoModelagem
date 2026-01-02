@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
@@ -14,36 +15,44 @@ import org.trab.demo.model.Paciente;
 import org.trab.demo.repository.AgendaRepository;
 import org.trab.demo.repository.ConsultaRepository;
 import org.trab.demo.util.Sessao;
-import org.trab.demo.util.Telas;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class AgendamentoController {
+public class AgendamentoController extends BaseConsultaController {
 
     @FXML private DatePicker datePicker;
     @FXML private Button btnExibirConsultas;
     @FXML private Button btnAgendarConsulta;
     @FXML private TableView<Agenda> tableViewHorarios;
     @FXML private TableColumn<Agenda, Date> colDia;
-    @FXML private TableColumn<Agenda, Time> colHora;
+    @FXML private TableColumn<Agenda, Date> colHora;
+    @FXML private Text textAjuda;
+    @FXML private Button btnAgendarConsulta1;
 
-    private ObservableList<Agenda> horariosList = FXCollections.observableArrayList();
+    private ObservableList<Agenda> horariosList;
 
     @FXML
     public void initialize() {
         colDia.setCellValueFactory(new PropertyValueFactory<>("data"));
         colHora.setCellValueFactory(new PropertyValueFactory<>("hora"));
-        tableViewHorarios.setItems(horariosList);
-        btnAgendarConsulta.setDisable(true);
+
         tableViewHorarios.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             btnAgendarConsulta.setDisable(newSelection == null);
         });
+
+        // Configurar clique no texto de ajuda
+        if (textAjuda != null) {
+            textAjuda.setOnMouseClicked(event -> onAjuda());
+        }
+    }
+
+    @Override
+    protected void verificarSelecao() {
+        // Implementação específica se necessário
     }
 
     @FXML
@@ -52,19 +61,19 @@ public class AgendamentoController {
         LocalDate hoje = LocalDate.now();
 
         if (selectedDate == null) {
-            showAlert("Erro", "Por favor, selecione uma data.");
+            showAlert("Atenção", "Por favor, selecione uma data.");
             return;
         }
 
-        // Verificar se a data selecionada é o dia atual
         if (selectedDate.isBefore(hoje.plusDays(1))) {
-            showAlert("Erro", "Só é possível agendar consultas a partir de amanhã (" + hoje.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ").");
+            showAlert("Atenção", "Você só pode agendar consultas a partir de amanhã (" +
+                    hoje.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ").");
             return;
         }
 
         try {
             List<Agenda> horarios = AgendaRepository.getHorariosData(Date.valueOf(selectedDate));
-            horariosList.clear();
+            horariosList = FXCollections.observableArrayList();
 
             for (Agenda horario : horarios) {
                 if (horario.getStatus().equals(StatusConsultaEnum.LIVRE.toString())) {
@@ -72,112 +81,87 @@ public class AgendamentoController {
                 }
             }
 
+            tableViewHorarios.setItems(horariosList);
+
             if (horariosList.isEmpty()) {
                 showAlert("Informação", "Não há horários disponíveis para a data selecionada.");
             }
         } catch (SQLException e) {
-            showAlert("Erro", "Erro ao buscar horários: " + e.getMessage());
+            showAlert("Erro", "Erro ao buscar horários disponíveis: " + e.getMessage());
         }
     }
 
     @FXML
     private void agendarConsulta(ActionEvent event) {
         Agenda horarioSelecionado = tableViewHorarios.getSelectionModel().getSelectedItem();
+
         if (horarioSelecionado == null) {
-            showAlert("Erro", "Por favor, selecione um horário.");
+            showAlert("Atenção", "Por favor, selecione um horário.");
             return;
         }
 
-        // Verificação adicional para garantir que a data é válida
-        LocalDate dataConsulta = horarioSelecionado.getData().toLocalDate();
-        if (dataConsulta.isBefore(LocalDate.now().plusDays(1))) {
-            showAlert("Erro", "Não é possível agendar consultas para hoje. Selecione uma data a partir de amanhã.");
-            return;
-        }
-
-        Sessao sessao = Sessao.getInstance();
-        Paciente paciente = sessao.getUser(Paciente.class);
+        if (!validarAgendamento(horarioSelecionado)) return;
 
         try {
-            // Criar nova consulta utilizando os IDs
             Consulta novaConsulta = new Consulta();
-            novaConsulta.setIdPaciente(paciente.getId());
+            novaConsulta.setIdPaciente(Sessao.getInstance().getUser(Paciente.class).getId());
             novaConsulta.setIdAgenda(horarioSelecionado.getId());
 
-            // Inserir consulta no sql
             ConsultaRepository.agendarConsulta(novaConsulta);
-
-            // Atualização do status de consulta
             AgendaRepository.finalizaConsulta(horarioSelecionado.getId(), StatusConsultaEnum.AGENDADO.toString());
 
-            showAlert("Sucesso", "Consulta agendada com sucesso!");
-            tableViewHorarios.getSelectionModel().clearSelection();
-            horariosList.clear();
-            btnAgendarConsulta.setDisable(true);
+            showAlert("Sucesso", "Sua consulta foi agendada com sucesso!");
+            reabrirTela();
         } catch (SQLException e) {
-            showAlert("Erro", "Erro ao agendar consulta: " + e.getMessage());
+            showAlert("Erro", "Não foi possível agendar sua consulta: " + e.getMessage());
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+    private boolean validarAgendamento(Agenda horario) {
+        LocalDate dataConsulta = horario.getData().toLocalDate();
 
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-
-    public void onDeslogar(MouseEvent mouseEvent) {
-        try {
-            Sessao.getInstance().setUser(null); //define paciente da sessão NULL;
-            Telas.getTelaLogin(null); //chama tela de login
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi deslogar do sistema");
+        if (dataConsulta.isBefore(LocalDate.now().plusDays(1))) {
+            showAlert("Atenção", "Não é possível agendar consultas para hoje. Selecione uma data a partir de amanhã.");
+            return false;
         }
+        return true;
     }
 
-    public void onInicio(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaDashPaci();//chama tela de paciente
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível ir para a tela inicial");
+    // Método de ajuda com texto amigável
+    @FXML
+    private void onAjuda() {
+        showAlert("Como agendar uma consulta",
+                "Passo a passo para agendar uma nova consulta:\n\n" +
+                        "1. Escolha uma DATA usando o calendário acima da tabela.\n" +
+                        "2. Clique em 'Exibir Horários' para ver os horários disponíveis na data escolhida.\n" +
+                        "3. Na tabela abaixo, você verá todos os horários disponíveis.\n" +
+                        "4. Clique em um horário para selecioná-lo.\n" +
+                        "5. Clique em 'Agendar Consulta' para confirmar o agendamento.\n\n" +
+                        "Importante: Você só pode agendar consultas a partir do dia seguinte ao atual.");
+    }
+
+    // Implementação do método reabrirTela
+    @Override
+    protected void reabrirTela() {
+        // Limpar seleção
+        tableViewHorarios.getSelectionModel().clearSelection();
+
+        // Limpar date picker
+        datePicker.setValue(null);
+
+        // Limpar lista de horários
+        if (horariosList != null) {
+            horariosList.clear();
+            tableViewHorarios.setItems(horariosList);
         }
+
+        // Desabilitar botão
+        btnAgendarConsulta.setDisable(true);
     }
 
-    public void onPerfil(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaPerfil(); //chama tela de Editar Perfil
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível ir para a tela de edição de perfil");
-        }
-    }
-
+    // Sobrescreve apenas o método específico da tela atual
+    @Override
     public void onAgendar(MouseEvent mouseEvent) {
-        showAlert("Agendamento", "você já está na tela de agendamento");
-    }
-
-    public void onRemarcar(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaRemarcacao(); //chama tela de Editar Perfil
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de remarcação");
-        }
-    }
-
-    public void onCancelar(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaCancelamento(); //chama tela de Editar Perfil
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de cancelamento");
-        }
+        showAlert("Agendamento", "Você já está na tela de agendamento de consultas");
     }
 }
