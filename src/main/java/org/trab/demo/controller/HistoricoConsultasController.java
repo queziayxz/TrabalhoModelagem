@@ -15,10 +15,13 @@ import org.trab.demo.util.Telas;
 import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class HistoricoConsultasController implements Initializable {
 
@@ -58,11 +61,10 @@ public class HistoricoConsultasController implements Initializable {
 
             if(!consultas.isEmpty()) {
                 this.lb_semConsultas.setVisible(false);
-                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
                 String formatedTime;
 
                 for(int i = 0; i < consultas.size(); i++) {
-                    formatedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
+                    formatedTime = this.formattedTimeString(consultas.get(i).getHorarioConsulta().getHora());
 
                     Button button = new Button(formatedTime);
                     button.setStyle("-fx-font-size:18");
@@ -88,10 +90,8 @@ public class HistoricoConsultasController implements Initializable {
         Button button = (Button) event.getSource();
         Consulta consulta = (Consulta) button.getUserData();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
-        String formatedDate = dateFormat.format(consulta.getHorarioConsulta().getData());
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String formatedTime = timeFormat.format(consulta.getHorarioConsulta().getHora());
+        String formatedDate = this.formattedDateString(consulta.getHorarioConsulta().getData());
+        String formatedTime = this.formattedTimeString(consulta.getHorarioConsulta().getHora());
 
         if(consulta.getHorarioConsulta().getStatus().equals(StatusConsultaEnum.CONCLUIDO.toString())) {
             this.rb_pacienteCompareceu.setSelected(true);
@@ -103,6 +103,22 @@ public class HistoricoConsultasController implements Initializable {
         this.tf_telefone.setText(consulta.getPaciente().getTelefone());
         this.tf_dia.setText(formatedDate);
         this.tf_horario.setText(formatedTime);
+    }
+
+    private String formattedDateString(Date date)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+        String formattedDate = dateFormat.format(date);
+        return formattedDate;
+    }
+
+    private String formattedTimeString(Time time)
+    {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String formattedTime = timeFormat.format(time);
+
+        return formattedTime;
     }
 
     public void delogarSistema(MouseEvent mouseEvent) throws IOException

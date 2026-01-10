@@ -21,27 +21,22 @@ public class LoginController {
 
     @FXML
     protected void login() {
-        Alert dialogoErro = new Alert(Alert.AlertType.INFORMATION);
-        dialogoErro.setTitle("Erro Login");
 
-        if(tf_email.getText().isEmpty() || tf_password.getText().isEmpty()) {
-            dialogoErro.setContentText("Informe todos os campos para realizar o login");
-            dialogoErro.showAndWait();
+        if(!validaCampos()) {
+            showAlertWarning("Erro Login","","Informe todos os campos para realizar o login");
         } else {
             try {
-                User user =  UserRepository.autenticate(tf_email.getText(),tf_password.getText());
+                User user =  UserRepository.autenticate(this.tf_email.getText(),this.tf_password.getText());
                 if(user != null) {
                     Sessao sessao = Sessao.getInstance();
                     sessao.setUser(user);
                     if(user.getIsPsicologo()) {
                         Telas.getTelaDashPsi();
                     } else {
-                        System.out.println("entrou na dash paciente");
                         Telas.getTelaDashPaci();
                     }
                 } else {
-                    dialogoErro.setContentText("Usuário não encontrado!");
-                    dialogoErro.showAndWait();
+                    showAlertWarning("Erro Login","","Usuário não encontrado!");
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -49,6 +44,24 @@ public class LoginController {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    private void showAlertWarning(String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.WARNING);
+        dialogoExe.setTitle(title);
+        dialogoExe.setHeaderText(header);
+        dialogoExe.setContentText(content);
+        dialogoExe.showAndWait();
+    }
+
+    private boolean validaCampos()
+    {
+        if(tf_email.getText().isEmpty() || tf_password.getText().isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 
     public void linkSemCadastro()

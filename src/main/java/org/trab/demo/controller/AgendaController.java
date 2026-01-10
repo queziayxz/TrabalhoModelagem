@@ -19,10 +19,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
@@ -85,9 +87,7 @@ public class AgendaController implements Initializable {
 
             resetaCampos();
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
-            String formattedDate = dateFormat.format(dateSql);
+            String formattedDate = formattedDateString(dateSql);
             this.lb_dataSelecionada.setText(formattedDate);
             this.lb_dataSelecionada.setVisible(true);
 
@@ -97,8 +97,7 @@ public class AgendaController implements Initializable {
                 this.lb_semHorario.setVisible(true);
             } else {
                 for(int i = 0; i < consultas.size(); i++) {
-                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                    String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
+                    String formattedTime = formattedTimeString(consultas.get(i).getHorarioConsulta().getHora());
 
                     Button button = new Button(formattedTime);
                     button.setPrefWidth(85);
@@ -113,14 +112,16 @@ public class AgendaController implements Initializable {
                     if(consultas.get(i).getPaciente() != null) {
                         button.setUserData(consultas.get(i));
 
-                        switch (consultas.get(i).getHorarioConsulta().getStatus()) {
-                            case "AGENDADO":
+                        final String agendado = StatusConsultaEnum.AGENDADO.toString();
+
+                        switch (StatusConsultaEnum.valueOf(consultas.get(i).getHorarioConsulta().getStatus())) {
+                            case AGENDADO:
                                 label.setText(consultas.get(i).getPaciente().getNome());
                                 break;
-                            case "CONCLUIDO":
+                            case CONCLUIDO:
                                 label.setText("Consulta Realizada");
                                 break;
-                            case "NAO_REALIZADO":
+                            case NAO_REALIZADO:
                                 label.setText("Consulta não Realizada");
                                 break;
                         }
@@ -136,10 +137,7 @@ public class AgendaController implements Initializable {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } catch (IllegalArgumentException e) {
-            Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-            dialogoInfo.setTitle("Error");
-            dialogoInfo.setHeaderText(e.getMessage());
-            dialogoInfo.showAndWait();
+            showAlertWarning("Error",e.getMessage(),"");
         }
     }
 
@@ -188,43 +186,26 @@ public class AgendaController implements Initializable {
         java.sql.Date sqlDate = consulta.getHorarioConsulta().getData();
         LocalTime horaSelecionada = consulta.getHorarioConsulta().getHora().toLocalTime();
 
-        if(sqlDate.toLocalDate().isAfter(LocalDate.now()) ||
-                (sqlDate.toLocalDate().isEqual(LocalDate.now()) && horaSelecionada.isAfter(LocalTime.now()))) {
-            Alert dialogoExe = new Alert(Alert.AlertType.INFORMATION);
-            dialogoExe.setTitle("Erro Finalização Consulta");
-            dialogoExe.setHeaderText("Não foi possível marcar a consulta como concluída!");
-            dialogoExe.setContentText("Foi selecionado uma consulta em datas futuras.");
-            dialogoExe.showAndWait();
+        if(!validaDataHora(sqlDate,horaSelecionada)) {
+            showAlertInformation("Erro Finalização Consulta","Não foi possível marcar a consulta como concluída!",
+                    "Foi selecionado uma consulta em datas futuras.");
         } else {
-            Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
-            ButtonType btnRealizado = new ButtonType("Marcar como Realizado");
-            ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-            String dateF = dateFormat.format(consulta.getHorarioConsulta().getData());
-            String timeF = timeFormat.format(consulta.getHorarioConsulta().getHora());
+            String dateF = formattedDateString(consulta.getHorarioConsulta().getData());
+            String timeF = formattedTimeString(consulta.getHorarioConsulta().getHora());
 
-            dialogoExe.setTitle("Finalizando Consulta");
-            dialogoExe.setContentText("Tem certeza que deseja marcar como realizado a consulta no dia "+dateF+" as "+timeF+"?");
-            dialogoExe.getButtonTypes().setAll(btnRealizado, btnCancelar);
-            dialogoExe.showAndWait().ifPresent(b -> {
-                if (b == btnRealizado) {
-                    try {
-                        AgendaRepository.finalizaConsulta(consulta.getHorarioConsulta().getId(), StatusConsultaEnum.CONCLUIDO.toString());
+            boolean btnClick = showAlertConfirmation("Marcar como Realizado","Finalizando Consulta",
+                    "Tem certeza que deseja marcar como realizado a consulta no dia "+dateF+" as "+timeF+"?","");
+            if(btnClick) {
+                try {
+                    AgendaRepository.finalizaConsulta(consulta.getHorarioConsulta().getId(), StatusConsultaEnum.CONCLUIDO.toString());
 
-                        Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
-                        dialogoInfo.setContentText("Consulta Finalizada com Sucesso!");
-                        dialogoInfo.showAndWait();
-                        resetaCampos();
-                    } catch (SQLException e) {
-                        Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-                        dialogoInfo.setTitle("Error");
-                        dialogoInfo.setHeaderText("Não foi possível marcar como concluída a consulta selecionada!");
-                        dialogoInfo.showAndWait();
-                    }
+                    showAlertInformation("Agendamento","Consulta Finalizada com Sucesso!","");
+                    resetaCampos();
+                } catch (SQLException e) {
+                    showAlertWarning("Error","Não foi possível marcar como concluída a consulta selecionada!","");
                 }
-            });
+            }
         }
 
     }
@@ -237,43 +218,25 @@ public class AgendaController implements Initializable {
         java.sql.Date sqlDate = consulta.getHorarioConsulta().getData();
         LocalTime horaSelecionada = consulta.getHorarioConsulta().getHora().toLocalTime();
 
-        if(sqlDate.toLocalDate().isAfter(LocalDate.now()) ||
-                (sqlDate.toLocalDate().isEqual(LocalDate.now()) && horaSelecionada.isAfter(LocalTime.now()))) {
-            Alert dialogoExe = new Alert(Alert.AlertType.INFORMATION);
-            dialogoExe.setTitle("Erro Finalização Consulta");
-            dialogoExe.setHeaderText("Não foi possível marcar a consulta como não concluída!");
-            dialogoExe.setContentText("Foi selecionado uma consulta em datas futuras.");
-            dialogoExe.showAndWait();
+        if(!validaDataHora(sqlDate,horaSelecionada)) {
+            showAlertInformation("Erro Finalização Consulta","Não foi possível marcar a consulta como não concluída!",
+                    "Foi selecionado uma consulta em datas futuras.");
         } else {
-            Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
-            ButtonType btnRealizado = new ButtonType("Marcar como Não Realizado");
-            ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            String dateF = formattedDateString(consulta.getHorarioConsulta().getData());
+            String timeF = formattedTimeString(consulta.getHorarioConsulta().getHora());
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-            String dateF = dateFormat.format(consulta.getHorarioConsulta().getData());
-            String timeF = timeFormat.format(consulta.getHorarioConsulta().getHora());
+            boolean btnClick = showAlertConfirmation("Marcar como Não Realizado","Deletando Horário",
+                    "","Tem certeza que deseja marcar como não realizado a consulta no dia "+dateF+" as "+timeF+"?");
 
-            dialogoExe.setTitle("Deletando Horário");
-            dialogoExe.setContentText("Tem certeza que deseja marcar como não realizado a consulta no dia "+dateF+" as "+timeF+"?");
-            dialogoExe.getButtonTypes().setAll(btnRealizado, btnCancelar);
-            dialogoExe.showAndWait().ifPresent(b -> {
-                if (b == btnRealizado) {
-                    try {
-                        AgendaRepository.finalizaConsulta(consulta.getHorarioConsulta().getId(), StatusConsultaEnum.NAO_REALIZADO.toString());
-
-                        Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
-                        dialogoInfo.setContentText("Consulta Finalizada com Sucesso!");
-                        dialogoInfo.showAndWait();
-                        resetaCampos();
-                    } catch (SQLException e) {
-                        Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-                        dialogoInfo.setTitle("Error");
-                        dialogoInfo.setHeaderText("Não foi possível marcar como não concluída a consulta selecionada!");
-                        dialogoInfo.showAndWait();
-                    }
+            if(btnClick) {
+                try {
+                    AgendaRepository.finalizaConsulta(consulta.getHorarioConsulta().getId(), StatusConsultaEnum.NAO_REALIZADO.toString());
+                    showAlertInformation("Finalização","","Consulta Finalizada com Sucesso!");
+                    resetaCampos();
+                } catch (SQLException e) {
+                    showAlertWarning("Error","Não foi possível marcar como não concluída a consulta selecionada!","");
                 }
-            });
+            }
         }
 
     }
@@ -283,35 +246,21 @@ public class AgendaController implements Initializable {
         Button button = (Button) event.getSource();
         Agenda horario = (Agenda) button.getUserData();
 
-        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType btnDeletar = new ButtonType("Deletar");
-        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        String dateF = formattedDateString(horario.getData());
+        String timeF = formattedTimeString(horario.getHora());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String dateF = dateFormat.format(horario.getData());
-        String timeF = timeFormat.format(horario.getHora());
+        boolean clickBtn = showAlertConfirmation("Deletar","Deletando Horário","",
+                "Tem certeza que deseja detelar o horário de "+timeF+" no dia "+dateF+"?");
 
-        dialogoExe.setTitle("Deletando Horário");
-        dialogoExe.setContentText("Tem certeza que deseja detelar o horário de "+timeF+" no dia "+dateF+"?");
-        dialogoExe.getButtonTypes().setAll(btnDeletar, btnCancelar);
-        dialogoExe.showAndWait().ifPresent(b -> {
-            if (b == btnDeletar) {
-                try {
-                    AgendaRepository.deleteHorario(horario.getId());
-
-                    Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
-                    dialogoInfo.setContentText("Horário Deletado com Sucesso!");
-                    dialogoInfo.showAndWait();
-                    resetaCampos();
-                } catch (SQLException e) {
-                    Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-                    dialogoInfo.setTitle("Error");
-                    dialogoInfo.setHeaderText("Não foi possível deletar o horário selecionado!");
-                    dialogoInfo.showAndWait();
-                }
+        if(clickBtn) {
+            try {
+                AgendaRepository.deleteHorario(horario.getId());
+                showAlertInformation("Deletando","","Horário Deletado com Sucesso!");
+                resetaCampos();
+            } catch (SQLException e) {
+                showAlertWarning("Error","","Não foi possível deletar o horário selecionado!");
             }
-        });
+        }
     }
 
     public void cancelarConsulta(ActionEvent event)
@@ -319,35 +268,21 @@ public class AgendaController implements Initializable {
         Button button = (Button) event.getSource();
         Consulta consulta = (Consulta) button.getUserData();
 
-        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType btnSim = new ButtonType("Sim");
-        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        String dateF = formattedDateString(consulta.getHorarioConsulta().getData());
+        String timeF = formattedTimeString(consulta.getHorarioConsulta().getHora());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String dateF = dateFormat.format(consulta.getHorarioConsulta().getData());
-        String timeF = timeFormat.format(consulta.getHorarioConsulta().getHora());
+        boolean clickBtn = showAlertConfirmation("Sim","Cancelando Consulta","",
+                "Tem certeza que deseja cancelar a consulta de "+timeF+" no dia "+dateF+"?");
 
-        dialogoExe.setTitle("Cancelando Consulta");
-        dialogoExe.setContentText("Tem certeza que deseja cancelar a consulta de "+timeF+" no dia "+dateF+"?");
-        dialogoExe.getButtonTypes().setAll(btnSim, btnCancelar);
-        dialogoExe.showAndWait().ifPresent(b -> {
-            if (b == btnSim) {
-                try {
-                    ConsultaRepository.cancelarConsulta(consulta.getId());
-
-                    Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
-                    dialogoInfo.setContentText("Consulta Cancelada com Sucesso!");
-                    dialogoInfo.showAndWait();
-                    resetaCampos();
-                } catch (SQLException e) {
-                    Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-                    dialogoInfo.setTitle("Error");
-                    dialogoInfo.setHeaderText("Não foi possível cancelar a consulta selecionada!");
-                    dialogoInfo.showAndWait();
-                }
+        if(clickBtn) {
+            try {
+                ConsultaRepository.cancelarConsulta(consulta.getId());
+                showAlertInformation("Cancelamento","","Consulta Cancelada com Sucesso!");
+                resetaCampos();
+            } catch (SQLException e) {
+                showAlertWarning("Error","","Não foi possível cancelar a consulta selecionada!");
             }
-        });
+        }
     }
 
     private void validaCampos() throws IllegalArgumentException
@@ -355,6 +290,64 @@ public class AgendaController implements Initializable {
         if(this.data_picker.getEditor().getText().isEmpty()) {
             throw new IllegalArgumentException("Selecione uma Data!");
         }
+    }
+
+    private boolean validaDataHora(Date date, LocalTime time)
+    {
+        if(date.toLocalDate().isAfter(LocalDate.now()) ||
+                (date.toLocalDate().isEqual(LocalDate.now()) && time.isAfter(LocalTime.now()))) {
+            return false;
+        }
+        return true;
+    }
+
+    private void showAlertWarning(String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.WARNING);
+        dialogoExe.setTitle(title);
+        dialogoExe.setHeaderText(header);
+        dialogoExe.setContentText(content);
+        dialogoExe.showAndWait();
+    }
+
+    private void showAlertInformation(String title, String header, String content)
+    {
+        Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+        dialogoInfo.setTitle(title);
+        dialogoInfo.setHeaderText(header);
+        dialogoInfo.setContentText(content);
+        dialogoInfo.showAndWait();
+    }
+
+    private boolean showAlertConfirmation(String btnConfirmText, String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType btnConfirm = new ButtonType(btnConfirmText);
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        dialogoExe.setTitle(title);
+        dialogoExe.setContentText(content);
+        dialogoExe.getButtonTypes().setAll(btnConfirm, btnCancelar);
+
+        Optional<ButtonType> result = dialogoExe.showAndWait();
+
+        return (result.isPresent() && result.get() == btnConfirm);
+    }
+
+    private String formattedDateString(Date date)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+        String formattedDate = dateFormat.format(date);
+        return formattedDate;
+    }
+
+    private String formattedTimeString(Time time)
+    {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String formattedTime = timeFormat.format(time);
+
+        return formattedTime;
     }
 
     public void delogarSistema(MouseEvent mouseEvent) throws IOException

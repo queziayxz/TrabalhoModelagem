@@ -1,7 +1,5 @@
 package org.trab.demo.controller;
 
-
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -14,6 +12,7 @@ import org.trab.demo.util.Telas;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -29,9 +28,7 @@ public class DashboardAdm implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             Date currentDate = Calendar.getInstance().getTime();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
-            String formattedDate = dateFormat.format(currentDate);
+            String formattedDate = this.formattedDateString(currentDate);
             this.lb_dia.setText(formattedDate);
 
             List<Consulta> consultas = ConsultaRepository.getConsultasData(new java.sql.Date(currentDate.getTime()));
@@ -41,8 +38,7 @@ public class DashboardAdm implements Initializable {
             } else {
                 for(int i = 0; i < consultas.size(); i++) {
                     if(consultas.get(i).getPaciente() != null) {
-                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                        String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
+                        String formattedTime = this.formattedTimeString(consultas.get(i).getHorarioConsulta().getHora());
 
                         Button button = new Button(formattedTime);
                         button.setPrefWidth(85);
@@ -64,6 +60,22 @@ public class DashboardAdm implements Initializable {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private String formattedDateString(Date date)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+        String formattedDate = dateFormat.format(date);
+        return formattedDate;
+    }
+
+    private String formattedTimeString(Time time)
+    {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String formattedTime = timeFormat.format(time);
+
+        return formattedTime;
     }
 
     public void delogarSistema() throws IOException

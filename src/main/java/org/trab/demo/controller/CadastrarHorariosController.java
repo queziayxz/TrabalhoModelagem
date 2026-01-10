@@ -52,25 +52,20 @@ public class CadastrarHorariosController implements Initializable {
             this.validaCampos();
             this.resetaCampos();
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
-            String formattedDate = dateFormat.format(Date.valueOf(this.data_picker.getValue()));
+            String formattedDate = this.formattedDateString(Date.valueOf(this.data_picker.getValue()));
             this.lb_title.setText(formattedDate);
 
             Date dataSelecionada = Date.valueOf(this.data_picker.getValue());
 
             if(dataSelecionada.toLocalDate().isBefore(LocalDate.now())) {
-                Alert dialogoExe = new Alert(Alert.AlertType.WARNING);
-                dialogoExe.setTitle("Erro Buscar Horários");
-                dialogoExe.setHeaderText("Não foi possível buscar os horários da data selecionada!");
-                dialogoExe.setContentText("Por favor, selecione datas futuras.");
-                dialogoExe.showAndWait();
+                this.showAlertWarning("Erro Buscar Horários",
+                        "Não foi possível buscar os horários da data selecionada!",
+                        "Por favor, selecione datas futuras.");
             } else {
                 List<Consulta> consultas = this.selecionaHorarios(dataSelecionada);
 
                 for (int i = 0; i < consultas.size(); i++) {
-                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                    String formattedTime = timeFormat.format(consultas.get(i).getHorarioConsulta().getHora());
+                    String formattedTime = formattedTimeString(consultas.get(i).getHorarioConsulta().getHora());
                     Button button = new Button(formattedTime);
                     button.setStyle("-fx-font-size:18");
                     button.setOnAction(this::cadastraHorario);
@@ -99,10 +94,7 @@ public class CadastrarHorariosController implements Initializable {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } catch (IllegalArgumentException e) {
-            Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-            dialogoInfo.setTitle("Error");
-            dialogoInfo.setHeaderText(e.getMessage());
-            dialogoInfo.showAndWait();
+            this.showAlertWarning("Error",e.getMessage(),"Erro ao mostrar horários");
         }
     }
 
@@ -166,42 +158,26 @@ public class CadastrarHorariosController implements Initializable {
         LocalTime horaSelecionada = consulta.getHorarioConsulta().getHora().toLocalTime();
 
         if(sqlDate.toLocalDate().isEqual(LocalDate.now()) && !horaSelecionada.isAfter(LocalTime.now())) {
-            Alert dialogoExe = new Alert(Alert.AlertType.WARNING);
-            dialogoExe.setTitle("Erro Cadastro Horário");
-            dialogoExe.setHeaderText("Não foi possível cadastrar o horário selecionado!");
-            dialogoExe.setContentText("Por favor, selecione horários futuros.");
-            dialogoExe.showAndWait();
+            this.showAlertWarning("Erro Cadastro Horário", "Não foi possível cadastrar o horário selecionado!",
+                    "Por favor, selecione horários futuros.");
         } else {
+            String dateF = this.formattedDateString(consulta.getHorarioConsulta().getData());
+            String timeF = this.formattedTimeString(consulta.getHorarioConsulta().getHora());
 
-            Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
-            ButtonType btnCadastrar = new ButtonType("Cadastrar");
-            ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            boolean btnClick = this.showAlertConfirmation("Cadastrar","Cadastrar Horário", "",
+                    "Tem certeza que deseja cadastrar o horário no dia "+dateF+" as "+timeF+"?");
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-            String dateF = dateFormat.format(consulta.getHorarioConsulta().getData());
-            String timeF = timeFormat.format(consulta.getHorarioConsulta().getHora());
+            if(btnClick) {
+                try {
+                    AgendaRepository.cadastraHorario(consulta.getHorarioConsulta());
 
-            dialogoExe.setTitle("Cadastrar Horário");
-            dialogoExe.setContentText("Tem certeza que deseja cadastrar o horário no dia "+dateF+" as "+timeF+"?");
-            dialogoExe.getButtonTypes().setAll(btnCadastrar, btnCancelar);
-            dialogoExe.showAndWait().ifPresent(b -> {
-                if (b == btnCadastrar) {
-                    try {
-                        AgendaRepository.cadastraHorario(consulta.getHorarioConsulta());
-
-                        Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
-                        dialogoInfo.setContentText("Horário Cadastrado com Sucesso!");
-                        dialogoInfo.showAndWait();
-                        resetaCampos();
-                    } catch (SQLException e) {
-                        Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-                        dialogoInfo.setTitle("Error");
-                        dialogoInfo.setHeaderText("Não foi possível cadastrar esse horário!");
-                        dialogoInfo.showAndWait();
-                    }
+                    this.showAlertInformation("Cadastro","","Horário Cadastrado com Sucesso!");
+                    resetaCampos();
+                } catch (SQLException e) {
+                    this.showAlertWarning("Error","Não foi possível cadastrar esse horário!","");
                 }
-            });
+
+            }
         }
     }
 
@@ -218,6 +194,55 @@ public class CadastrarHorariosController implements Initializable {
             throw new IllegalArgumentException("Selecione uma Data!");
 
         }
+    }
+
+    private String formattedDateString(Date date)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+        String formattedDate = dateFormat.format(date);
+        return formattedDate;
+    }
+
+    private String formattedTimeString(Time time)
+    {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String formattedTime = timeFormat.format(time);
+
+        return formattedTime;
+    }
+
+    private void showAlertWarning(String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.WARNING);
+        dialogoExe.setTitle(title);
+        dialogoExe.setHeaderText(header);
+        dialogoExe.setContentText(content);
+        dialogoExe.showAndWait();
+    }
+
+    private void showAlertInformation(String title, String header, String content)
+    {
+        Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+        dialogoInfo.setTitle(title);
+        dialogoInfo.setHeaderText(header);
+        dialogoInfo.setContentText(content);
+        dialogoInfo.showAndWait();
+    }
+
+    private boolean showAlertConfirmation(String btnConfirmText, String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType btnConfirm = new ButtonType(btnConfirmText);
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        dialogoExe.setTitle(title);
+        dialogoExe.setContentText(content);
+        dialogoExe.getButtonTypes().setAll(btnConfirm, btnCancelar);
+
+        Optional<ButtonType> result = dialogoExe.showAndWait();
+
+        return (result.isPresent() && result.get() == btnConfirm);
     }
 
     public void delogarSistema(MouseEvent mouseEvent) throws IOException
