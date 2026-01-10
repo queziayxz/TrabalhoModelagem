@@ -85,6 +85,8 @@ public class AgendaController implements Initializable {
             Date dateSql = Date.valueOf(data);
             List<Consulta> consultas = ConsultaRepository.getConsultasHorariosData(dateSql);
 
+            System.out.println("quant consultas: "+consultas.size());
+
             resetaCampos();
 
             String formattedDate = formattedDateString(dateSql);
@@ -111,8 +113,6 @@ public class AgendaController implements Initializable {
 
                     if(consultas.get(i).getPaciente() != null) {
                         button.setUserData(consultas.get(i));
-
-                        final String agendado = StatusConsultaEnum.AGENDADO.toString();
 
                         switch (StatusConsultaEnum.valueOf(consultas.get(i).getHorarioConsulta().getStatus())) {
                             case AGENDADO:
@@ -292,7 +292,7 @@ public class AgendaController implements Initializable {
         }
     }
 
-    private boolean validaDataHora(Date date, LocalTime time)
+    public boolean validaDataHora(Date date, LocalTime time)
     {
         if(date.toLocalDate().isAfter(LocalDate.now()) ||
                 (date.toLocalDate().isEqual(LocalDate.now()) && time.isAfter(LocalTime.now()))) {

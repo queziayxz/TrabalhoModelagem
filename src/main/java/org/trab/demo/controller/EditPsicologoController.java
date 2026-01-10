@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class EditPsicologoController implements Initializable {
@@ -60,7 +61,7 @@ public class EditPsicologoController implements Initializable {
     {
         try {
 
-            this.validaCampos();
+            validaCampos();
 
             Psicologo psicologo = new Psicologo();
             psicologo.setId(Sessao.getInstance().getUser(Psicologo.class).getId());
@@ -75,36 +76,22 @@ public class EditPsicologoController implements Initializable {
             psicologo.setEmail(this.tf_email.getText());
             psicologo.setSenha(Sessao.getInstance().getUser(Psicologo.class).getSenha());
 
-            Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
-            ButtonType btnEditar = new ButtonType("Editar");
-            ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            boolean clickBtn = showAlertConfirmation("Editar","Editando Perfil", "",
+                    "Tem certeza que deseja editar suas informações?");
 
-            dialogoExe.setTitle("Editando Perfil");
-            dialogoExe.setContentText("Tem certeza que deseja editar suas informações?");
-            dialogoExe.getButtonTypes().setAll(btnEditar, btnCancelar);
-            dialogoExe.showAndWait().ifPresent(b -> {
-                if (b == btnEditar) {
-                    try {
-                        UserRepository.updatePsicologo(psicologo);
-                    } catch (SQLException e) {
-                        Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-                        dialogoInfo.setTitle("Error");
-                        dialogoInfo.setHeaderText("Não foi possível editar as informações!");
-                        dialogoInfo.showAndWait();
-                    }
-
-                    Sessao.getInstance().setUser(psicologo);
-
-                    Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
-                    dialogoInfo.setContentText("Perfil Editado com Sucesso!");
-                    dialogoInfo.showAndWait();
+            if(clickBtn) {
+                try {
+                    UserRepository.updatePsicologo(psicologo);
+                } catch (SQLException e) {
+                    showAlertWarning("Error","Não foi possível editar as informações!","");
                 }
-            });
+
+                Sessao.getInstance().setUser(psicologo);
+
+                showAlertInformation("Edição","","Perfil Editado com Sucesso!");
+            }
         } catch (IllegalArgumentException e) {
-            Alert dialogoInfo = new Alert(Alert.AlertType.WARNING);
-            dialogoInfo.setTitle("Error");
-            dialogoInfo.setHeaderText(e.getMessage());
-            dialogoInfo.showAndWait();
+            showAlertWarning("Error",e.getMessage(),"");
         }
     }
 
@@ -122,6 +109,39 @@ public class EditPsicologoController implements Initializable {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
+    }
+
+    private void showAlertWarning(String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.WARNING);
+        dialogoExe.setTitle(title);
+        dialogoExe.setHeaderText(header);
+        dialogoExe.setContentText(content);
+        dialogoExe.showAndWait();
+    }
+
+    private void showAlertInformation(String title, String header, String content)
+    {
+        Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
+        dialogoInfo.setTitle(title);
+        dialogoInfo.setHeaderText(header);
+        dialogoInfo.setContentText(content);
+        dialogoInfo.showAndWait();
+    }
+
+    private boolean showAlertConfirmation(String btnConfirmText, String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType btnConfirm = new ButtonType(btnConfirmText);
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        dialogoExe.setTitle(title);
+        dialogoExe.setContentText(content);
+        dialogoExe.getButtonTypes().setAll(btnConfirm, btnCancelar);
+
+        Optional<ButtonType> result = dialogoExe.showAndWait();
+
+        return (result.isPresent() && result.get() == btnConfirm);
     }
 
     public void delogarSistema(MouseEvent mouseEvent) throws IOException
