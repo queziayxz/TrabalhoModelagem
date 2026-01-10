@@ -24,9 +24,7 @@ public class ConsultaRepository {
             for(int i = 0; i < horarios.size(); i++) {
                 Consulta con = new Consulta();
 
-                if (horarios.get(i).getStatus().equals(StatusConsultaEnum.AGENDADO.toString()) ||
-                        horarios.get(i).getStatus().equals(StatusConsultaEnum.CONCLUIDO.toString()) ||
-                        horarios.get(i).getStatus().equals(StatusConsultaEnum.NAO_REALIZADO.toString())) {
+                if (!horarios.get(i).getStatus().equals(StatusConsultaEnum.LIVRE.toString())) {
 
                     String sql = "SELECT * FROM consultas WHERE id_agenda=?";
 
@@ -69,8 +67,6 @@ public class ConsultaRepository {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-
-                System.out.println("id agenda: "+result.getLong("a.id"));
 
                 Consulta consulta = new Consulta();
                 consulta.setId(result.getLong("c.id"));
