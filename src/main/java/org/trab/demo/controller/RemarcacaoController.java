@@ -192,11 +192,11 @@ public class RemarcacaoController extends BaseConsultaController {
                         "2. Escolha uma NOVA DATA usando o calendário acima da tabela da DIREITA.\n" +
                         "3. Clique em 'Exibir Horários' para ver os horários disponíveis na nova data.\n" +
                         "4. Na tabela da DIREITA, selecione um novo horário disponível.\n" +
-                        "5. Clique em 'Remarcar Consulta' para confirmar a alteração.\n\n" +
+                        "5. Clique em 'Remarcar Consulta' para confirmar a alteração.\n" +
                         "Importante:\n" +
                         "- Você só pode remarcar consultas com pelo menos 1 dia de antecedência\n" +
                         "- A nova data deve ser pelo menos amanhã\n" +
-                        "- Não é possível selecionar o mesmo horário atual");
+                        "- Não é possível selecionar o mesmo horário atual\n\n\n");
     }
 
     // Implementação do método reabrirTela

@@ -54,8 +54,6 @@ public class UserRepository {
                         return paci;
                 }
 
-            } else {
-                System.out.println("usuario nao existe");
             }
 
             return null;

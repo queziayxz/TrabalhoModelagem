@@ -37,7 +37,26 @@ public class AgendamentoController extends BaseConsultaController {
 
     @FXML
     public void initialize() {
+        // Configuração para exibir data no formato DD/MM/YYYY
         colDia.setCellValueFactory(new PropertyValueFactory<>("data"));
+        colDia.setCellFactory(column -> {
+            return new TableCell<Agenda, Date>() {
+                private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        // Converte java.sql.Date para LocalDate e formata
+                        LocalDate data = item.toLocalDate();
+                        setText(data.format(formatter));
+                    }
+                }
+            };
+        });
+
         colHora.setCellValueFactory(new PropertyValueFactory<>("hora"));
 
         tableViewHorarios.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -137,7 +156,7 @@ public class AgendamentoController extends BaseConsultaController {
                         "3. Na tabela abaixo, você verá todos os horários disponíveis.\n" +
                         "4. Clique em um horário para selecioná-lo.\n" +
                         "5. Clique em 'Agendar Consulta' para confirmar o agendamento.\n\n" +
-                        "Importante: Você só pode agendar consultas a partir do dia seguinte ao atual.");
+                        "Importante: Você só pode agendar consultas a partir do dia seguinte ao atual.\n\n");
     }
 
     // Implementação do método reabrirTela
