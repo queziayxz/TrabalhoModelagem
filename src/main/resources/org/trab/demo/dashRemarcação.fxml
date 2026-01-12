@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.RemarcacaoController">
+<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.trab.demo.controller.RemarcacaoController">
     <children>
         <HBox fx:id="hBoxMenuBar" fillHeight="false" prefWidth="899.0" styleClass="hBoxMenuBar" stylesheets="@css/styleBackgroundMenu.css">
             <children>
@@ -52,7 +52,7 @@
                 </HBox>
                 <HBox alignment="CENTER_RIGHT" spacing="20.0">
                     <children>
-                        <Text onMouseClicked="#onDeslogar" styleClass="text-menu" text="Deslogar">
+                        <Text onMouseClicked="#onDeslogar" styleClass="text-menu" text="Sair">
                             <font>
                                 <Font size="10.0" />
                             </font>
@@ -70,62 +70,71 @@
         </HBox>
         <AnchorPane VBox.vgrow="ALWAYS">
             <children>
-                <Text layoutX="14.6" layoutY="62.38203125" text="Remarcar Consultas" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="5.0">
+                <Text layoutX="14.0" layoutY="39.0" text="Remarcar Consultas" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="711.069140625" AnchorPane.topAnchor="17.41796875">
                     <font>
                         <Font size="20.0" />
                     </font>
                 </Text>
-                <Text layoutX="13.8" layoutY="83.6283203125" text="Para remarcar sua consulta, selecione a consulta na qual deseja remarcar. Depois busque por uma nova data e clique em “Exibir Horários”. Por último, selecione uma nova data para sua consulta e clique em “Remarcar Consulta”." wrappingWidth="864.7999938964842" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="40.0">
-                    <font>
-                        <Font name="System Bold" size="13.0" />
-                    </font>
-                </Text>
-                <Text layoutX="14.0" layoutY="123.0" text="Suas Consultas Marcadas" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="90.0">
+                <Text layoutX="14.0" layoutY="123.0" text="Suas Consultas Marcadas" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="70.0">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Text>
 
-                <HBox alignment="TOP_RIGHT" layoutX="447.2" layoutY="103.8" prefHeight="26.0" prefWidth="427.0" spacing="10" AnchorPane.leftAnchor="447.2" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+                <HBox alignment="TOP_RIGHT" layoutX="447.2" layoutY="103.8" prefHeight="26.0" prefWidth="427.0" spacing="10" AnchorPane.leftAnchor="447.2" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
                     <children>
-                        <DatePicker fx:id="datePickerNova" maxHeight="1.7976931348623157E308" prefHeight="26.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnExibirHorariosNovos" mnemonicParsing="false" onAction="#exibirHorariosNovos" prefHeight="26.0" text="Exibir Horários">
-                     <font>
-                        <Font size="14.0" />
-                     </font></Button>
+                        <DatePicker fx:id="datePickerNova" prefHeight="26.0" HBox.hgrow="ALWAYS" promptText="Escolha uma nova data" />
+                        <Button fx:id="btnExibirHorariosNovos" mnemonicParsing="false" onAction="#exibirHorariosNovos" prefHeight="26.0" text="Exibir Horários Disponíveis" />
                     </children>
                     <padding>
                         <Insets right="16.0" />
                     </padding>
                 </HBox>
 
-                <HBox layoutX="14.4" layoutY="137.4" spacing="20" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="120.0">
+                <HBox layoutX="14.4" layoutY="137.4" spacing="20" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="100.0">
                     <children>
-                        <TableView fx:id="tableViewConsultasAtuais" HBox.hgrow="ALWAYS">
-                            <columnResizePolicy>
-                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                            </columnResizePolicy>
-                            <columns>
-                                <TableColumn fx:id="colDiaAtual" prefWidth="205.6" text="Dia" />
-                                <TableColumn fx:id="colHoraAtual" prefWidth="205.6" text="Hora" />
-                            </columns>
-                        </TableView>
-                        <TableView fx:id="tableViewHorariosNovos" HBox.hgrow="ALWAYS">
-                            <columnResizePolicy>
-                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                            </columnResizePolicy>
-                            <columns>
-                                <TableColumn fx:id="colDiaNovo" prefWidth="205.6" text="Dia" />
-                                <TableColumn fx:id="colHoraNovo" prefWidth="205.6" text="Hora" />
-                            </columns>
-                        </TableView>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Text text="Consultas Agendadas:" style="-fx-font-weight: bold;">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Text>
+                                <TableView fx:id="tableViewConsultasAtuais" HBox.hgrow="ALWAYS">
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
+                                    <columns>
+                                        <TableColumn fx:id="colDiaAtual" prefWidth="205.6" text="Data" />
+                                        <TableColumn fx:id="colHoraAtual" prefWidth="205.6" text="Horário" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Text text="Novos Horários Disponíveis:" style="-fx-font-weight: bold;">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Text>
+                                <TableView fx:id="tableViewHorariosNovos" HBox.hgrow="ALWAYS">
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
+                                    <columns>
+                                        <TableColumn fx:id="colDiaNovo" prefWidth="205.6" text="Data" />
+                                        <TableColumn fx:id="colHoraNovo" prefWidth="205.6" text="Horário" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </VBox>
                     </children>
                 </HBox>
 
-                <Button fx:id="btnRemarcarConsulta" layoutX="757.6" layoutY="547.8" onAction="#remarcarConsulta" text="Remarcar Consultas" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="15.0">
-               <font>
-                  <Font size="14.0" />
-               </font></Button>
+                <Button fx:id="btnRemarcarConsulta" layoutX="757.6" layoutY="547.8" onAction="#remarcarConsulta" text="Confirmar Remarcação" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="15.0" />
+                <Button fx:id="btnAgendarConsulta1" layoutX="773.0" layoutY="17.0" onAction="#onAjuda" opacity="0.0" prefHeight="26.0" prefWidth="111.0" />
+                <Text fx:id="textAjuda" layoutX="782.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Precisa de ajuda?" wrappingWidth="94.13671875" style="-fx-cursor: hand; -fx-text-fill: #0066CC; -fx-underline: true;" />
             </children>
         </AnchorPane>
     </children>

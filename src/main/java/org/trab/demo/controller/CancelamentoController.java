@@ -1,41 +1,35 @@
 package org.trab.demo.controller;
 
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
-import org.trab.demo.enums.StatusConsultaEnum;
+import javafx.scene.text.Text;
 import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
-import org.trab.demo.model.Paciente;
 import org.trab.demo.repository.ConsultaRepository;
-import org.trab.demo.util.Sessao;
-import org.trab.demo.util.Telas;
 
-import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.List;
 
-public class CancelamentoController {
+public class CancelamentoController extends BaseConsultaController {
 
     @FXML private TableView<Consulta> tableViewConsultas;
     @FXML private TableColumn<Consulta, String> colDia;
     @FXML private TableColumn<Consulta, String> colHora;
     @FXML private Button btnCancelarConsulta;
+    @FXML private Text textAjuda;
+    @FXML private Button btnCancelarConsulta1;
 
-    private ObservableList<Consulta> consultasList = FXCollections.observableArrayList();
+    private ObservableList<Consulta> consultasList;
     private Consulta consultaSelecionada;
 
     @FXML
     public void initialize() {
-        // Configurar as colunas usando as propriedades aninhadas
+        // Configurar as colunas
         colDia.setCellValueFactory(cellData -> {
             Agenda agenda = cellData.getValue().getHorarioConsulta();
             return new SimpleStringProperty(formatDate(agenda.getData()));
@@ -46,31 +40,24 @@ public class CancelamentoController {
             return new SimpleStringProperty(formatTime(agenda.getHora()));
         });
 
-        tableViewConsultas.setItems(consultasList);
-        btnCancelarConsulta.setDisable(true);
-
         tableViewConsultas.getSelectionModel().selectedItemProperty().addListener((obs, old, newSelection) -> {
             consultaSelecionada = newSelection;
             verificarSelecao();
         });
 
+        // Configurar clique no texto de ajuda
+        if (textAjuda != null) {
+            textAjuda.setOnMouseClicked(event -> onAjuda());
+        }
+
         carregarConsultas();
     }
 
-    private String formatDate(Date date) {
-        if (date == null) return "";
-        return new SimpleDateFormat("dd/MM/yyyy").format(date);
-    }
-
-    private String formatTime(Time time) {
-        if (time == null) return "";
-        return new SimpleDateFormat("HH:mm").format(time);
-    }
-
-    private void verificarSelecao() {
+    @Override
+    protected void verificarSelecao() {
         if (consultaSelecionada != null) {
             LocalDate dataConsulta = consultaSelecionada.getHorarioConsulta().getData().toLocalDate();
-            boolean podeCancelar = dataConsulta.isAfter(LocalDate.now());
+            boolean podeCancelar = podeCancelarOuRemarcar(dataConsulta);
             btnCancelarConsulta.setDisable(!podeCancelar);
         } else {
             btnCancelarConsulta.setDisable(true);
@@ -78,108 +65,70 @@ public class CancelamentoController {
     }
 
     private void carregarConsultas() {
-        Sessao sessao = Sessao.getInstance();
-        Paciente paciente = sessao.getUser(Paciente.class);
-
         try {
-            List<Consulta> consultas = ConsultaRepository.getConsultasByPaciente(paciente.getId());
-            consultasList.clear();
-
-            for (Consulta consulta : consultas) {
-                if (consulta.getHorarioConsulta().getStatus().equals(StatusConsultaEnum.AGENDADO.toString())) {
-                    consultasList.add(consulta);
-                }
-            }
+            consultasList = carregarConsultasPaciente();
+            tableViewConsultas.setItems(consultasList);
 
             if (consultasList.isEmpty()) {
                 showAlert("Informação", "Você não tem consultas agendadas para cancelar.");
             }
         } catch (SQLException e) {
-            showAlert("Erro", "Erro ao buscar consultas: " + e.getMessage());
+            showAlert("Erro", "Erro ao buscar suas consultas: " + e.getMessage());
         }
     }
 
     @FXML
     private void cancelarConsulta() {
         if (consultaSelecionada == null) {
-            showAlert("Erro", "Selecione uma consulta para cancelar.");
+            showAlert("Atenção", "Por favor, selecione uma consulta para cancelar.");
             return;
         }
 
         LocalDate dataConsulta = consultaSelecionada.getHorarioConsulta().getData().toLocalDate();
-        if (!dataConsulta.isAfter(LocalDate.now())) {
-            showAlert("Erro", "Só é possível cancelar consultas com pelo menos 1 dia de antecedência.");
+        if (!podeCancelarOuRemarcar(dataConsulta)) {
+            showAlert("Atenção", "Você só pode cancelar consultas com pelo menos 1 dia de antecedência.");
             return;
         }
 
         try {
             ConsultaRepository.cancelarConsulta(consultaSelecionada.getId());
-            showAlert("Sucesso", "Consulta cancelada com sucesso!");
-            carregarConsultas();
-            btnCancelarConsulta.setDisable(true);
+            showAlert("Sucesso", "Sua consulta foi cancelada com sucesso!");
+            reabrirTela();
         } catch (SQLException e) {
-            showAlert("Erro", "Erro ao cancelar consulta: " + e.getMessage());
+            showAlert("Erro", "Não foi possível cancelar sua consulta: " + e.getMessage());
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    // Método de ajuda com texto amigável
+    @FXML
+    private void onAjuda() {
+        showAlert("Como cancelar uma consulta",
+                "Passo a passo para cancelar uma consulta:\n\n" +
+                        "1. Na tabela abaixo, você verá todas as suas consultas agendadas.\n" +
+                        "2. Clique em uma consulta para selecioná-la.\n" +
+                        "3. O botão 'Cancelar' será liberado se a consulta puder ser cancelada.\n" +
+                        "4. Clique em 'Cancelar' para confirmar o cancelamento.\n\n" +
+                        "Importante: Você só pode cancelar consultas com pelo menos 1 dia de antecedência.\n" +
+                        "Consultas de hoje não podem ser canceladas através do sistema.");
     }
 
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    // Implementação do método reabrirTela
+    @Override
+    protected void reabrirTela() {
+        // Limpar seleção
+        tableViewConsultas.getSelectionModel().clearSelection();
+        consultaSelecionada = null;
+
+        // Recarregar consultas
+        carregarConsultas();
+
+        // Desabilitar botão
+        btnCancelarConsulta.setDisable(true);
     }
 
-    public void onDeslogar(MouseEvent mouseEvent) {
-        try {
-            Sessao.getInstance().setUser(null);
-            Telas.getTelaLogin(null);
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível deslogar");
-        }
-    }
-
-    public void onInicio(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaDashPaci();
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível ir para a tela inicial");
-        }
-    }
-
-    public void onPerfil(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaPerfil();
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível acessar o perfil");
-        }
-    }
-
-    public void onAgendar(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaAgendamento();
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível acessar o agendamento");
-        }
-    }
-
-    public void onRemarcar(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaRemarcacao();
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível acessar a remarcação");
-        }
-    }
-
+    // Sobrescreve apenas o método específico da tela atual
+    @Override
     public void onCancelar(MouseEvent mouseEvent) {
-        showAlert("Cancelamento", "Você já está na tela de cancelamento");
+        showAlert("Cancelamento", "Você já está na tela de cancelamento de consultas");
     }
 }

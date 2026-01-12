@@ -1,37 +1,28 @@
 package org.trab.demo.controller;
 
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Agenda;
 import org.trab.demo.model.Consulta;
-import org.trab.demo.model.Paciente;
 import org.trab.demo.repository.AgendaRepository;
 import org.trab.demo.repository.ConsultaRepository;
-import org.trab.demo.util.Sessao;
-import org.trab.demo.util.Telas;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class RemarcacaoController {
+public class RemarcacaoController extends BaseConsultaController {
 
-    @FXML private DatePicker datePickerAtual;
     @FXML private DatePicker datePickerNova;
-    @FXML private Button btnExibirConsultasAtuais;
     @FXML private Button btnExibirHorariosNovos;
     @FXML private Button btnRemarcarConsulta;
     @FXML private TableView<Consulta> tableViewConsultasAtuais;
@@ -40,15 +31,37 @@ public class RemarcacaoController {
     @FXML private TableView<Agenda> tableViewHorariosNovos;
     @FXML private TableColumn<Agenda, String> colDiaNovo;
     @FXML private TableColumn<Agenda, String> colHoraNovo;
+    @FXML private Text textAjuda;
+    @FXML private Button btnAgendarConsulta1;
 
-    private ObservableList<Consulta> consultasAtuaisList = FXCollections.observableArrayList();
-    private ObservableList<Agenda> horariosNovosList = FXCollections.observableArrayList();
+    private ObservableList<Consulta> consultasAtuaisList;
+    private ObservableList<Agenda> horariosNovosList;
     private Consulta consultaSelecionadaAtual;
     private Agenda horarioSelecionadoNovo;
 
     @FXML
     public void initialize() {
-        // Configurar tabela de consultas atuais (Consulta)
+        configurarTabelas();
+
+        tableViewConsultasAtuais.getSelectionModel().selectedItemProperty().addListener((obs, old, newSelection) -> {
+            consultaSelecionadaAtual = newSelection;
+            verificarSelecao();
+        });
+
+        tableViewHorariosNovos.getSelectionModel().selectedItemProperty().addListener((obs, old, newSelection) -> {
+            horarioSelecionadoNovo = newSelection;
+            verificarSelecao();
+        });
+
+        // Configurar clique no texto de ajuda
+        if (textAjuda != null) {
+            textAjuda.setOnMouseClicked(event -> onAjuda());
+        }
+
+        carregarConsultasAtuais();
+    }
+
+    private void configurarTabelas() {
         colDiaAtual.setCellValueFactory(cellData -> {
             Agenda agenda = cellData.getValue().getHorarioConsulta();
             return new SimpleStringProperty(formatDate(agenda.getData()));
@@ -59,93 +72,30 @@ public class RemarcacaoController {
             return new SimpleStringProperty(formatTime(agenda.getHora()));
         });
 
-        // Configurar tabela de novos horários (Agenda)
-        colDiaNovo.setCellValueFactory(cellData -> {
-            Agenda agenda = cellData.getValue();
-            return new SimpleStringProperty(formatDate(agenda.getData()));
-        });
+        colDiaNovo.setCellValueFactory(cellData ->
+                new SimpleStringProperty(formatDate(cellData.getValue().getData()))
+        );
 
-        colHoraNovo.setCellValueFactory(cellData -> {
-            Agenda agenda = cellData.getValue();
-            return new SimpleStringProperty(formatTime(agenda.getHora()));
-        });
-
-        tableViewConsultasAtuais.setItems(consultasAtuaisList);
-        tableViewHorariosNovos.setItems(horariosNovosList);
-
-        btnRemarcarConsulta.setDisable(true);
-
-        // Listeners de seleção
-        tableViewConsultasAtuais.getSelectionModel().selectedItemProperty().addListener((obs, old, newSelection) -> {
-            consultaSelecionadaAtual = newSelection;
-            verificarSelecoes();
-        });
-
-        tableViewHorariosNovos.getSelectionModel().selectedItemProperty().addListener((obs, old, newSelection) -> {
-            horarioSelecionadoNovo = newSelection;
-            verificarSelecoes();
-        });
-
-        // Carregar consultas do paciente ao inicializar
-        carregarConsultas();
+        colHoraNovo.setCellValueFactory(cellData ->
+                new SimpleStringProperty(formatTime(cellData.getValue().getHora()))
+        );
     }
 
-    private String formatDate(Date date) {
-        if (date == null) return "";
-        return new SimpleDateFormat("dd/MM/yyyy").format(date);
+    @Override
+    protected void verificarSelecao() {
+        btnRemarcarConsulta.setDisable(consultaSelecionadaAtual == null || horarioSelecionadoNovo == null);
     }
 
-    private String formatTime(Time time) {
-        if (time == null) return "";
-        return new SimpleDateFormat("HH:mm").format(time);
-    }
-
-    private void carregarConsultas() {
-        Sessao sessao = Sessao.getInstance();
-        Paciente paciente = sessao.getUser(Paciente.class);
-
+    private void carregarConsultasAtuais() {
         try {
-            List<Consulta> consultas = ConsultaRepository.getConsultasByPaciente(paciente.getId());
-            consultasAtuaisList.clear();
-
-            for (Consulta consulta : consultas) {
-                if (consulta.getHorarioConsulta().getStatus().equals(StatusConsultaEnum.AGENDADO.toString())) {
-                    consultasAtuaisList.add(consulta);
-                }
-            }
+            consultasAtuaisList = carregarConsultasPaciente();
+            tableViewConsultasAtuais.setItems(consultasAtuaisList);
 
             if (consultasAtuaisList.isEmpty()) {
                 showAlert("Informação", "Você não tem consultas agendadas para remarcar.");
             }
         } catch (SQLException e) {
-            showAlert("Erro", "Erro ao buscar consultas: " + e.getMessage());
-        }
-    }
-
-    private void verificarSelecoes() {
-        btnRemarcarConsulta.setDisable(consultaSelecionadaAtual == null || horarioSelecionadoNovo == null);
-    }
-
-    @FXML
-    private void exibirConsultasAtuais(ActionEvent event) {
-        Sessao sessao = Sessao.getInstance();
-        Paciente paciente = sessao.getUser(Paciente.class);
-
-        try {
-            List<Consulta> consultas = ConsultaRepository.getConsultasByPaciente(paciente.getId());
-            consultasAtuaisList.clear();
-
-            for (Consulta consulta : consultas) {
-                if (consulta.getHorarioConsulta().getStatus().equals(StatusConsultaEnum.AGENDADO.toString())) {
-                    consultasAtuaisList.add(consulta);
-                }
-            }
-
-            if (consultasAtuaisList.isEmpty()) {
-                showAlert("Informação", "Você não tem consultas agendadas.");
-            }
-        } catch (SQLException e) {
-            showAlert("Erro", "Erro ao buscar consultas: " + e.getMessage());
+            showAlert("Erro", "Erro ao buscar suas consultas: " + e.getMessage());
         }
     }
 
@@ -155,20 +105,19 @@ public class RemarcacaoController {
         LocalDate hoje = LocalDate.now();
 
         if (selectedDate == null) {
-            showAlert("Erro", "Por favor, selecione uma data para a nova consulta.");
+            showAlert("Atenção", "Por favor, selecione uma data para a nova consulta.");
             return;
         }
 
-        // Verificar se a data selecionada é pelo menos amanhã
         if (selectedDate.isBefore(hoje.plusDays(1))) {
-            showAlert("Erro", "Só é possível remarcar para datas a partir de " +
+            showAlert("Atenção", "Você só pode remarcar para datas a partir de " +
                     hoje.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             return;
         }
 
         try {
             List<Agenda> horarios = AgendaRepository.getHorariosData(Date.valueOf(selectedDate));
-            horariosNovosList.clear();
+            horariosNovosList = FXCollections.observableArrayList();
 
             for (Agenda horario : horarios) {
                 if (horario.getStatus().equals(StatusConsultaEnum.LIVRE.toString())) {
@@ -176,128 +125,108 @@ public class RemarcacaoController {
                 }
             }
 
+            tableViewHorariosNovos.setItems(horariosNovosList);
+
             if (horariosNovosList.isEmpty()) {
                 showAlert("Informação", "Não há horários disponíveis para a data selecionada.");
             }
         } catch (SQLException e) {
-            showAlert("Erro", "Erro ao buscar horários: " + e.getMessage());
+            showAlert("Erro", "Erro ao buscar horários disponíveis: " + e.getMessage());
         }
     }
 
     @FXML
     private void remarcarConsulta(ActionEvent event) {
-        Sessao sessao = Sessao.getInstance();
-        Paciente paciente = sessao.getUser(Paciente.class);
-        LocalDate hoje = LocalDate.now();
-
-        // Verificar se a consulta atual pode ser cancelada (pelo menos 1 dia de antecedência)
-        LocalDate dataConsultaAtual = consultaSelecionadaAtual.getHorarioConsulta().getData().toLocalDate();
-        if (dataConsultaAtual.isBefore(hoje.plusDays(1))) {
-            showAlert("Erro", "Não é possível remarcar consultas com menos de 1 dia de antecedência.");
-            return;
-        }
-
-        // Verificar se a nova data é pelo menos amanhã
-        LocalDate novaData = horarioSelecionadoNovo.getData().toLocalDate();
-        if (novaData.isBefore(hoje.plusDays(1))) {
-            showAlert("Erro", "A nova data deve ser a partir de " +
-                    hoje.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            return;
-        }
-
-        // Verificar se não está tentando remarcar para o mesmo horário
-        if (consultaSelecionadaAtual.getHorarioConsulta().getId().equals(horarioSelecionadoNovo.getId())) {
-            showAlert("Erro", "Selecione um horário diferente para remarcar.");
-            return;
-        }
+        if (!validarRemarcacao()) return;
 
         try {
-            // Cancelar consulta selecionada
             ConsultaRepository.cancelarConsulta(consultaSelecionadaAtual.getId());
 
-            // Criar nova consulta com IDs
             Consulta novaConsulta = new Consulta();
-            novaConsulta.setIdPaciente(paciente.getId());
+            novaConsulta.setIdPaciente(consultaSelecionadaAtual.getIdPaciente());
             novaConsulta.setIdAgenda(horarioSelecionadoNovo.getId());
 
-            // Agendar nova consulta
             ConsultaRepository.agendarConsulta(novaConsulta);
-
-            // Atualizar status do novo horário
             AgendaRepository.finalizaConsulta(
                     horarioSelecionadoNovo.getId(),
                     StatusConsultaEnum.AGENDADO.toString()
             );
 
-            showAlert("Sucesso", "Consulta remarcada com sucesso!");
-
-            // Atualizar as listas
-            exibirConsultasAtuais(null);
-            exibirHorariosNovos(null);
-            btnRemarcarConsulta.setDisable(true);
+            showAlert("Sucesso", "Sua consulta foi remarcada com sucesso!");
+            reabrirTela();
         } catch (SQLException e) {
-            showAlert("Erro", "Erro ao remarcar consulta: " + e.getMessage());
+            showAlert("Erro", "Não foi possível remarcar sua consulta: " + e.getMessage());
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+    private boolean validarRemarcacao() {
+        LocalDate hoje = LocalDate.now();
+        LocalDate dataConsultaAtual = consultaSelecionadaAtual.getHorarioConsulta().getData().toLocalDate();
+        LocalDate novaData = horarioSelecionadoNovo.getData().toLocalDate();
 
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    public void onDeslogar(MouseEvent mouseEvent) {
-        try {
-            Sessao.getInstance().setUser(null);
-            Telas.getTelaLogin(null);
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível deslogar a sua conta");
+        if (!podeCancelarOuRemarcar(dataConsultaAtual)) {
+            showAlert("Atenção", "Você só pode remarcar consultas com pelo menos 1 dia de antecedência.");
+            return false;
         }
-    }
 
-    public void onInicio(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaDashPaci();
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível ir para a tela inicial");
+        if (novaData.isBefore(hoje.plusDays(1))) {
+            showAlert("Atenção", "A nova data deve ser a partir de " +
+                    hoje.plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            return false;
         }
-    }
 
-    public void onPerfil(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaPerfil();
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível ir para a tela de editar perfil");
+        if (consultaSelecionadaAtual.getHorarioConsulta().getId().equals(horarioSelecionadoNovo.getId())) {
+            showAlert("Atenção", "Selecione um horário diferente para remarcar.");
+            return false;
         }
+
+        return true;
     }
 
-    public void onAgendar(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaAgendamento();
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de agendamento");
+    // Método de ajuda com texto amigável
+    @FXML
+    private void onAjuda() {
+        showAlert("Como remarcar uma consulta",
+                "Passo a passo para remarcar uma consulta:\n\n" +
+                        "1. Na tabela da ESQUERDA, selecione a consulta que deseja remarcar.\n" +
+                        "2. Escolha uma NOVA DATA usando o calendário acima da tabela da DIREITA.\n" +
+                        "3. Clique em 'Exibir Horários' para ver os horários disponíveis na nova data.\n" +
+                        "4. Na tabela da DIREITA, selecione um novo horário disponível.\n" +
+                        "5. Clique em 'Remarcar Consulta' para confirmar a alteração.\n\n" +
+                        "Importante:\n" +
+                        "- Você só pode remarcar consultas com pelo menos 1 dia de antecedência\n" +
+                        "- A nova data deve ser pelo menos amanhã\n" +
+                        "- Não é possível selecionar o mesmo horário atual");
+    }
+
+    // Implementação do método reabrirTela
+    @Override
+    protected void reabrirTela() {
+        // Limpar seleções
+        tableViewConsultasAtuais.getSelectionModel().clearSelection();
+        tableViewHorariosNovos.getSelectionModel().clearSelection();
+        consultaSelecionadaAtual = null;
+        horarioSelecionadoNovo = null;
+
+        // Limpar date picker
+        datePickerNova.setValue(null);
+
+        // Recarregar consultas atuais
+        carregarConsultasAtuais();
+
+        // Limpar horários novos
+        if (horariosNovosList != null) {
+            horariosNovosList.clear();
+            tableViewHorariosNovos.setItems(horariosNovosList);
         }
+
+        // Desabilitar botão
+        btnRemarcarConsulta.setDisable(true);
     }
 
+    // Sobrescreve apenas o método específico da tela atual
+    @Override
     public void onRemarcar(MouseEvent mouseEvent) {
-        showAlert("Remarcação", "Você já está na tela de remarcação");
-    }
-
-    public void onCancelar(MouseEvent mouseEvent) {
-        try {
-            Telas.getTelaCancelamento();
-        } catch (IOException e) {
-            showError("Erro de Navegação", "Não foi possível abrir a tela de Cancelamento");
-        }
+        showAlert("Remarcação", "Você já está na tela de remarcação de consultas");
     }
 }
