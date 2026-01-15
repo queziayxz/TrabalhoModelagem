@@ -137,9 +137,11 @@ public class RemarcacaoController extends BaseConsultaController {
 
     @FXML
     private void remarcarConsulta(ActionEvent event) {
+        if (!validarRemarcacao()) return;
+
         boolean btnConfirm = showAlertConfirmation("Remarcar","Remaração de Consulta","",
                 "Certeza que deseja remarcar a consulta selecionada?");
-        if (!validarRemarcacao() || !btnConfirm) return;
+        if(!btnConfirm) return;
 
         try {
             ConsultaRepository.cancelarConsulta(consultaSelecionadaAtual.getId());
