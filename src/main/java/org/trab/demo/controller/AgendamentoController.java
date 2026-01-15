@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class AgendamentoController extends BaseConsultaController {
 
@@ -121,18 +122,23 @@ public class AgendamentoController extends BaseConsultaController {
 
         if (!validarAgendamento(horarioSelecionado)) return;
 
-        try {
-            Consulta novaConsulta = new Consulta();
-            novaConsulta.setIdPaciente(Sessao.getInstance().getUser(Paciente.class).getId());
-            novaConsulta.setIdAgenda(horarioSelecionado.getId());
+        boolean clickBtn = showAlertConfirmation("Agendar","Agendamento","Confirmação",
+                "Certeza que deseja agendar a consulta no horário selecionado?");
 
-            ConsultaRepository.agendarConsulta(novaConsulta);
-            AgendaRepository.finalizaConsulta(horarioSelecionado.getId(), StatusConsultaEnum.AGENDADO.toString());
+        if (clickBtn) {
+            try {
+                Consulta novaConsulta = new Consulta();
+                novaConsulta.setIdPaciente(Sessao.getInstance().getUser(Paciente.class).getId());
+                novaConsulta.setIdAgenda(horarioSelecionado.getId());
 
-            showAlert("Sucesso", "Sua consulta foi agendada com sucesso!");
-            reabrirTela();
-        } catch (SQLException e) {
-            showAlert("Erro", "Não foi possível agendar sua consulta: " + e.getMessage());
+                ConsultaRepository.agendarConsulta(novaConsulta);
+                AgendaRepository.finalizaConsulta(horarioSelecionado.getId(), StatusConsultaEnum.AGENDADO.toString());
+
+                showAlert("Sucesso", "Sua consulta foi agendada com sucesso!");
+                reabrirTela();
+            } catch (SQLException e) {
+                showAlert("Erro", "Não foi possível agendar sua consulta: " + e.getMessage());
+            }
         }
     }
 
@@ -183,4 +189,19 @@ public class AgendamentoController extends BaseConsultaController {
     public void onAgendar(MouseEvent mouseEvent) {
         showAlert("Agendamento", "Você já está na tela de agendamento de consultas");
     }
+
+//    private boolean showAlertConfirmation(String btnConfirmText, String title, String header, String content)
+//    {
+//        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+//        ButtonType btnConfirm = new ButtonType(btnConfirmText);
+//        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+//
+//        dialogoExe.setTitle(title);
+//        dialogoExe.setContentText(content);
+//        dialogoExe.getButtonTypes().setAll(btnConfirm, btnCancelar);
+//
+//        Optional<ButtonType> result = dialogoExe.showAndWait();
+//
+//        return (result.isPresent() && result.get() == btnConfirm);
+//    }
 }

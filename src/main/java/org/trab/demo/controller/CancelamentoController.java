@@ -90,12 +90,17 @@ public class CancelamentoController extends BaseConsultaController {
             return;
         }
 
-        try {
-            ConsultaRepository.cancelarConsulta(consultaSelecionada.getId());
-            showAlert("Sucesso", "Sua consulta foi cancelada com sucesso!");
-            reabrirTela();
-        } catch (SQLException e) {
-            showAlert("Erro", "Não foi possível cancelar sua consulta: " + e.getMessage());
+        boolean clickBnt = showAlertConfirmation("Cancelar Consulta","Cancelamento","",
+                "Certeza que deseja cancelar a consulta selecionada?");
+
+        if(clickBnt) {
+            try {
+                ConsultaRepository.cancelarConsulta(consultaSelecionada.getId());
+                showAlert("Sucesso", "Sua consulta foi cancelada com sucesso!");
+                reabrirTela();
+            } catch (SQLException e) {
+                showAlert("Erro", "Não foi possível cancelar sua consulta: " + e.getMessage());
+            }
         }
     }
 

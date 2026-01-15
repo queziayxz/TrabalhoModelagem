@@ -1,12 +1,7 @@
 package org.trab.demo.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.trab.demo.model.Paciente;
 import org.trab.demo.model.User;
 import org.trab.demo.util.Telas;
@@ -14,6 +9,7 @@ import org.trab.demo.util.Telas;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class RegisterController {
 
@@ -33,39 +29,43 @@ public class RegisterController {
     }
 
     private void handleRegister() {
-        try {
-            // Validar campos obrigatórios
-            if (!validateFields()) {
-                showAlert("Erro", "Por favor, preencha todos os campos corretamente");
-                return;
+        boolean btnClick = showAlertConfirmation("Cadastrar","Cadastro Paciente","",
+                "Certeza que deseja se cadastrar no sistema?");
+        if(btnClick) {
+            try {
+                // Validar campos obrigatórios
+                if (!validateFields()) {
+                    showAlert("Erro", "Por favor, preencha todos os campos corretamente");
+                    return;
+                }
+
+                // Validar CPF
+                User.validarCPF(tf_cpf.getText());
+
+                // Criar objeto Paciente
+                Paciente paciente = new Paciente();
+                paciente.setNome(tf_name.getText());
+                paciente.setEmail(tf_email.getText());
+                paciente.setTelefone(tf_phone.getText());
+                paciente.setCpf(tf_cpf.getText().replaceAll("[^\\d]", ""));
+                paciente.setSenha(tf_password.getText());
+                paciente.setIsPsicologo(false);
+                paciente.setDataNascimento(
+                        Date.valueOf(dp_birth_date.getValue())
+                );
+
+                // Inserir no banco de dados
+                insertPaciente(paciente);
+
+                // Feedback e redirecionamento
+                showAlert("Sucesso", "Cadastro realizado com sucesso!");
+                Telas.getTelaLogin(null);
+
+            } catch (IllegalArgumentException e) {
+                showAlert("Erro de CPF", e.getMessage());
+            } catch (Exception e) {
+                showAlert("Erro", "Ocorreu um erro: " + e.getMessage());
             }
-
-            // Validar CPF
-            User.validarCPF(tf_cpf.getText());
-
-            // Criar objeto Paciente
-            Paciente paciente = new Paciente();
-            paciente.setNome(tf_name.getText());
-            paciente.setEmail(tf_email.getText());
-            paciente.setTelefone(tf_phone.getText());
-            paciente.setCpf(tf_cpf.getText().replaceAll("[^\\d]", ""));
-            paciente.setSenha(tf_password.getText());
-            paciente.setIsPsicologo(false);
-            paciente.setDataNascimento(
-                    Date.valueOf(dp_birth_date.getValue())
-            );
-
-            // Inserir no banco de dados
-            insertPaciente(paciente);
-
-            // Feedback e redirecionamento
-            showAlert("Sucesso", "Cadastro realizado com sucesso!");
-            Telas.getTelaLogin(null);
-
-        } catch (IllegalArgumentException e) {
-            showAlert("Erro de CPF", e.getMessage());
-        } catch (Exception e) {
-            showAlert("Erro", "Ocorreu um erro: " + e.getMessage());
         }
     }
 
@@ -103,6 +103,22 @@ public class RegisterController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    protected boolean showAlertConfirmation(String btnConfirmText, String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType btnConfirm = new ButtonType(btnConfirmText);
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        dialogoExe.setTitle(title);
+        dialogoExe.setHeaderText(header);
+        dialogoExe.setContentText(content);
+        dialogoExe.getButtonTypes().setAll(btnConfirm, btnCancelar);
+
+        Optional<ButtonType> result = dialogoExe.showAndWait();
+
+        return (result.isPresent() && result.get() == btnConfirm);
     }
 
     public void linkPossuiCadastro() {

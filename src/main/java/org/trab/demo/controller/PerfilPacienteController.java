@@ -1,11 +1,7 @@
 package org.trab.demo.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.trab.demo.model.Paciente;
 import org.trab.demo.model.User;
@@ -16,6 +12,7 @@ import org.trab.demo.util.Telas;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class PerfilPacienteController {
@@ -54,7 +51,10 @@ public class PerfilPacienteController {
 
     @FXML
     private void salvarAlteracoes() {
-        if (validarCampos()) {
+        boolean btnClick = showAlertConfirmation("Editar","Edição Paciente","",
+                "Certeza que deseja editar suas informações?");
+
+        if (validarCampos() && btnClick) {
             try {
 
                 String novoCPF = tfCPF.getText().replaceAll("[^\\d]", "");
@@ -169,6 +169,22 @@ public class PerfilPacienteController {
         alerta.setHeaderText(null);
         alerta.setContentText(mensagem);
         alerta.showAndWait();
+    }
+
+    private boolean showAlertConfirmation(String btnConfirmText, String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType btnConfirm = new ButtonType(btnConfirmText);
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        dialogoExe.setTitle(title);
+        dialogoExe.setHeaderText(header);
+        dialogoExe.setContentText(content);
+        dialogoExe.getButtonTypes().setAll(btnConfirm, btnCancelar);
+
+        Optional<ButtonType> result = dialogoExe.showAndWait();
+
+        return (result.isPresent() && result.get() == btnConfirm);
     }
 
     public void onDeslogar(MouseEvent mouseEvent) {

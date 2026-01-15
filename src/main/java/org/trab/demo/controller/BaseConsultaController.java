@@ -3,6 +3,8 @@ package org.trab.demo.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import org.trab.demo.enums.StatusConsultaEnum;
 import org.trab.demo.model.Consulta;
@@ -18,6 +20,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class BaseConsultaController {
 
@@ -36,6 +39,22 @@ public abstract class BaseConsultaController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    protected boolean showAlertConfirmation(String btnConfirmText, String title, String header, String content)
+    {
+        Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType btnConfirm = new ButtonType(btnConfirmText);
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        dialogoExe.setTitle(title);
+        dialogoExe.setHeaderText(header);
+        dialogoExe.setContentText(content);
+        dialogoExe.getButtonTypes().setAll(btnConfirm, btnCancelar);
+
+        Optional<ButtonType> result = dialogoExe.showAndWait();
+
+        return (result.isPresent() && result.get() == btnConfirm);
     }
 
     // Métodos de navegação comuns
